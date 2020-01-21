@@ -39,6 +39,9 @@
                 <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/Controls/BiaWindowDialogStyle.xaml" />
                 <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/Controls/BiaWindowSpaceSavingStyle.xaml" />
                 <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/Controls/BiaWindowTemplatedDialogStyle.xaml" />
+
+                <!--  JitPad  -->
+                <internals:SharedResourceDictionary Source="pack://application:,,,/JitPad;component/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </internals:SharedResourceDictionary>
     </Application.Resources>
