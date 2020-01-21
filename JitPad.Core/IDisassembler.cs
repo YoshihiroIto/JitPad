@@ -1,10 +1,7 @@
 ﻿namespace JitPad.Core
 {
-    public class Disassembler
+    public interface IDisassembler
     {
-        public void Run()
-        {
-            
-        }
+        DisassembleResult Run();
     }
 }
