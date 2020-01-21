@@ -12,27 +12,28 @@ namespace JitPad.Core
 {
     public class Compiler
     {
-        public CompileResult Compile(string assemblyName, string sourceCode, string? sourceCodePath, bool isReleaseBuild)
+        public CompileResult Compile(string assemblyName, string sourceCode, string? sourceCodePath,
+            bool isReleaseBuild)
         {
             using var asmImage = new MemoryStream();
 
             sourceCodePath ??= Path.ChangeExtension(assemblyName, ".cs");
 
             var symbolsName = Path.ChangeExtension(assemblyName, ".pdb");
- 
+
             var buffer = Encoding.UTF8.GetBytes(sourceCode);
             var sourceText = SourceText.From(buffer, buffer.Length, Encoding.UTF8, canBeEmbedded: true);
 
             var compilation = GenerateCode(assemblyName, sourceText, sourceCodePath, isReleaseBuild);
-            
+
             var emitOptions = new EmitOptions(
                 debugInformationFormat: DebugInformationFormat.Embedded,
                 pdbFilePath: symbolsName
             );
-            
+
             var result = compilation.Emit(
                 peStream: asmImage,
-                embeddedTexts: new []{EmbeddedText.FromSource(sourceCodePath, sourceText)},
+                embeddedTexts: new[] {EmbeddedText.FromSource(sourceCodePath, sourceText)},
                 options: emitOptions);
 
             if (result.Success)
@@ -63,18 +64,28 @@ namespace JitPad.Core
             var syntaxRootNode = syntaxTree.GetRoot() as CSharpSyntaxNode;
             var encoded = CSharpSyntaxTree.Create(syntaxRootNode, null, sourceCodePath, Encoding.UTF8);
 
-            var references = new MetadataReference[]
-            {
-                MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-            };
-
-            return CSharpCompilation.Create(
+            var compilation = CSharpCompilation.Create(
                 assemblyName,
                 new[] {encoded},
-                references: references,
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
                     .WithOptimizationLevel(isReleaseBuild ? OptimizationLevel.Release : OptimizationLevel.Debug)
                     .WithPlatform(Platform.AnyCpu));
+
+            var references = new List<MetadataReference>();
+            var assemblyPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
+
+            foreach (var x in Directory.EnumerateFiles(assemblyPath, "*.dll"))
+            {
+                var fileName = Path.GetFileName(x);
+                
+                if (fileName.IndexOf("Native", StringComparison.Ordinal) == -1  &&
+                    (fileName.StartsWith("System.") || fileName.StartsWith("Microsoft.")))
+                    references.Add(MetadataReference.CreateFromFile(x));
+            }
+
+            compilation = compilation.AddReferences(references);
+
+            return compilation;
         }
     }
 }
