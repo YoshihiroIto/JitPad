@@ -1,0 +1,3 @@
+[submodule "JitDasm"]
+	path = JitDasm
+	url = git@github.com:YoshihiroIto/JitDasm.git

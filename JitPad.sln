@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JitPad", "JitPad\JitPad.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JitPad.Core", "JitPad.Core\JitPad.Core.csproj", "{EF16057D-0180-4B0A-ABB9-0D340C1B7495}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JitDasm", "JitDasm\JitDasm\JitDasm.csproj", "{823FB60C-5D89-4413-BE80-A1CE503222C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{EF16057D-0180-4B0A-ABB9-0D340C1B7495}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF16057D-0180-4B0A-ABB9-0D340C1B7495}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF16057D-0180-4B0A-ABB9-0D340C1B7495}.Release|Any CPU.Build.0 = Release|Any CPU
+		{823FB60C-5D89-4413-BE80-A1CE503222C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{823FB60C-5D89-4413-BE80-A1CE503222C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{823FB60C-5D89-4413-BE80-A1CE503222C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{823FB60C-5D89-4413-BE80-A1CE503222C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
