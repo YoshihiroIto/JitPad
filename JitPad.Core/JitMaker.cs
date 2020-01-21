@@ -21,11 +21,11 @@ namespace JitPad.Core
         {
             var assemblyLoadContext = new UnloadableAssemblyLoadContext();
             var sourceCodeTempPath = Path.GetTempFileName() + ".cs";
-            
+
             try
             {
                 const string assemblyName = "compiled.dll";
-                
+
                 // todo: PDB embedded source code
                 File.WriteAllText(sourceCodeTempPath, _sourceCode, Encoding.UTF8);
 
@@ -35,13 +35,14 @@ namespace JitPad.Core
                 if (compileResult.IsOk == false)
                     return new DisassembleResult(false, "", compileResult.Messages);
 
-                var assembly = assemblyLoadContext.LoadFromStream(
-                    new MemoryStream(compileResult.AssembleImage));
-                
+                var assembly = assemblyLoadContext.LoadFromStream(new MemoryStream(compileResult.AssembleImage));
+
                 var args = new[]
                 {
                     "-m", assemblyName + ", Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
-                    "-p", Process.GetCurrentProcess().Id.ToString()
+                    "-p", Process.GetCurrentProcess().Id.ToString(),
+                    "--diffable",
+                    "--heap-search"
                 };
 
                 var output = new StringWriter();
