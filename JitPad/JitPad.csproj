@@ -6,4 +6,8 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\JitPad.Core\JitPad.Core.csproj" />
+    </ItemGroup>
+
 </Project>

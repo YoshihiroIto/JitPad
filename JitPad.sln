@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JitPad", "JitPad\JitPad.csproj", "{65D7B3EE-ADD4-4F76-8BA0-88AA8C440E5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JitPad.Core", "JitPad.Core\JitPad.Core.csproj", "{EF16057D-0180-4B0A-ABB9-0D340C1B7495}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{65D7B3EE-ADD4-4F76-8BA0-88AA8C440E5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65D7B3EE-ADD4-4F76-8BA0-88AA8C440E5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65D7B3EE-ADD4-4F76-8BA0-88AA8C440E5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF16057D-0180-4B0A-ABB9-0D340C1B7495}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF16057D-0180-4B0A-ABB9-0D340C1B7495}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF16057D-0180-4B0A-ABB9-0D340C1B7495}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF16057D-0180-4B0A-ABB9-0D340C1B7495}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
