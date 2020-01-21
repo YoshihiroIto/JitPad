@@ -30,7 +30,7 @@ public class TestClass
 
             var compiler = new Compiler();
 
-            var result = compiler.Compile("test.dll", sourceCode, isReleaseBuild);
+            var result = compiler.Compile("test.dll", sourceCode, null, isReleaseBuild);
 
             Assert.True(result.IsOk);
         }
@@ -53,7 +53,7 @@ public class TestClass
 
             var compiler = new Compiler();
 
-            var result = compiler.Compile("test.dll", sourceCode, isReleaseBuild);
+            var result = compiler.Compile("test.dll", sourceCode, null, isReleaseBuild);
 
             Assert.False(result.IsOk);
             Assert.True(result.Messages.Any());

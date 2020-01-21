@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
+using System.Runtime.Loader;
+using System.Text;
 
 namespace JitPad.Core
 {
@@ -18,26 +19,31 @@ namespace JitPad.Core
 
         public DisassembleResult Run()
         {
-            const string assemblyName = "compiled.dll";
-
-            var compiler = new Compiler();
-
-            var compileResult = compiler.Compile(assemblyName, _sourceCode, _isReleaseBuild);
-            if (compileResult.IsOk == false)
-                return new DisassembleResult(false, "", compileResult.Messages);
-
             var assemblyLoadContext = new UnloadableAssemblyLoadContext();
-
+            var sourceCodeTempPath = Path.GetTempFileName() + ".cs";
+            
             try
             {
-                var assembly = assemblyLoadContext.LoadFromStream(new MemoryStream(compileResult.AssembleImage));
+                const string assemblyName = "compiled.dll";
+                
+                // todo: PDB embedded source code
+                File.WriteAllText(sourceCodeTempPath, _sourceCode, Encoding.UTF8);
 
+                var compiler = new Compiler();
+
+                var compileResult = compiler.Compile(assemblyName, _sourceCode, sourceCodeTempPath, _isReleaseBuild);
+                if (compileResult.IsOk == false)
+                    return new DisassembleResult(false, "", compileResult.Messages);
+
+                var assembly = assemblyLoadContext.LoadFromStream(
+                    new MemoryStream(compileResult.AssembleImage));
+                
                 var args = new[]
                 {
                     "-m", assemblyName + ", Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
                     "-p", Process.GetCurrentProcess().Id.ToString()
                 };
-                
+
                 var output = new StringWriter();
 
                 var retCode = JitDasm.Program.MainForJitPad(compileResult.AssembleImage, assembly, output, args);
@@ -53,6 +59,8 @@ namespace JitPad.Core
             }
             finally
             {
+                File.Delete(sourceCodeTempPath);
+
                 assemblyLoadContext.Unload();
             }
         }

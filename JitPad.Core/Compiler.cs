@@ -1,21 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.Text;
 
 namespace JitPad.Core
 {
     public class Compiler
     {
-        public CompileResult Compile(string assemblyName, string sourceCode, bool isReleaseBuild)
+        public CompileResult Compile(string assemblyName, string sourceCode, string? sourceCodePath, bool isReleaseBuild)
         {
             using var asmImage = new MemoryStream();
 
-            var result = GenerateCode(assemblyName, sourceCode, isReleaseBuild).Emit(asmImage);
+            sourceCodePath ??= Path.ChangeExtension(assemblyName, ".cs");
 
-            if (result.Success != false)
+            var symbolsName = Path.ChangeExtension(assemblyName, ".pdb");
+ 
+            var buffer = Encoding.UTF8.GetBytes(sourceCode);
+            var sourceText = SourceText.From(buffer, buffer.Length, Encoding.UTF8, canBeEmbedded: true);
+
+            var compilation = GenerateCode(assemblyName, sourceText, sourceCodePath, isReleaseBuild);
+            
+            var emitOptions = new EmitOptions(
+                debugInformationFormat: DebugInformationFormat.Embedded,
+                pdbFilePath: symbolsName
+            );
+            
+            var result = compilation.Emit(
+                peStream: asmImage,
+                embeddedTexts: new []{EmbeddedText.FromSource(sourceCodePath, sourceText)},
+                options: emitOptions);
+
+            if (result.Success)
             {
                 asmImage.Seek(0, SeekOrigin.Begin);
 
@@ -24,6 +44,9 @@ namespace JitPad.Core
             else
             {
                 var messages = result.Diagnostics
+                    .Where(x =>
+                        x.IsWarningAsError ||
+                        x.Severity == DiagnosticSeverity.Error)
                     .OrderBy(x => x.Location.SourceSpan.Start)
                     .Select(x => x.ToString());
 
@@ -31,11 +54,15 @@ namespace JitPad.Core
             }
         }
 
-        private static CSharpCompilation GenerateCode(string assemblyName, string sourceCode, bool isReleaseBuild)
+        private static CSharpCompilation GenerateCode(string assemblyName, SourceText sourceText, string sourceCodePath,
+            bool isReleaseBuild)
         {
-            var sourceText = SourceText.From(sourceCode);
             var options = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.Default);
-            var syntaxTree = SyntaxFactory.ParseSyntaxTree(sourceText, options);
+            var syntaxTree = CSharpSyntaxTree.ParseText(sourceText, options, path: sourceCodePath);
+
+            var syntaxRootNode = syntaxTree.GetRoot() as CSharpSyntaxNode;
+            var encoded = CSharpSyntaxTree.Create(syntaxRootNode, null, sourceCodePath, Encoding.UTF8);
+
             var references = new MetadataReference[]
             {
                 MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
@@ -43,11 +70,11 @@ namespace JitPad.Core
 
             return CSharpCompilation.Create(
                 assemblyName,
-                new[] {syntaxTree},
+                new[] {encoded},
                 references: references,
-                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
-                    optimizationLevel: isReleaseBuild ? OptimizationLevel.Release : OptimizationLevel.Debug,
-                    assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default));
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
+                    .WithOptimizationLevel(isReleaseBuild ? OptimizationLevel.Release : OptimizationLevel.Debug)
+                    .WithPlatform(Platform.AnyCpu));
         }
     }
 }
