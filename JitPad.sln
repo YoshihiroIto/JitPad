@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biaui", "externals\Biaui\Bi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "externals", "externals", "{68759FD1-D7D8-4D0D-B0AA-B478945F83A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JitPad.Foundation", "JitPad.Foundation\JitPad.Foundation.csproj", "{6FA9CD20-98D4-4B54-B65D-1240C1DD7D0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{2204BF7A-B487-4EBA-B6D7-51F2DEFE777C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2204BF7A-B487-4EBA-B6D7-51F2DEFE777C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2204BF7A-B487-4EBA-B6D7-51F2DEFE777C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FA9CD20-98D4-4B54-B65D-1240C1DD7D0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FA9CD20-98D4-4B54-B65D-1240C1DD7D0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FA9CD20-98D4-4B54-B65D-1240C1DD7D0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FA9CD20-98D4-4B54-B65D-1240C1DD7D0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2204BF7A-B487-4EBA-B6D7-51F2DEFE777C} = {68759FD1-D7D8-4D0D-B0AA-B478945F83A1}
