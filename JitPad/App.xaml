@@ -6,39 +6,8 @@
     <Application.Resources>
         <internals:SharedResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/Font.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/Colors.xaml" />
-
-                <!--  StandardControls  -->
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/AccessText.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/Button.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/CheckBox.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/ComboBox.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/ContextMenu.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/Decorator.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/Expander.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/GridSplitter.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/Label.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/ListBox.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/ListView.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/Menu.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/Popup.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/RadioButton.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/ScrollViewer.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/Slider.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/TabControl.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/TextBlock.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/TextBox.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/ToggleButton.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/ToolTip.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/StandardControls/TreeView.xaml" />
-
-                <!--  Controls  -->
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/Controls/BiaColorPickerLightweightStyle.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/Controls/BiaColorPickerWheelStyle.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/Controls/BiaWindowDialogStyle.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/Controls/BiaWindowSpaceSavingStyle.xaml" />
-                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/Controls/BiaWindowTemplatedDialogStyle.xaml" />
+                <!-- Biaui -->
+                <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/Styles.xaml" />
 
                 <!--  JitPad  -->
                 <internals:SharedResourceDictionary Source="pack://application:,,,/JitPad;component/Styles.xaml" />
