@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace JitPad.Core
+﻿namespace JitPad.Core
 {
     public class CompileResult
     {

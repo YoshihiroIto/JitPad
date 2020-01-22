@@ -25,19 +25,28 @@ namespace JitPad
             app.Run();
         }
 
+        private readonly JitPad.Core.AppContext _appContext = new JitPad.Core.AppContext();
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
             Reactive.Bindings.UIDispatcherScheduler.Initialize();
 
-            MainWindow = new MainWindow();
-            MainWindow?.Show();
+            MainWindow = new MainWindow
+            {
+                DataContext = new MainWindowViewModel(_appContext)
+            };
+
+            MainWindow.Show();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
+
+            (MainWindow?.DataContext as IDisposable)?.Dispose();
+            _appContext?.Dispose();
         }
     }
 }
