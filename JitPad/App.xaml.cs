@@ -2,6 +2,9 @@
 using System.IO;
 using System.Runtime;
 using System.Windows;
+using System.Xml;
+using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 
 namespace JitPad
 {
@@ -30,8 +33,8 @@ namespace JitPad
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
-            Reactive.Bindings.UIDispatcherScheduler.Initialize();
+            
+            SetupTextEditor();
 
             MainWindow = new MainWindow
             {
@@ -47,6 +50,16 @@ namespace JitPad
 
             (MainWindow?.DataContext as IDisposable)?.Dispose();
             _appContext?.Dispose();
+        }
+
+        private static void SetupTextEditor()
+        {
+            Reactive.Bindings.UIDispatcherScheduler.Initialize();
+            
+            using var reader = new XmlTextReader(new MemoryStream(JitPad.Properties.Resources.CSharp_Mode));
+            var highlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+
+            HighlightingManager.Instance.RegisterHighlighting("C#", new[] {".cs"}, highlighting);
         }
     }
 }
