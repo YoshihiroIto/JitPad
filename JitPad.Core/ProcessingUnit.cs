@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using JitPad.Core.Processor;
@@ -30,23 +29,52 @@ namespace JitPad.Core
         {
             this.SourceFile.ObserveProperty(x => x.Text)
                 .Throttle(TimeSpan.FromMilliseconds(50))
-                .Subscribe(x => Result = DoProcess(SourceFile.Text))
+                .Subscribe(x =>
+                {
+                    _ProcessedSource = SourceFile.Text;
+
+                    if (_isInProcessing)
+                        return;
+
+                    _isInProcessing = true;
+
+                    try
+                    {
+                        Result = DoProcess();
+                    }
+                    finally
+                    {
+                        _isInProcessing = false;
+                    }
+                })
                 .AddTo(_Trashes);
         }
+
+        private string _ProcessedSource = "";
+
+        private bool _isInProcessing;
 
         public void Dispose()
         {
             _Trashes.Dispose();
         }
 
-        private static string DoProcess(string sourceText)
+        private string DoProcess()
         {
-            if (string.IsNullOrEmpty(sourceText))
+            if (string.IsNullOrEmpty(_ProcessedSource))
                 return "";
 
-            var jitMaker = new JitMaker(sourceText, true);
+            DisassembleResult result;
 
-            var result = jitMaker.Run();
+            string sourceText;
+            do
+            {
+                sourceText = _ProcessedSource;
+                
+                var jitMaker = new JitMaker(_ProcessedSource, true);
+
+                result = jitMaker.Run();
+            } while (sourceText != _ProcessedSource);
 
             return result.IsOk ? result.Output : string.Join("\n", result.Messages);
         }

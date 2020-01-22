@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading;
 
 namespace JitPad.Core.Processor
 {
@@ -40,8 +41,7 @@ namespace JitPad.Core.Processor
                 {
                     "-m", assemblyName + ", Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
                     "-p", Process.GetCurrentProcess().Id.ToString(),
-                    "--diffable",
-                    "--heap-search"
+                    "--diffable"
                 };
 
                 var output = new StringWriter();

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using JitPad.Foundation;
+﻿using JitPad.Foundation;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using AppContext = JitPad.Core.AppContext;
