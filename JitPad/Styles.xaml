@@ -12,12 +12,14 @@
         <Setter Property="Foreground" Value="{DynamicResource TextBoxForegroundBrushKey}" />
         <Setter Property="Background" Value="{DynamicResource TextBoxBackgroundBrushKey}" />
         <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrushKey}" />
-        <Setter Property="ShowLineNumbers" Value="False" />
+        <Setter Property="ShowLineNumbers" Value="True" />
         <Setter Property="UseLayoutRounding" Value="True" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="FontFamily" Value="{DynamicResource BiauiMonoFontFamily}" />
-        <Setter Property="WordWrap" Value="True" />
+        <Setter Property="WordWrap" Value="False" />
         <Setter Property="FontSize" Value="14" />
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
     </Style>
     
     <Style TargetType="{x:Type avalonedit:TextEditor}" BasedOn="{StaticResource TextEditorBaseStyle}" x:Key="TopTextEditorStyle">

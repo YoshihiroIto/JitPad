@@ -34,6 +34,8 @@ namespace JitPad
         {
             base.OnStartup(e);
             
+            Reactive.Bindings.UIDispatcherScheduler.Initialize();
+            
             SetupTextEditor();
 
             MainWindow = new MainWindow
@@ -54,8 +56,6 @@ namespace JitPad
 
         private static void SetupTextEditor()
         {
-            Reactive.Bindings.UIDispatcherScheduler.Initialize();
-            
             using var reader = new XmlTextReader(new MemoryStream(JitPad.Properties.Resources.CSharp_Mode));
             var highlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
 

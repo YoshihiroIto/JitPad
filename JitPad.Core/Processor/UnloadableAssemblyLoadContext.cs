@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
 
-namespace JitPad.Core.Processer
+namespace JitPad.Core.Processor
 {
     internal class UnloadableAssemblyLoadContext : AssemblyLoadContext
     {

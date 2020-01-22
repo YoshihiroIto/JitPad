@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace JitPad.Core.Processer
+namespace JitPad.Core.Processor
 {
     public class JitMaker : IDisassembler
     {
@@ -48,14 +48,9 @@ namespace JitPad.Core.Processer
 
                 var retCode = JitDasm.Program.MainForJitPad(compileResult.AssembleImage, assembly, output, args);
 
-                if (retCode == 0)
-                {
-                    return new DisassembleResult(true, output.ToString(), Array.Empty<string>());
-                }
-                else
-                {
-                    return new DisassembleResult(false, "", output.ToString().Split("\n"));
-                }
+                return retCode == 0
+                    ? new DisassembleResult(true, output.ToString(), Array.Empty<string>())
+                    : new DisassembleResult(false, "", output.ToString().Split("\n"));
             }
             finally
             {

@@ -10,6 +10,8 @@ namespace JitPad.Core
 
         public void Dispose()
         {
+            Primary.Dispose();
+            Secondary.Dispose();
         }
     }
 }

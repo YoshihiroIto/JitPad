@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.Text;
 
-namespace JitPad.Core.Processer
+namespace JitPad.Core.Processor
 {
     public class Compiler
     {

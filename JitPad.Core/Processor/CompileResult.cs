@@ -1,4 +1,4 @@
-﻿namespace JitPad.Core.Processer
+﻿namespace JitPad.Core.Processor
 {
     public class CompileResult
     {

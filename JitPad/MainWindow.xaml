@@ -2,11 +2,15 @@
                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:behaviors="clr-namespace:JitPad.Behaviors"
                     xmlns:controls="clr-namespace:Biaui.Controls;assembly=Biaui"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:jitPad="clr-namespace:JitPad"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     Width="1400"
                     Height="800"
+                    d:DataContext="{d:DesignInstance jitPad:MainWindowViewModel}"
                     Style="{StaticResource BiaWindowDialogStyle}"
                     WindowStartupLocation="CenterScreen"
                     mc:Ignorable="d">
@@ -38,17 +42,41 @@
         <avalonedit:TextEditor Grid.Row="0"
                                Grid.Column="0"
                                Style="{StaticResource TopTextEditorStyle}"
-                               SyntaxHighlighting="C#" />
+                               SyntaxHighlighting="C#">
+            <b:Interaction.Behaviors>
+                <behaviors:TextEditorBehavior Text="{Binding PrimarySourceText.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </b:Interaction.Behaviors>
+        </avalonedit:TextEditor>
+
         <avalonedit:TextEditor Grid.Row="2"
                                Grid.Column="0"
-                               Style="{StaticResource BottomTextEditorStyle}" />
+                               IsReadOnly="True"
+                               ShowLineNumbers="False"
+                               Style="{StaticResource BottomTextEditorStyle}"
+                               WordWrap="True">
+            <b:Interaction.Behaviors>
+                <behaviors:TextEditorBehavior Text="{Binding PrimaryResult.Value, Mode=OneWay}" />
+            </b:Interaction.Behaviors>
+        </avalonedit:TextEditor>
 
         <avalonedit:TextEditor Grid.Row="0"
                                Grid.Column="2"
                                Style="{StaticResource TopTextEditorStyle}"
-                               SyntaxHighlighting="C#" />
+                               SyntaxHighlighting="C#">
+            <b:Interaction.Behaviors>
+                <behaviors:TextEditorBehavior Text="{Binding SecondarySourceText.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </b:Interaction.Behaviors>
+        </avalonedit:TextEditor>
+
         <avalonedit:TextEditor Grid.Row="2"
                                Grid.Column="2"
-                               Style="{StaticResource BottomTextEditorStyle}" />
+                               IsReadOnly="True"
+                               ShowLineNumbers="False"
+                               Style="{StaticResource BottomTextEditorStyle}"
+                               WordWrap="True">
+            <b:Interaction.Behaviors>
+                <behaviors:TextEditorBehavior Text="{Binding SecondaryResult.Value, Mode=OneWay}" />
+            </b:Interaction.Behaviors>
+        </avalonedit:TextEditor>
     </Grid>
 </controls:BiaWindow>

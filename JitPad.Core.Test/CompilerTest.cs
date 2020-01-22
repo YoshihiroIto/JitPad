@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using JitPad.Core.Processer;
+using JitPad.Core.Processor;
 using Xunit;
 
 namespace JitPad.Core.Test
