@@ -1,6 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Runtime;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace JitPad
 {
@@ -9,14 +10,19 @@ namespace JitPad
         [STAThread]
         public static void Main()
         {
-            App app = new App();
+            var configDir =
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "Jewelry Development/JitPad/"
+                );
+
+            Directory.CreateDirectory(configDir);
+            ProfileOptimization.SetProfileRoot(configDir);
+            ProfileOptimization.StartProfile("Startup.Profile");
+
+            var app = new App();
             app.InitializeComponent();
             app.Run();
-        }
-        
-        public App()
-        {
-            InitializeComponent();
         }
 
         protected override void OnStartup(StartupEventArgs e)
