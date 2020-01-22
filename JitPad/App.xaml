@@ -1,12 +1,11 @@
 ﻿<Application x:Class="JitPad.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:internals="clr-namespace:Biaui.Internals;assembly=Biaui"
-             StartupUri="MainWindow.xaml">
+             xmlns:internals="clr-namespace:Biaui.Internals;assembly=Biaui">
     <Application.Resources>
         <internals:SharedResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- Biaui -->
+                <!--  Biaui  -->
                 <internals:SharedResourceDictionary Source="pack://application:,,,/Biaui;component/Styles.xaml" />
 
                 <!--  JitPad  -->
