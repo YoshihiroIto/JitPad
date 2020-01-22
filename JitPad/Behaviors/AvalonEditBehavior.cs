@@ -35,7 +35,7 @@ namespace JitPad.Behaviors
                 AssociatedObject.TextChanged -= AssociatedObjectOnTextChanged;
         }
 
-        private void AssociatedObjectOnTextChanged(object sender, EventArgs eventArgs)
+        private void AssociatedObjectOnTextChanged(object? sender, EventArgs eventArgs)
         {
             if (sender is TextEditor textEditor)
                 if (textEditor.Document != null)

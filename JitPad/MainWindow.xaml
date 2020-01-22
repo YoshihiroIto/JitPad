@@ -37,14 +37,16 @@
 
         <avalonedit:TextEditor Grid.Row="0"
                                Grid.Column="0"
-                               Style="{StaticResource TopTextEditorStyle}" />
+                               Style="{StaticResource TopTextEditorStyle}"
+                               SyntaxHighlighting="C#" />
         <avalonedit:TextEditor Grid.Row="2"
                                Grid.Column="0"
                                Style="{StaticResource BottomTextEditorStyle}" />
 
         <avalonedit:TextEditor Grid.Row="0"
                                Grid.Column="2"
-                               Style="{StaticResource TopTextEditorStyle}" />
+                               Style="{StaticResource TopTextEditorStyle}"
+                               SyntaxHighlighting="C#" />
         <avalonedit:TextEditor Grid.Row="2"
                                Grid.Column="2"
                                Style="{StaticResource BottomTextEditorStyle}" />
