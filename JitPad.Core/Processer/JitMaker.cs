@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace JitPad.Core
+namespace JitPad.Core.Processer
 {
     public class JitMaker : IDisassembler
     {

@@ -1,4 +1,4 @@
-﻿namespace JitPad.Core
+﻿namespace JitPad.Core.Processer
 {
     public interface IDisassembler
     {
