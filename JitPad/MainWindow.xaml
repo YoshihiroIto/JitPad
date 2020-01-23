@@ -17,8 +17,6 @@
     <Grid Margin="12,32,12,12">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -28,16 +26,10 @@
         </Grid.ColumnDefinitions>
 
         <GridSplitter Grid.Row="0"
-                      Grid.RowSpan="3"
                       Grid.Column="1"
                       Width="8"
                       Margin="8,0"
                       ResizeDirection="Columns" />
-        <GridSplitter Grid.Row="1"
-                      Grid.Column="0"
-                      Grid.ColumnSpan="3"
-                      Height="8"
-                      ResizeDirection="Rows" />
 
         <avalonedit:TextEditor Grid.Row="0"
                                Grid.Column="0"
@@ -48,34 +40,14 @@
             </b:Interaction.Behaviors>
         </avalonedit:TextEditor>
 
-        <avalonedit:TextEditor Grid.Row="2"
-                               Grid.Column="0"
+        <avalonedit:TextEditor Grid.Row="0"
+                               Grid.Column="2"
                                IsReadOnly="True"
                                ShowLineNumbers="False"
                                Style="{StaticResource BottomTextEditorStyle}"
                                WordWrap="True">
             <b:Interaction.Behaviors>
                 <behaviors:TextEditorBehavior Text="{Binding PrimaryResult.Value, Mode=OneWay}" />
-            </b:Interaction.Behaviors>
-        </avalonedit:TextEditor>
-
-        <avalonedit:TextEditor Grid.Row="0"
-                               Grid.Column="2"
-                               Style="{StaticResource TopTextEditorStyle}"
-                               SyntaxHighlighting="C#">
-            <b:Interaction.Behaviors>
-                <behaviors:TextEditorBehavior Text="{Binding SecondarySourceText.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            </b:Interaction.Behaviors>
-        </avalonedit:TextEditor>
-
-        <avalonedit:TextEditor Grid.Row="2"
-                               Grid.Column="2"
-                               IsReadOnly="True"
-                               ShowLineNumbers="False"
-                               Style="{StaticResource BottomTextEditorStyle}"
-                               WordWrap="True">
-            <b:Interaction.Behaviors>
-                <behaviors:TextEditorBehavior Text="{Binding SecondaryResult.Value, Mode=OneWay}" />
             </b:Interaction.Behaviors>
         </avalonedit:TextEditor>
     </Grid>
