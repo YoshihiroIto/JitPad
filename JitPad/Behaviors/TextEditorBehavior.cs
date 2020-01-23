@@ -34,14 +34,11 @@ namespace JitPad.Behaviors
                         self._Text = (string) e.NewValue;
 
                         var editor = self.AssociatedObject;
-                        if (editor?.Document != null)
+                        if (editor.Document.Text != self.Text)
                         {
-                            if (editor.Document.Text != self.Text)
-                            {
-                                var caretOffset = editor.CaretOffset;
-                                editor.Document.Text = self.Text;
-                                editor.CaretOffset = Math.Min(editor.Document.TextLength, caretOffset);
-                            }
+                            var caretOffset = editor.CaretOffset;
+                            editor.Document.Text = self.Text;
+                            editor.CaretOffset = Math.Min(editor.Document.TextLength, caretOffset);
                         }
                     }
                 ));
@@ -52,16 +49,14 @@ namespace JitPad.Behaviors
         {
             base.OnAttached();
 
-            if (AssociatedObject != null)
-                AssociatedObject.TextChanged += AssociatedObjectOnTextChanged;
+            AssociatedObject.TextChanged += AssociatedObjectOnTextChanged;
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
 
-            if (AssociatedObject != null)
-                AssociatedObject.TextChanged -= AssociatedObjectOnTextChanged;
+            AssociatedObject.TextChanged -= AssociatedObjectOnTextChanged;
         }
 
         private void AssociatedObjectOnTextChanged(object? sender, EventArgs eventArgs)
