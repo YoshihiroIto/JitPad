@@ -24,7 +24,7 @@ namespace JitPad.Core.Processor
             var buffer = Encoding.UTF8.GetBytes(sourceCode);
             var sourceText = SourceText.From(buffer, buffer.Length, Encoding.UTF8, canBeEmbedded: true);
 
-            var compilation = GenerateCode(assemblyName, sourceText, sourceCodePath, isReleaseBuild);
+            var (compilation, _) = GenerateCode(assemblyName, sourceText, sourceCodePath, isReleaseBuild);
 
             var emitOptions = new EmitOptions(
                 debugInformationFormat: DebugInformationFormat.Embedded,
@@ -64,7 +64,21 @@ namespace JitPad.Core.Processor
             }
         }
 
-        private static CSharpCompilation GenerateCode(string assemblyName, SourceText sourceText, string sourceCodePath,
+        public SemanticModel MakeSemanticModel(string sourceCode)
+        {
+            var sourceCodePath = "dummy";
+            var assemblyName = "dummy";
+            var isReleaseBuild = true;
+
+            var buffer = Encoding.UTF8.GetBytes(sourceCode);
+            var sourceText = SourceText.From(buffer, buffer.Length, Encoding.UTF8, canBeEmbedded: true);
+
+            var (compilation, syntaxTree) = GenerateCode(assemblyName, sourceText, sourceCodePath, isReleaseBuild);
+
+            return compilation.GetSemanticModel(syntaxTree);
+        }
+
+        private static (CSharpCompilation, SyntaxTree) GenerateCode(string assemblyName, SourceText sourceText, string sourceCodePath,
             bool isReleaseBuild)
         {
             var options = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.Default);
@@ -86,15 +100,15 @@ namespace JitPad.Core.Processor
             foreach (var x in Directory.EnumerateFiles(assemblyPath, "*.dll"))
             {
                 var fileName = Path.GetFileName(x);
-                
-                if (fileName.IndexOf("Native", StringComparison.Ordinal) == -1  &&
+
+                if (fileName.IndexOf("Native", StringComparison.Ordinal) == -1 &&
                     (fileName.StartsWith("System.") || fileName.StartsWith("Microsoft.")))
                     references.Add(MetadataReference.CreateFromFile(x));
             }
 
             compilation = compilation.AddReferences(references);
 
-            return compilation;
+            return (compilation, encoded);
         }
     }
 }

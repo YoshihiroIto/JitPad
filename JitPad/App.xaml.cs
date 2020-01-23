@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime;
 using System.Windows;
+using System.Windows.Threading;
 using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
@@ -30,6 +31,13 @@ namespace JitPad
 
         private readonly JitPad.Core.AppContext _appContext = new JitPad.Core.AppContext();
 
+        public static Dispatcher UiDispatcher
+        {
+            get => _uiDispatcher ?? throw new NullReferenceException();
+            set => _uiDispatcher = value;
+        }
+        private static Dispatcher? _uiDispatcher;
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -44,6 +52,9 @@ namespace JitPad
             };
 
             MainWindow.Show();
+
+            _uiDispatcher = MainWindow?.Dispatcher ?? throw new NullReferenceException();
+
         }
 
         protected override void OnExit(ExitEventArgs e)
