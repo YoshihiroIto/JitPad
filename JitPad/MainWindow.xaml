@@ -8,8 +8,10 @@
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:jitPad="clr-namespace:JitPad"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    Drop="Window_Drop" PreviewDragOver="Window_PreviewDragOver"
+                    AllowDrop="True"
                     Width="1400"
-                    Height="800"
+                    Height="1000"
                     d:DataContext="{d:DesignInstance jitPad:MainWindowViewModel}"
                     Style="{StaticResource BiaWindowDialogStyle}"
                     WindowStartupLocation="CenterScreen"
@@ -31,7 +33,16 @@
                    Grid.ColumnSpan="3"
                    Margin="0,0,0,12"
                    WindowChrome.IsHitTestVisibleInChrome="True">
-            <controls:BiaToggleSwitch HorizontalAlignment="Left"
+            <controls:BiaToggleButton HorizontalAlignment="Left"
+                                      Content="File monitoring"
+                                      IsChecked="{Binding IsFileMonitoring.Value, Mode=TwoWay}" />
+
+            <controls:BiaTextBox Width="320"
+                                 HorizontalAlignment="Left"
+                                 Text="{Binding MonitoringFilePath.Value, Mode=TwoWay}" />
+
+            <controls:BiaToggleSwitch Margin="12,0,0,0"
+                                      HorizontalAlignment="Left"
                                       DisabledLabel="Debug"
                                       EnabledLabel="Release"
                                       IsChecked="{Binding IeReleaseBuild.Value, Mode=TwoWay}" />
