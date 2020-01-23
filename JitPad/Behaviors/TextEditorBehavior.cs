@@ -36,9 +36,12 @@ namespace JitPad.Behaviors
                         var editor = self.AssociatedObject;
                         if (editor?.Document != null)
                         {
-                            var caretOffset = editor.CaretOffset;
-                            editor.Document.Text = self.Text;
-                            editor.CaretOffset = Math.Min(editor.Document.TextLength, caretOffset);
+                            if (editor.Document.Text != self.Text)
+                            {
+                                var caretOffset = editor.CaretOffset;
+                                editor.Document.Text = self.Text;
+                                editor.CaretOffset = Math.Min(editor.Document.TextLength, caretOffset);
+                            }
                         }
                     }
                 ));
