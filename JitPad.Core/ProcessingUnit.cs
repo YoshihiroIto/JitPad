@@ -53,7 +53,7 @@ namespace JitPad.Core
         public ProcessingUnit()
         {
             SourceFile.ObserveProperty(x => x.Text)
-                .Throttle(TimeSpan.FromMilliseconds(50))
+                .Throttle(TimeSpan.FromMilliseconds(500))
                 .ObserveOn(ThreadPoolScheduler.Instance)
                 .Subscribe(x =>
                 {
