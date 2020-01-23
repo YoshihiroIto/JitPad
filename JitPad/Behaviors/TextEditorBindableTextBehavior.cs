@@ -5,7 +5,7 @@ using Microsoft.Xaml.Behaviors;
 
 namespace JitPad.Behaviors
 {
-    public sealed class TextEditorBehavior : Behavior<TextEditor>
+    public sealed class TextEditorBindableTextBehavior : Behavior<TextEditor>
     {
         #region Text
 
@@ -25,12 +25,12 @@ namespace JitPad.Behaviors
             DependencyProperty.Register(
                 nameof(Text),
                 typeof(string),
-                typeof(TextEditorBehavior),
+                typeof(TextEditorBindableTextBehavior),
                 new PropertyMetadata(
                     default,
                     (s, e) =>
                     {
-                        var self = (TextEditorBehavior) s;
+                        var self = (TextEditorBindableTextBehavior) s;
                         self._Text = (string) e.NewValue;
 
                         var editor = self.AssociatedObject;
