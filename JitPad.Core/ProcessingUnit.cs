@@ -60,6 +60,17 @@ namespace JitPad.Core
 
         #endregion
 
+        #region IsInProcessing
+        
+        private bool _IsInProcessing;
+        
+        public bool IsInProcessing
+        {
+            get => _IsInProcessing;
+            set => SetProperty(ref _IsInProcessing, value);
+        }
+        
+        #endregion
 
         private readonly CompositeDisposable _Trashes = new CompositeDisposable();
 
@@ -70,7 +81,7 @@ namespace JitPad.Core
                 .ObserveOn(ThreadPoolScheduler.Instance)
                 .Subscribe(x => OnProcess())
                 .AddTo(_Trashes);
-            
+
             this.ObserveProperty(x => x.IsReleaseBuild)
                 .ObserveOn(ThreadPoolScheduler.Instance)
                 .Subscribe(x => OnProcess())
@@ -81,10 +92,10 @@ namespace JitPad.Core
         {
             _ProcessedSource = SourceFile.Text;
 
-            if (_isInProcessing)
+            if (IsInProcessing)
                 return;
 
-            _isInProcessing = true;
+            IsInProcessing = true;
 
             try
             {
@@ -99,13 +110,11 @@ namespace JitPad.Core
             }
             finally
             {
-                _isInProcessing = false;
+                IsInProcessing = false;
             }
         }
 
         private string _ProcessedSource = "";
-
-        private bool _isInProcessing;
 
         public void Dispose()
         {

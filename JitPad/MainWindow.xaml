@@ -8,11 +8,12 @@
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:jitPad="clr-namespace:JitPad"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                    Drop="Window_Drop" PreviewDragOver="Window_PreviewDragOver"
-                    AllowDrop="True"
                     Width="1400"
                     Height="1000"
                     d:DataContext="{d:DesignInstance jitPad:MainWindowViewModel}"
+                    AllowDrop="True"
+                    Drop="Window_Drop"
+                    PreviewDragOver="Window_PreviewDragOver"
                     Style="{StaticResource BiaWindowDialogStyle}"
                     WindowStartupLocation="CenterScreen"
                     mc:Ignorable="d">
@@ -105,5 +106,22 @@
                 </Style>
             </avalonedit:TextEditor.Style>
         </avalonedit:TextEditor>
+
+        <controls:BiaProgressPanel Grid.Row="1"
+                                   Grid.Column="2"
+                                   Height="12"
+                                   VerticalAlignment="Top">
+            <controls:BiaProgressPanel.Style>
+                <Style TargetType="controls:BiaProgressPanel">
+                    <Setter Property="Visibility" Value="Hidden" />
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsInProcessing.Value, Mode=OneWay}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </controls:BiaProgressPanel.Style>
+        </controls:BiaProgressPanel>
     </Grid>
 </controls:BiaWindow>
