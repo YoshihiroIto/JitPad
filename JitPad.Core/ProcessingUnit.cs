@@ -24,6 +24,30 @@ namespace JitPad.Core
 
         #endregion
 
+        #region Message
+
+        private string _Message = "";
+        
+        public string Message
+        {
+            get => _Message;
+            set => SetProperty(ref _Message, value);
+        }
+        
+        #endregion
+
+        #region IsOk
+        
+        private bool _IsOk;
+        
+        public bool IsOk
+        {
+            get => _IsOk;
+            set => SetProperty(ref _IsOk, value);
+        }
+        
+        #endregion
+
         private readonly CompositeDisposable _Trashes = new CompositeDisposable();
 
         public ProcessingUnit()
@@ -42,7 +66,14 @@ namespace JitPad.Core
 
                     try
                     {
-                        Result = DoProcess();
+                        var (isOk, result, message) = DoProcess();
+
+                        if (isOk)
+                            Result = result;
+                        else
+                            Message = message;
+
+                        IsOk = isOk;
                     }
                     finally
                     {
@@ -61,10 +92,10 @@ namespace JitPad.Core
             _Trashes.Dispose();
         }
 
-        private string DoProcess()
+        private (bool, string, string) DoProcess()
         {
             if (string.IsNullOrEmpty(_ProcessedSource))
-                return "";
+                return (true, "", "");
 
             DisassembleResult result;
 
@@ -78,7 +109,7 @@ namespace JitPad.Core
                 result = jitMaker.Run();
             } while (sourceText != _ProcessedSource);
 
-            return result.IsOk ? result.Output : string.Join("\n", result.Messages);
+            return (result.IsOk, result.Output, string.Join("\n", result.Messages));
         }
     }
 }

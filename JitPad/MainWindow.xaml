@@ -47,6 +47,40 @@
             <b:Interaction.Behaviors>
                 <behaviors:TextEditorBehavior Text="{Binding PrimaryResult.Value, Mode=OneWay}" />
             </b:Interaction.Behaviors>
+
+            <avalonedit:TextEditor.Style>
+                <Style TargetType="avalonedit:TextEditor" BasedOn="{StaticResource {x:Type avalonedit:TextEditor}}">
+                    <Setter Property="Visibility" Value="Hidden" />
+                    
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding PrimaryIsOk.Value, Mode=OneWay}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </avalonedit:TextEditor.Style>
+        </avalonedit:TextEditor>
+
+        <avalonedit:TextEditor Grid.Row="0"
+                               Grid.Column="2"
+                               IsReadOnly="True"
+                               ShowLineNumbers="False"
+                               WordWrap="True">
+            <b:Interaction.Behaviors>
+                <behaviors:TextEditorBehavior Text="{Binding PrimaryMessage.Value, Mode=OneWay}" />
+            </b:Interaction.Behaviors>
+
+            <avalonedit:TextEditor.Style>
+                <Style TargetType="avalonedit:TextEditor" BasedOn="{StaticResource {x:Type avalonedit:TextEditor}}">
+                    <Setter Property="Visibility" Value="Visible" />
+                    
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding PrimaryIsOk.Value, Mode=OneWay}" Value="True">
+                            <Setter Property="Visibility" Value="Hidden" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </avalonedit:TextEditor.Style>
         </avalonedit:TextEditor>
     </Grid>
 </controls:BiaWindow>
