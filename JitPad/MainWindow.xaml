@@ -33,7 +33,6 @@
 
         <avalonedit:TextEditor Grid.Row="0"
                                Grid.Column="0"
-                               Style="{StaticResource TopTextEditorStyle}"
                                SyntaxHighlighting="C#">
             <b:Interaction.Behaviors>
                 <behaviors:TextEditorBehavior Text="{Binding PrimarySourceText.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -44,7 +43,6 @@
                                Grid.Column="2"
                                IsReadOnly="True"
                                ShowLineNumbers="False"
-                               Style="{StaticResource BottomTextEditorStyle}"
                                WordWrap="True">
             <b:Interaction.Behaviors>
                 <behaviors:TextEditorBehavior Text="{Binding PrimaryResult.Value, Mode=OneWay}" />
