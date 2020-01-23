@@ -9,7 +9,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\externals\Biaui\Biaui\source\Biaui\Biaui.csproj" />
-      <ProjectReference Include="..\JitDasm\JitDasm\JitDasm.csproj" />
       <ProjectReference Include="..\JitPad.Core\JitPad.Core.csproj" />
     </ItemGroup>
 

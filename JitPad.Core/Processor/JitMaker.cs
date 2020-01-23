@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Threading;
 
 namespace JitPad.Core.Processor
 {
@@ -19,44 +18,61 @@ namespace JitPad.Core.Processor
 
         public DisassembleResult Run()
         {
-            var assemblyLoadContext = new UnloadableAssemblyLoadContext();
             var sourceCodeTempPath = Path.GetTempFileName() + ".cs";
+            var assemblyTempPath = Path.ChangeExtension(sourceCodeTempPath, ".dll");
 
             try
             {
-                const string assemblyName = "compiled.dll";
-
-                // todo: PDB embedded source code
                 File.WriteAllText(sourceCodeTempPath, _sourceCode, Encoding.UTF8);
 
                 var compiler = new Compiler();
 
-                var compileResult = compiler.Compile(assemblyName, _sourceCode, sourceCodeTempPath, _isReleaseBuild);
+                var compileResult = compiler.Compile("compiled.dll", _sourceCode, sourceCodeTempPath, _isReleaseBuild);
                 if (compileResult.IsOk == false)
                     return new DisassembleResult(false, "", compileResult.Messages);
 
-                var assembly = assemblyLoadContext.LoadFromStream(new MemoryStream(compileResult.AssembleImage));
+                File.WriteAllBytes(assemblyTempPath, compileResult.AssembleImage);
 
-                var args = new[]
+                var procInfo = new ProcessStartInfo
                 {
-                    "-m", assemblyName + ", Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
-                    "-p", Process.GetCurrentProcess().Id.ToString(),
-                    "--diffable"
+                    FileName = "JitDasm",
+                    Arguments = "--diffable -l " + assemblyTempPath,
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true
                 };
 
-                var output = new StringWriter();
+                var proc = Process.Start(procInfo);
+                if (proc == null)
+                    return new DisassembleResult(false, "", Array.Empty<string>());
 
-                var retCode = JitDasm.Program.MainForJitPad(compileResult.AssembleImage, assembly, output, args);
+                var output = proc.StandardOutput.ReadToEnd().Replace("\r\r\n", "\n");
 
-                return retCode == 0
-                    ? new DisassembleResult(true, output.ToString(), Array.Empty<string>())
-                    : new DisassembleResult(false, "", output.ToString().Split("\n"));
+                return proc.ExitCode == 0
+                    ? new DisassembleResult(true, output, Array.Empty<string>())
+                    : new DisassembleResult(false, "", output.Split("\n"));
             }
             finally
             {
-                File.Delete(sourceCodeTempPath);
+                SafeFileDelete(sourceCodeTempPath);
+                SafeFileDelete(assemblyTempPath);
+            }
+        }
 
-                assemblyLoadContext.Unload();
+        private static void SafeFileDelete(string filePath)
+        {
+            for (var i = 0; i != 4; ++i)
+            {
+                try
+                {
+                    File.Delete(filePath);
+                    break;
+                }
+                catch
+                {
+                    GC.Collect();
+                    GC.WaitForFullGCComplete();
+                }
             }
         }
     }
