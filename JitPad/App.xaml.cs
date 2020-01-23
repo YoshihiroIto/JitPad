@@ -33,9 +33,9 @@ namespace JitPad
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            
+
             Reactive.Bindings.UIDispatcherScheduler.Initialize();
-            
+
             SetupTextEditor();
 
             MainWindow = new MainWindow
@@ -56,10 +56,17 @@ namespace JitPad
 
         private static void SetupTextEditor()
         {
-            using var reader = new XmlTextReader(new MemoryStream(JitPad.Properties.Resources.CSharp_Mode));
-            var highlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+            {
+                using var reader = new XmlTextReader(new MemoryStream(JitPad.Properties.Resources.CSharp_Mode));
+                var highlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+                HighlightingManager.Instance.RegisterHighlighting("C#", new[] {".cs"}, highlighting);
+            }
 
-            HighlightingManager.Instance.RegisterHighlighting("C#", new[] {".cs"}, highlighting);
+            {
+                using var reader = new XmlTextReader(new MemoryStream(JitPad.Properties.Resources.Asm_Mode));
+                var highlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+                HighlightingManager.Instance.RegisterHighlighting("Asm", new[] {".asm"}, highlighting);
+            }
         }
     }
 }

@@ -67,6 +67,7 @@
                                Grid.Column="2"
                                IsReadOnly="True"
                                ShowLineNumbers="False"
+                               SyntaxHighlighting="Asm"
                                WordWrap="True">
             <b:Interaction.Behaviors>
                 <behaviors:TextEditorBehavior Text="{Binding PrimaryResult.Value, Mode=OneWay}" />
