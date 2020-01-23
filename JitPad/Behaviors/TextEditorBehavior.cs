@@ -19,7 +19,7 @@ namespace JitPad.Behaviors
             }
         }
 
-        private string _Text;
+        private string _Text = "";
 
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register(
