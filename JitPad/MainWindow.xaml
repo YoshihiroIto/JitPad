@@ -15,9 +15,21 @@
                     AllowDrop="True"
                     Drop="Window_Drop"
                     PreviewDragOver="Window_PreviewDragOver"
-                    Style="{StaticResource BiaWindowDialogStyle}"
                     WindowStartupLocation="CenterScreen"
                     mc:Ignorable="d">
+    <controls:BiaWindow.Style>
+        <Style TargetType="controls:BiaWindow" BasedOn="{StaticResource BiaWindowDialogStyle}">
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome CaptionHeight="48"
+                                  CornerRadius="{x:Static biaui:Boxes.CornerRadius0}"
+                                  GlassFrameThickness="{x:Static biaui:Boxes.Thickness1}"
+                                  ResizeBorderThickness="{x:Static biaui:Boxes.Thickness8}" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </controls:BiaWindow.Style>
+
     <controls:BiaWindow.Resources>
         <Style x:Key="FilePathTextBoxStyle"
                BasedOn="{StaticResource {x:Type TextBox}}"
@@ -183,7 +195,7 @@
                    HorizontalAlignment="Center"
                    Stroke="{StaticResource AccentBrushKey.Dark}"
                    StrokeThickness="1" />
-        
+
         <GridSplitter Grid.Row="1"
                       Grid.Column="1"
                       Width="12"
