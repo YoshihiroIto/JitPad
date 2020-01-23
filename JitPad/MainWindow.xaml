@@ -45,7 +45,7 @@
         </Style>
     </controls:BiaWindow.Resources>
 
-    <Grid Margin="12">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -60,7 +60,7 @@
         <DockPanel Grid.Row="0"
                    Grid.Column="0"
                    Grid.ColumnSpan="3"
-                   Margin="0,0,0,12"
+                   Margin="12"
                    WindowChrome.IsHitTestVisibleInChrome="True">
 
             <controls:BiaClippingBorder CornerRadius="4">
@@ -99,11 +99,13 @@
                                       IsChecked="{Binding IeReleaseBuild.Value, Mode=TwoWay}" />
         </DockPanel>
 
-        <GridSplitter Grid.Row="1"
-                      Grid.Column="1"
-                      Width="8"
-                      Margin="8,0"
-                      ResizeDirection="Columns" />
+        <Rectangle Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="3"
+                   Height="1"
+                   VerticalAlignment="Bottom"
+                   Stroke="{StaticResource AccentBrushKey.Dark}"
+                   StrokeThickness="1" />
 
         <avalonedit:TextEditor Grid.Row="1"
                                Grid.Column="0"
@@ -161,7 +163,6 @@
 
         <controls:BiaProgressPanel Grid.Row="1"
                                    Grid.Column="2"
-                                   Height="12"
                                    VerticalAlignment="Top">
             <controls:BiaProgressPanel.Style>
                 <Style TargetType="controls:BiaProgressPanel">
@@ -175,5 +176,18 @@
                 </Style>
             </controls:BiaProgressPanel.Style>
         </controls:BiaProgressPanel>
+
+        <Rectangle Grid.Row="1"
+                   Grid.Column="1"
+                   Width="1"
+                   HorizontalAlignment="Center"
+                   Stroke="{StaticResource AccentBrushKey.Dark}"
+                   StrokeThickness="1" />
+        
+        <GridSplitter Grid.Row="1"
+                      Grid.Column="1"
+                      Width="12"
+                      Margin="-12,0"
+                      ResizeDirection="Columns" />
     </Grid>
 </controls:BiaWindow>

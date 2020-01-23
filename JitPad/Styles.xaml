@@ -5,7 +5,7 @@
         pack://application:,,,/Biaui;component/Assets/Fonts/RictyDiminished-Regular.ttf#Ricty Diminished,
     </FontFamily>
 
-    <Style BasedOn="{StaticResource GridSplitterSimpleStyle}" TargetType="GridSplitter" />
+    <Style BasedOn="{StaticResource GridSplitterTransparentStyle}" TargetType="GridSplitter" />
 
     <Style TargetType="{x:Type avalonedit:TextEditor}">
         <Setter Property="BorderThickness" Value="1" />
@@ -25,9 +25,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type avalonedit:TextEditor}">
                     <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="8">
+                            BorderThickness="0"
+                            CornerRadius="0">
                         <ScrollViewer Name="PART_ScrollViewer"
                                       Padding="{TemplateBinding Padding}"
                                       HorizontalContentAlignment="Left"
