@@ -14,8 +14,9 @@
                     Style="{StaticResource BiaWindowDialogStyle}"
                     WindowStartupLocation="CenterScreen"
                     mc:Ignorable="d">
-    <Grid Margin="12,32,12,12">
+    <Grid Margin="12,12,12,12">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -25,13 +26,24 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <GridSplitter Grid.Row="0"
+        <DockPanel Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="3"
+                   Margin="0,0,0,12"
+                   WindowChrome.IsHitTestVisibleInChrome="True">
+            <controls:BiaToggleSwitch HorizontalAlignment="Left"
+                                      DisabledLabel="Debug"
+                                      EnabledLabel="Release"
+                                      IsChecked="{Binding IeReleaseBuild.Value, Mode=TwoWay}" />
+        </DockPanel>
+
+        <GridSplitter Grid.Row="1"
                       Grid.Column="1"
                       Width="8"
                       Margin="8,0"
                       ResizeDirection="Columns" />
 
-        <avalonedit:TextEditor Grid.Row="0"
+        <avalonedit:TextEditor Grid.Row="1"
                                Grid.Column="0"
                                SyntaxHighlighting="C#">
             <b:Interaction.Behaviors>
@@ -39,7 +51,7 @@
             </b:Interaction.Behaviors>
         </avalonedit:TextEditor>
 
-        <avalonedit:TextEditor Grid.Row="0"
+        <avalonedit:TextEditor Grid.Row="1"
                                Grid.Column="2"
                                IsReadOnly="True"
                                ShowLineNumbers="False"
@@ -49,9 +61,9 @@
             </b:Interaction.Behaviors>
 
             <avalonedit:TextEditor.Style>
-                <Style TargetType="avalonedit:TextEditor" BasedOn="{StaticResource {x:Type avalonedit:TextEditor}}">
+                <Style BasedOn="{StaticResource {x:Type avalonedit:TextEditor}}" TargetType="avalonedit:TextEditor">
                     <Setter Property="Visibility" Value="Hidden" />
-                    
+
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding PrimaryIsOk.Value, Mode=OneWay}" Value="True">
                             <Setter Property="Visibility" Value="Visible" />
@@ -61,7 +73,7 @@
             </avalonedit:TextEditor.Style>
         </avalonedit:TextEditor>
 
-        <avalonedit:TextEditor Grid.Row="0"
+        <avalonedit:TextEditor Grid.Row="1"
                                Grid.Column="2"
                                IsReadOnly="True"
                                ShowLineNumbers="False"
@@ -71,9 +83,9 @@
             </b:Interaction.Behaviors>
 
             <avalonedit:TextEditor.Style>
-                <Style TargetType="avalonedit:TextEditor" BasedOn="{StaticResource {x:Type avalonedit:TextEditor}}">
+                <Style BasedOn="{StaticResource {x:Type avalonedit:TextEditor}}" TargetType="avalonedit:TextEditor">
                     <Setter Property="Visibility" Value="Visible" />
-                    
+
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding PrimaryIsOk.Value, Mode=OneWay}" Value="True">
                             <Setter Property="Visibility" Value="Hidden" />
