@@ -86,7 +86,7 @@ namespace JitPad.Core
             Observable
                 .Merge(this.ObserveProperty(x => IsFileMonitoring).ToUnit())
                 .Merge(this.ObserveProperty(x => MonitoringFilePath).ToUnit())
-                .Subscribe(_ => { UpdateFileMonitoring(); })
+                .Subscribe(_ => UpdateFileMonitoring())
                 .AddTo(_Trashes);
         }
 

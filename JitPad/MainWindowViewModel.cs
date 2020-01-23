@@ -1,4 +1,8 @@
-﻿using JitPad.Foundation;
+﻿using System;
+using System.Linq;
+using System.Windows;
+using JitPad.Foundation;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using AppContext = JitPad.Core.AppContext;
@@ -12,25 +16,48 @@ namespace JitPad
         public ReactiveProperty<bool> IsFileMonitoring { get; }
         public ReactiveProperty<string> MonitoringFilePath { get; }
         public ReadOnlyReactiveProperty<bool> IsInProcessing { get; }
-        
+
         public ReactiveProperty<string> PrimarySourceText { get; }
         public ReadOnlyReactiveProperty<string> PrimaryResult { get; }
         public ReadOnlyReactiveProperty<string> PrimaryMessage { get; }
         public ReadOnlyReactiveProperty<bool> PrimaryIsOk { get; }
 
+        public ReactiveCommand OpenMonitoringFileCommand { get; }
+
         public MainWindowViewModel(AppContext appContext)
         {
             _AppContext = appContext;
-            
-            IeReleaseBuild = appContext.ToReactivePropertyAsSynchronized(x => x.IsReleaseBuild).AddTo(Trashes); 
-            IsFileMonitoring = appContext.ToReactivePropertyAsSynchronized(x => x.IsFileMonitoring).AddTo(Trashes); 
-            MonitoringFilePath = appContext.ToReactivePropertyAsSynchronized(x => x.MonitoringFilePath).AddTo(Trashes); 
-            IsInProcessing = appContext.Primary.ObserveProperty(x => x.IsInProcessing).ToReadOnlyReactiveProperty().AddTo(Trashes); 
-            
+
+            IeReleaseBuild = appContext.ToReactivePropertyAsSynchronized(x => x.IsReleaseBuild).AddTo(Trashes);
+            IsFileMonitoring = appContext.ToReactivePropertyAsSynchronized(x => x.IsFileMonitoring).AddTo(Trashes);
+            MonitoringFilePath = appContext.ToReactivePropertyAsSynchronized(x => x.MonitoringFilePath).AddTo(Trashes);
+            IsInProcessing = appContext.Primary.ObserveProperty(x => x.IsInProcessing).ToReadOnlyReactiveProperty().AddTo(Trashes);
+
             PrimarySourceText = appContext.Primary.SourceFile.ToReactivePropertyAsSynchronized(x => x.Text).AddTo(Trashes);
             PrimaryResult = appContext.Primary.ObserveProperty(x => x.Result).ToReadOnlyReactiveProperty().AddTo(Trashes);
             PrimaryMessage = appContext.Primary.ObserveProperty(x => x.Message).ToReadOnlyReactiveProperty().AddTo(Trashes);
             PrimaryIsOk = appContext.Primary.ObserveProperty(x => x.IsOk).ToReadOnlyReactiveProperty().AddTo(Trashes);
+
+            OpenMonitoringFileCommand = new ReactiveCommand().AddTo(Trashes);
+            OpenMonitoringFileCommand.Subscribe(_ =>
+            {
+                using var dialog = new CommonOpenFileDialog();
+
+                var filter = new CommonFileDialogFilter {DisplayName = "C# file"};
+                filter.Extensions.Add("cs");
+
+                dialog.Filters.Add(filter);
+
+                var selectedFile = dialog.ShowDialog(Application.Current.MainWindow) == CommonFileDialogResult.Ok
+                    ? dialog.FileNames.FirstOrDefault()
+                    : null;
+
+                if (string.IsNullOrEmpty(selectedFile) == false)
+                {
+                    _AppContext.MonitoringFilePath = selectedFile;
+                    ReloadMonitoringFile();
+                }
+            }).AddTo(Trashes);
         }
 
         public void ReloadMonitoringFile()

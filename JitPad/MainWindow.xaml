@@ -4,6 +4,7 @@
                     xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
                     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:behaviors="clr-namespace:JitPad.Behaviors"
+                    xmlns:biaui="clr-namespace:Biaui;assembly=Biaui"
                     xmlns:controls="clr-namespace:Biaui.Controls;assembly=Biaui"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:jitPad="clr-namespace:JitPad"
@@ -17,7 +18,34 @@
                     Style="{StaticResource BiaWindowDialogStyle}"
                     WindowStartupLocation="CenterScreen"
                     mc:Ignorable="d">
-    <Grid Margin="12,12,12,12">
+    <controls:BiaWindow.Resources>
+        <Style x:Key="FilePathTextBoxStyle"
+               BasedOn="{StaticResource {x:Type TextBox}}"
+               TargetType="{x:Type TextBox}">
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{x:Static biaui:Boxes.BasicCornerRadius}"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Margin="6,1,26,1"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Background="Transparent"
+                                          HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
+                                          VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </controls:BiaWindow.Resources>
+
+    <Grid Margin="12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -34,13 +62,35 @@
                    Grid.ColumnSpan="3"
                    Margin="0,0,0,12"
                    WindowChrome.IsHitTestVisibleInChrome="True">
-            <controls:BiaToggleButton HorizontalAlignment="Left"
-                                      Content="File monitoring"
-                                      IsChecked="{Binding IsFileMonitoring.Value, Mode=TwoWay}" />
 
-            <controls:BiaTextBox Width="320"
-                                 HorizontalAlignment="Left"
-                                 Text="{Binding MonitoringFilePath.Value, Mode=TwoWay}" />
+            <controls:BiaClippingBorder CornerRadius="4">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <controls:BiaToggleButton Grid.Column="0"
+                                              HorizontalAlignment="Left"
+                                              Content="File monitoring"
+                                              CornerRadius="0"
+                                              IsChecked="{Binding IsFileMonitoring.Value, Mode=TwoWay}" />
+
+                    <TextBox Grid.Column="1"
+                             Width="320"
+                             Margin="-4,0,0,0"
+                             HorizontalAlignment="Left"
+                             Panel.ZIndex="-1"
+                             Style="{StaticResource FilePathTextBoxStyle}"
+                             Text="{Binding MonitoringFilePath.Value, Mode=TwoWay}" />
+
+                    <controls:BiaIconButton Grid.Column="1"
+                                            HorizontalAlignment="Right"
+                                            Command="{Binding OpenMonitoringFileCommand, Mode=OneTime}"
+                                            Content="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"
+                                            CornerRadius="0" />
+                </Grid>
+            </controls:BiaClippingBorder>
 
             <controls:BiaToggleSwitch Margin="12,0,0,0"
                                       HorizontalAlignment="Left"
