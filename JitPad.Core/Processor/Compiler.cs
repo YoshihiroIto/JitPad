@@ -49,7 +49,16 @@ namespace JitPad.Core.Processor
                         x.IsWarningAsError ||
                         x.Severity == DiagnosticSeverity.Error)
                     .OrderBy(x => x.Location.SourceSpan.Start)
-                    .Select(x => x.ToString());
+                    .Select(x =>
+                    {
+                        var lineSpan = x.Location.GetMappedLineSpan().Span;
+
+                        var line = lineSpan.Start.Line + 1;
+                        var character = lineSpan.Start.Character + 1;
+                        var severity = x.Severity.ToString().ToLower();
+
+                        return $"({line},{character}) {severity} {x.Id}: {x.GetMessage()}";
+                    });
 
                 return new CompileResult(Array.Empty<byte>(), messages.ToArray());
             }
