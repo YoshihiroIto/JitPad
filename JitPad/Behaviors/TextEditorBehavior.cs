@@ -38,7 +38,7 @@ namespace JitPad.Behaviors
                         {
                             var caretOffset = editor.CaretOffset;
                             editor.Document.Text = self.Text;
-                            editor.CaretOffset = caretOffset;
+                            editor.CaretOffset = Math.Min(editor.Document.TextLength, caretOffset);
                         }
                     }
                 ));
