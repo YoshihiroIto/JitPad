@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using JitPad.Core.Processor;
@@ -27,8 +28,9 @@ namespace JitPad.Core
 
         public ProcessingUnit()
         {
-            this.SourceFile.ObserveProperty(x => x.Text)
+            SourceFile.ObserveProperty(x => x.Text)
                 .Throttle(TimeSpan.FromMilliseconds(50))
+                .ObserveOn(ThreadPoolScheduler.Instance)
                 .Subscribe(x =>
                 {
                     _ProcessedSource = SourceFile.Text;
