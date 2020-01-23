@@ -15,6 +15,7 @@
                     AllowDrop="True"
                     Drop="Window_Drop"
                     PreviewDragOver="Window_PreviewDragOver"
+                    DataContextChanged="MainWindow_OnDataContextChanged"
                     WindowStartupLocation="CenterScreen"
                     mc:Ignorable="d">
     <controls:BiaWindow.Style>

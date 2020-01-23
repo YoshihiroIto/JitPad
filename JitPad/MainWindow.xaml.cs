@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace JitPad
 {
@@ -15,8 +16,8 @@ namespace JitPad
         {
             if (e.Data.GetData(DataFormats.FileDrop) is IEnumerable<string> files)
             {
-                ((MainWindowViewModel) DataContext).MonitoringFilePath.Value = files.FirstOrDefault() ?? "";
-                ((MainWindowViewModel) DataContext).ReloadMonitoringFile();
+                ViewModel.MonitoringFilePath.Value = files.FirstOrDefault() ?? "";
+                ViewModel.ReloadMonitoringFile();
             }
         }
 
@@ -26,6 +27,35 @@ namespace JitPad
                 ? DragDropEffects.Copy
                 : DragDropEffects.None;
             e.Handled = true;
+        }
+
+        private MainWindowViewModel ViewModel => (MainWindowViewModel) DataContext;
+
+        private void MainWindow_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.OldValue is MainWindowViewModel oldVm)
+                oldVm.CsFileOpen = null;
+            
+            if (e.NewValue is MainWindowViewModel newVm)
+                newVm.CsFileOpen = CsFileOpen;
+        }
+
+        private static string? CsFileOpen()
+        {
+            using var dialog = new CommonOpenFileDialog();
+
+            var filter = new CommonFileDialogFilter {DisplayName = "C# file"};
+            filter.Extensions.Add("cs");
+
+            dialog.Filters.Add(filter);
+
+            var window = Application.Current?.MainWindow;
+            if (window == null)
+                return null;
+
+            return dialog.ShowDialog(window) == CommonFileDialogResult.Ok
+                ? dialog.FileNames.FirstOrDefault()
+                : null;
         }
     }
 }

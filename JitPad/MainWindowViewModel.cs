@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Linq;
-using System.Windows;
 using JitPad.Foundation;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using AppContext = JitPad.Core.AppContext;
@@ -23,6 +20,8 @@ namespace JitPad
         public ReadOnlyReactiveProperty<bool> PrimaryIsOk { get; }
 
         public ReactiveCommand OpenMonitoringFileCommand { get; }
+        
+        public Func<string?>? CsFileOpen { get; set; }
 
         public MainWindowViewModel(AppContext appContext)
         {
@@ -41,18 +40,9 @@ namespace JitPad
             OpenMonitoringFileCommand = new ReactiveCommand().AddTo(Trashes);
             OpenMonitoringFileCommand.Subscribe(_ =>
             {
-                using var dialog = new CommonOpenFileDialog();
+                var selectedFile = CsFileOpen?.Invoke();
 
-                var filter = new CommonFileDialogFilter {DisplayName = "C# file"};
-                filter.Extensions.Add("cs");
-
-                dialog.Filters.Add(filter);
-
-                var selectedFile = dialog.ShowDialog(Application.Current.MainWindow) == CommonFileDialogResult.Ok
-                    ? dialog.FileNames.FirstOrDefault()
-                    : null;
-
-                if (string.IsNullOrEmpty(selectedFile) == false)
+                if (selectedFile != null)
                 {
                     _AppContext.MonitoringFilePath = selectedFile;
                     ReloadMonitoringFile();
