@@ -147,7 +147,7 @@ namespace JitPad.Core
             {
                 sourceText = _ProcessedSource;
 
-                var jitMaker = new JitMaker(_ProcessedSource, IsReleaseBuild, IsTieredJit);
+                var jitMaker = new JitDisassembler(_ProcessedSource, IsReleaseBuild, IsTieredJit);
 
                 result = jitMaker.Run();
             } while (sourceText != _ProcessedSource);

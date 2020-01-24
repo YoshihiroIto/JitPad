@@ -3,7 +3,7 @@ using Xunit;
 
 namespace JitPad.Core.Test
 {
-    public class JitMakerTest
+    public class JitDisAssemblerTest
     {
         [Fact]
         public void Ok()
@@ -20,7 +20,7 @@ public class TestClass
 }
 }";
 
-            var jitMaker = new JitMaker( sourceCode, true, true);
+            var jitMaker = new JitDisassembler( sourceCode, true, true);
 
             var result = jitMaker.Run();
         }

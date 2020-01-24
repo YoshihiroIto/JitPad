@@ -5,13 +5,13 @@ using System.Text;
 
 namespace JitPad.Core.Processor
 {
-    public class JitMaker : IDisassembler
+    public class JitDisassembler : IDisassembler
     {
         private readonly string _sourceCode;
         private readonly bool _isReleaseBuild;
         private readonly bool _IsTieredJit;
 
-        public JitMaker(string sourceCode, bool isReleaseBuild, bool isTieredJit)
+        public JitDisassembler(string sourceCode, bool isReleaseBuild, bool isTieredJit)
         {
             _sourceCode = sourceCode;
             _isReleaseBuild = isReleaseBuild;
