@@ -33,20 +33,33 @@ namespace JitPad.Core.Processor
 
                 File.WriteAllBytes(assemblyTempPath, compileResult.AssembleImage);
 
-                var procInfo = new ProcessStartInfo
+                using var proc = new Process
                 {
-                    FileName = "JitDasm",
-                    Arguments = "--diffable -l " + assemblyTempPath,
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "JitDasm",
+                        Arguments = "--diffable -l " + assemblyTempPath,
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true
+                    }
                 };
 
-                var proc = Process.Start(procInfo);
-                if (proc == null)
-                    return new DisassembleResult(false, "", Array.Empty<string>());
+                proc.StartInfo.Environment["COMPlus_TieredCompilation"] = "0";
 
-                var output = proc.StandardOutput.ReadToEnd().Replace("\r\r\n", "\n");
+                proc.Start();
+
+                var stdout = new StringBuilder();
+
+                proc.OutputDataReceived += (_, e) => stdout.AppendLine(e.Data);
+                proc.BeginOutputReadLine();
+                var r = proc.WaitForExit(5 * 1000);
+                proc.CancelOutputRead();
+
+                if (r == false)
+                    return new DisassembleResult(false, "", new []{"Timeout"});
+                
+                var output = stdout.ToString();
 
                 return proc.ExitCode == 0
                     ? new DisassembleResult(true, output, Array.Empty<string>())
@@ -71,7 +84,7 @@ namespace JitPad.Core.Processor
                 catch
                 {
                     GC.Collect();
-                    GC.WaitForFullGCComplete();
+                    GC.WaitForPendingFinalizers();
                 }
             }
         }
