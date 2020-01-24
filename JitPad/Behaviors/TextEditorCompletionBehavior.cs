@@ -1,5 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit;
@@ -76,6 +81,13 @@ namespace JitPad.Behaviors
                     _CompletionWindow = new CompletionWindow(AssociatedObject.TextArea);
                     _CompletionWindow.Closed += (_, __) => _CompletionWindow = null;
 
+                    _CompletionWindow.Loaded += (sender, __) =>
+                    {
+                        var listBox = Descendants((DependencyObject)sender).OfType<ListBox>().FirstOrDefault();
+                        if (listBox != null)
+                            listBox.Background = Brushes.Transparent;
+                    };
+
                     if (items.Length > 0)
                     {
                         foreach (var item in items)
@@ -85,6 +97,43 @@ namespace JitPad.Behaviors
                     }
                 });
             });
+        }
+
+        // Biaui
+        private static IEnumerable<DependencyObject> Children(DependencyObject obj)
+        {
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
+
+            if (obj is Popup popup)
+            {
+                if (popup.Child != null)
+                    yield return popup.Child;
+            }
+
+            var count = VisualTreeHelper.GetChildrenCount(obj);
+            if (count == 0)
+                yield break;
+
+            for (var i = 0; i != count; i++)
+            {
+                var child = VisualTreeHelper.GetChild(obj, i);
+                yield return child;
+            }
+        }
+
+        private static IEnumerable<DependencyObject> Descendants(DependencyObject obj)
+        {
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
+
+            foreach (var child in Children(obj))
+            {
+                yield return child;
+
+                foreach (var grandChild in Descendants(child))
+                    yield return grandChild;
+            }
         }
     }
 

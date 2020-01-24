@@ -1,11 +1,23 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit">
+                    xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                    xmlns:codeCompletion="clr-namespace:ICSharpCode.AvalonEdit.CodeCompletion;assembly=ICSharpCode.AvalonEdit">
     <FontFamily x:Key="BiauiMonoFontFamily">
         pack://application:,,,/Biaui;component/Assets/Fonts/RictyDiminished-Regular.ttf#Ricty Diminished,
     </FontFamily>
 
     <Style BasedOn="{StaticResource GridSplitterTransparentStyle}" TargetType="GridSplitter" />
+
+    <Style TargetType="codeCompletion:CompletionWindow">
+        <Setter Property="WindowStyle" Value="None" />
+        <Setter Property="ResizeMode" Value="NoResize" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="{StaticResource SubmenuItemBackground}" />
+        <Setter Property="TextElement.FontFamily" Value="{DynamicResource BiauiFontFamily}" />
+        <Setter Property="TextOptions.TextRenderingMode" Value="Auto" />
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+        <Setter Property="TextOptions.TextHintingMode" Value="Animated" />
+    </Style>
 
     <Style TargetType="{x:Type avalonedit:TextEditor}">
         <Setter Property="BorderThickness" Value="1" />
