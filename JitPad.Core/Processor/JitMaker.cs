@@ -37,7 +37,7 @@ namespace JitPad.Core.Processor
                 {
                     StartInfo = new ProcessStartInfo
                     {
-                        FileName = "JitDasm",
+                        FileName = "JitDasm/JitDasm.exe",
                         Arguments = "--diffable -l " + assemblyTempPath,
                         CreateNoWindow = true,
                         UseShellExecute = false,
@@ -57,8 +57,8 @@ namespace JitPad.Core.Processor
                 proc.CancelOutputRead();
 
                 if (r == false)
-                    return new DisassembleResult(false, "", new []{"Timeout"});
-                
+                    return new DisassembleResult(false, "", new[] {"Timeout"});
+
                 var output = stdout.ToString();
 
                 return proc.ExitCode == 0

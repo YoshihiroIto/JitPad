@@ -1,3 +1,6 @@
 [submodule "externals/Biaui"]
 	path = externals/Biaui
 	url = git@github.com:YoshihiroIto/Biaui.git
+[submodule "externals/JitDasm"]
+	path = externals/JitDasm
+	url = git@github.com:YoshihiroIto/JitDasm.git

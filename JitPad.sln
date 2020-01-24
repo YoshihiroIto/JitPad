@@ -1,16 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JitPad", "JitPad\JitPad.csproj", "{65D7B3EE-ADD4-4F76-8BA0-88AA8C440E5F}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JitPad", "JitPad\JitPad.csproj", "{65D7B3EE-ADD4-4F76-8BA0-88AA8C440E5F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3BCE4374-033D-43E6-B29F-1CF60D584B0C} = {3BCE4374-033D-43E6-B29F-1CF60D584B0C}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JitPad.Core", "JitPad.Core\JitPad.Core.csproj", "{EF16057D-0180-4B0A-ABB9-0D340C1B7495}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JitPad.Core", "JitPad.Core\JitPad.Core.csproj", "{EF16057D-0180-4B0A-ABB9-0D340C1B7495}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JitPad.Core.Test", "JitPad.Core.Test\JitPad.Core.Test.csproj", "{9A8C0595-A1BA-45AD-B899-0BDBD4DEF62F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JitPad.Core.Test", "JitPad.Core.Test\JitPad.Core.Test.csproj", "{9A8C0595-A1BA-45AD-B899-0BDBD4DEF62F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biaui", "externals\Biaui\Biaui\source\Biaui\Biaui.csproj", "{2204BF7A-B487-4EBA-B6D7-51F2DEFE777C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Biaui", "externals\Biaui\Biaui\source\Biaui\Biaui.csproj", "{2204BF7A-B487-4EBA-B6D7-51F2DEFE777C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "externals", "externals", "{68759FD1-D7D8-4D0D-B0AA-B478945F83A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JitPad.Foundation", "JitPad.Foundation\JitPad.Foundation.csproj", "{6FA9CD20-98D4-4B54-B65D-1240C1DD7D0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JitPad.Foundation", "JitPad.Foundation\JitPad.Foundation.csproj", "{6FA9CD20-98D4-4B54-B65D-1240C1DD7D0F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JitDasm", "externals\JitDasm\JitDasm\JitDasm.csproj", "{3BCE4374-033D-43E6-B29F-1CF60D584B0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,8 +46,19 @@ Global
 		{6FA9CD20-98D4-4B54-B65D-1240C1DD7D0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FA9CD20-98D4-4B54-B65D-1240C1DD7D0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FA9CD20-98D4-4B54-B65D-1240C1DD7D0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BCE4374-033D-43E6-B29F-1CF60D584B0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BCE4374-033D-43E6-B29F-1CF60D584B0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BCE4374-033D-43E6-B29F-1CF60D584B0C}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{3BCE4374-033D-43E6-B29F-1CF60D584B0C}.Debug|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2204BF7A-B487-4EBA-B6D7-51F2DEFE777C} = {68759FD1-D7D8-4D0D-B0AA-B478945F83A1}
+		{3BCE4374-033D-43E6-B29F-1CF60D584B0C} = {68759FD1-D7D8-4D0D-B0AA-B478945F83A1}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D52D63A4-EE75-4F37-9C30-F9D26C94959B}
 	EndGlobalSection
 EndGlobal
