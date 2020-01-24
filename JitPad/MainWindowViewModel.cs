@@ -10,6 +10,7 @@ namespace JitPad
     {
         private readonly AppContext _AppContext;
         public ReactiveProperty<bool> IeReleaseBuild { get; }
+        public ReactiveProperty<bool> IsTieredJit { get; }
         public ReactiveProperty<bool> IsFileMonitoring { get; }
         public ReactiveProperty<string> MonitoringFilePath { get; }
         public ReadOnlyReactiveProperty<bool> IsInProcessing { get; }
@@ -28,6 +29,7 @@ namespace JitPad
             _AppContext = appContext;
 
             IeReleaseBuild = appContext.ToReactivePropertyAsSynchronized(x => x.IsReleaseBuild).AddTo(Trashes);
+            IsTieredJit = appContext.ToReactivePropertyAsSynchronized(x => x.IsTieredJit).AddTo(Trashes);
             IsFileMonitoring = appContext.ToReactivePropertyAsSynchronized(x => x.IsFileMonitoring).AddTo(Trashes);
             MonitoringFilePath = appContext.ToReactivePropertyAsSynchronized(x => x.MonitoringFilePath).AddTo(Trashes);
             IsInProcessing = appContext.Primary.ObserveProperty(x => x.IsInProcessing).ToReadOnlyReactiveProperty().AddTo(Trashes);

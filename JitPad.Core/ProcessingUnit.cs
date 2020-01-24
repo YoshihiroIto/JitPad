@@ -60,16 +60,28 @@ namespace JitPad.Core
 
         #endregion
 
+        #region IsTieredJit
+
+        private bool _IsTieredJit;
+
+        public bool IsTieredJit
+        {
+            get => _IsTieredJit;
+            set => SetProperty(ref _IsTieredJit, value);
+        }
+
+        #endregion
+
         #region IsInProcessing
-        
+
         private bool _IsInProcessing;
-        
+
         public bool IsInProcessing
         {
             get => _IsInProcessing;
             set => SetProperty(ref _IsInProcessing, value);
         }
-        
+
         #endregion
 
         private readonly CompositeDisposable _Trashes = new CompositeDisposable();
@@ -82,7 +94,9 @@ namespace JitPad.Core
                 .Subscribe(x => OnProcess())
                 .AddTo(_Trashes);
 
-            this.ObserveProperty(x => x.IsReleaseBuild)
+            Observable
+                .Merge(this.ObserveProperty(x => x.IsReleaseBuild))
+                .Merge(this.ObserveProperty(x => x.IsTieredJit))
                 .ObserveOn(ThreadPoolScheduler.Instance)
                 .Subscribe(x => OnProcess())
                 .AddTo(_Trashes);
@@ -133,7 +147,7 @@ namespace JitPad.Core
             {
                 sourceText = _ProcessedSource;
 
-                var jitMaker = new JitMaker(_ProcessedSource, IsReleaseBuild);
+                var jitMaker = new JitMaker(_ProcessedSource, IsReleaseBuild, IsTieredJit);
 
                 result = jitMaker.Run();
             } while (sourceText != _ProcessedSource);

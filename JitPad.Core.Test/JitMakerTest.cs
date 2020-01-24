@@ -20,7 +20,7 @@ public class TestClass
 }
 }";
 
-            var jitMaker = new JitMaker( sourceCode, true);
+            var jitMaker = new JitMaker( sourceCode, true, true);
 
             var result = jitMaker.Run();
         }

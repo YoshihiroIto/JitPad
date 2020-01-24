@@ -9,11 +9,13 @@ namespace JitPad.Core.Processor
     {
         private readonly string _sourceCode;
         private readonly bool _isReleaseBuild;
+        private readonly bool _IsTieredJit;
 
-        public JitMaker(string sourceCode, bool isReleaseBuild)
+        public JitMaker(string sourceCode, bool isReleaseBuild, bool isTieredJit)
         {
             _sourceCode = sourceCode;
             _isReleaseBuild = isReleaseBuild;
+            _IsTieredJit = isTieredJit;
         }
 
         public DisassembleResult Run()
@@ -45,7 +47,7 @@ namespace JitPad.Core.Processor
                     }
                 };
 
-                proc.StartInfo.Environment["COMPlus_TieredCompilation"] = "0";
+                proc.StartInfo.Environment["COMPlus_TieredCompilation"] = _IsTieredJit ? "1" : "0";
 
                 proc.Start();
 

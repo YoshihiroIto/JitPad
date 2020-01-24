@@ -24,6 +24,22 @@ namespace JitPad.Core
         }
 
         #endregion
+        
+        #region IsTieredJit
+
+        private bool _IsTieredJit;
+
+        public bool IsTieredJit
+        {
+            get => _IsTieredJit;
+            set
+            {
+                if (SetProperty(ref _IsTieredJit, value))
+                    Primary.IsTieredJit = value;
+            }
+        }
+
+        #endregion
 
         #region IsFileMonitoring
 
@@ -57,7 +73,8 @@ namespace JitPad.Core
         {
             Primary = new ProcessingUnit
             {
-                IsReleaseBuild = IsReleaseBuild
+                IsReleaseBuild = IsReleaseBuild,
+                IsTieredJit = IsTieredJit
             };
 
             SetupFileMonitoring();
