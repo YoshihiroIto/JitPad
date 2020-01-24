@@ -13,7 +13,7 @@
         <Setter Property="ResizeMode" Value="NoResize" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="{StaticResource SubmenuItemBackground}" />
-        <Setter Property="TextElement.FontFamily" Value="{DynamicResource BiauiFontFamily}" />
+        <Setter Property="TextElement.FontFamily" Value="{StaticResource BiauiFontFamily}" />
         <Setter Property="TextOptions.TextRenderingMode" Value="Auto" />
         <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
         <Setter Property="TextOptions.TextHintingMode" Value="Animated" />
@@ -21,13 +21,13 @@
 
     <Style TargetType="{x:Type avalonedit:TextEditor}">
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Foreground" Value="{DynamicResource TextBoxForegroundBrushKey}" />
-        <Setter Property="Background" Value="{DynamicResource TextBoxBackgroundBrushKey}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrushKey}" />
+        <Setter Property="Foreground" Value="{StaticResource TextBoxForegroundBrushKey}" />
+        <Setter Property="Background" Value="{StaticResource TextBoxBackgroundBrushKey}" />
+        <Setter Property="BorderBrush" Value="{StaticResource TextBoxBorderBrushKey}" />
         <Setter Property="ShowLineNumbers" Value="True" />
         <Setter Property="UseLayoutRounding" Value="True" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="FontFamily" Value="{DynamicResource BiauiMonoFontFamily}" />
+        <Setter Property="FontFamily" Value="{StaticResource BiauiMonoFontFamily}" />
         <Setter Property="WordWrap" Value="False" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
@@ -46,6 +46,7 @@
                                       CanContentScroll="True"
                                       Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TextArea}"
                                       Focusable="False"
+                                      Style="{StaticResource BasicScrollViewerStyle}"
                                       HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
                                       VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" />
                     </Border>
