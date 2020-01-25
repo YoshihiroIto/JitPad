@@ -10,7 +10,17 @@ namespace JitPad.Core
 {
     public class ProcessingUnit : NotificationObject, IDisposable
     {
-        public SourceFile SourceFile { get; } = new SourceFile();
+        #region SourceCode
+        
+        private string _SourceText = "";
+        
+        public string SourceText
+        {
+            get => _SourceText;
+            set => SetProperty(ref _SourceText, value);
+        }
+        
+        #endregion
 
         #region Result
 
@@ -88,7 +98,7 @@ namespace JitPad.Core
 
         public ProcessingUnit()
         {
-            SourceFile.ObserveProperty(x => x.Text)
+            this.ObserveProperty(x => x.SourceText)
                 .Throttle(TimeSpan.FromMilliseconds(500))
                 .ObserveOn(ThreadPoolScheduler.Instance)
                 .Subscribe(x => OnProcess())
@@ -104,7 +114,7 @@ namespace JitPad.Core
 
         private void OnProcess()
         {
-            _ProcessedSource = SourceFile.Text;
+            _ProcessedSourceText = SourceText;
 
             if (IsInProcessing)
                 return;
@@ -128,7 +138,7 @@ namespace JitPad.Core
             }
         }
 
-        private string _ProcessedSource = "";
+        private string _ProcessedSourceText = "";
 
         public void Dispose()
         {
@@ -137,7 +147,7 @@ namespace JitPad.Core
 
         private (bool, string, string) DoProcess()
         {
-            if (string.IsNullOrEmpty(_ProcessedSource))
+            if (string.IsNullOrEmpty(_ProcessedSourceText))
                 return (true, "", "");
 
             DisassembleResult result;
@@ -145,12 +155,12 @@ namespace JitPad.Core
             string sourceText;
             do
             {
-                sourceText = _ProcessedSource;
+                sourceText = _ProcessedSourceText;
 
-                var jitMaker = new JitDisassembler(_ProcessedSource, IsReleaseBuild, IsTieredJit);
+                var jitMaker = new JitDisassembler(_ProcessedSourceText, IsReleaseBuild, IsTieredJit);
 
                 result = jitMaker.Run();
-            } while (sourceText != _ProcessedSource);
+            } while (sourceText != _ProcessedSourceText);
 
             return (result.IsOk, result.Output, string.Join("\n", result.Messages));
         }

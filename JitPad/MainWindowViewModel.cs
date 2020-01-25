@@ -34,7 +34,7 @@ namespace JitPad
             MonitoringFilePath = appContext.ToReactivePropertyAsSynchronized(x => x.MonitoringFilePath).AddTo(Trashes);
             IsInProcessing = appContext.Primary.ObserveProperty(x => x.IsInProcessing).ToReadOnlyReactiveProperty().AddTo(Trashes);
 
-            PrimarySourceText = appContext.Primary.SourceFile.ToReactivePropertyAsSynchronized(x => x.Text).AddTo(Trashes);
+            PrimarySourceText = appContext.Primary.ToReactivePropertyAsSynchronized(x => x.SourceText).AddTo(Trashes);
             PrimaryResult = appContext.Primary.ObserveProperty(x => x.Result).ToReadOnlyReactiveProperty().AddTo(Trashes);
             PrimaryMessage = appContext.Primary.ObserveProperty(x => x.Message).ToReadOnlyReactiveProperty().AddTo(Trashes);
             PrimaryIsOk = appContext.Primary.ObserveProperty(x => x.IsOk).ToReadOnlyReactiveProperty().AddTo(Trashes);

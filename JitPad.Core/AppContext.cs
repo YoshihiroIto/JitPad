@@ -121,7 +121,7 @@ namespace JitPad.Core
 
         private void LoadMonitoringFile()
         {
-            Primary.SourceFile.Text =
+            Primary.SourceText =
                 File.Exists(MonitoringFilePath)
                     ? File.ReadAllText(MonitoringFilePath)
                     : "";
