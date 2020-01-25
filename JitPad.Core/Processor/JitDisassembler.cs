@@ -5,7 +5,7 @@ using System.Text;
 
 namespace JitPad.Core.Processor
 {
-    public class JitDisassembler : IDisassembler
+    public class JitDisassembler
     {
         private readonly string _sourceCode;
         private readonly bool _isReleaseBuild;
