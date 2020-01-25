@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Completion;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.CodeAnalysis.Text;
 
@@ -70,6 +73,8 @@ namespace JitPad.Core
                 var items =
                     data.Items
                         .Where(item => MatchesFilterText(helper, item, text, textSpanToText))
+                        .OrderBy(x => x.DisplayText)
+                        .Distinct(x => x.DisplayText)
                         .Select(x =>
                             new CompleteData(
                                 x,

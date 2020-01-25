@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using Biaui;
 using Microsoft.CodeAnalysis;
 
 namespace JitPad.Behaviors
@@ -30,39 +31,37 @@ namespace JitPad.Behaviors
             return text;
         }
 
-        public static Run ToRun(this TaggedText text, bool isBold = false)
+        public static Run ToRun(this TaggedText text)
         {
             var s = text.ToVisibleDisplayString(includeLeftToRightMarker: true);
-
-            var run = new Run(s);
-
-            if (isBold)
+            
+            var run = new Run(s)
             {
-                run.FontWeight = FontWeights.Bold;
-            }
-
-            run.Foreground = text.Tag switch
-            {
-                TextTags.Keyword => Brushes.Blue,
-                TextTags.Struct => Brushes.Teal,
-                TextTags.Enum => Brushes.Teal,
-                TextTags.TypeParameter => Brushes.Teal,
-                TextTags.Class => Brushes.Teal,
-                TextTags.Delegate => Brushes.Teal,
-                TextTags.Interface => Brushes.Teal,
-                _ => run.Foreground
+                FontSize = 12,
+                FontWeight = FontWeights.Normal,
+                Foreground = text.Tag switch
+                {
+                    TextTags.Keyword => Caches.GetSolidColorBrush(new ByteColor(0xFF, 0xF9, 0x26, 0x72)),
+                    TextTags.Struct => Caches.GetSolidColorBrush(new ByteColor(0xFF, 0x56, 0xD9, 0xEF)),
+                    TextTags.Enum => Caches.GetSolidColorBrush(new ByteColor(0xFF, 0x56, 0xD9, 0xEF)),
+                    TextTags.TypeParameter => Caches.GetSolidColorBrush(new ByteColor(0xFF, 0x56, 0xD9, 0xEF)),
+                    TextTags.Class => Caches.GetSolidColorBrush(new ByteColor(0xFF, 0x56, 0xD9, 0xEF)),
+                    TextTags.Delegate => Caches.GetSolidColorBrush(new ByteColor(0xFF, 0x56, 0xD9, 0xEF)),
+                    TextTags.Interface => Caches.GetSolidColorBrush(new ByteColor(0xFF, 0x56, 0xD9, 0xEF)),
+                    _ => Caches.GetSolidColorBrush(ByteColor.White)
+                }
             };
 
             return run;
         }
-
-        public static TextBlock ToTextBlock(this IEnumerable<TaggedText> text, bool isBold = false)
+        
+        public static TextBlock ToTextBlock(this IEnumerable<TaggedText> text)
         {
             var result = new TextBlock {TextWrapping = TextWrapping.Wrap};
 
             foreach (var part in text)
             {
-                result.Inlines.Add(part.ToRun(isBold));
+                result.Inlines.Add(part.ToRun());
             }
 
             return result;

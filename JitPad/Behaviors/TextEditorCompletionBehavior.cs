@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -49,7 +51,6 @@ namespace JitPad.Behaviors
             static bool IsCharIdentifier(char c) => char.IsLetterOrDigit(c) || c == '_';
         }
 
-
         private void TextAreaOnTextEntered(object sender, TextCompositionEventArgs e)
         {
             var offset = AssociatedObject.CaretOffset;
@@ -66,7 +67,7 @@ namespace JitPad.Behaviors
                 ShowCompletionWindow(null);
             }
         }
-        
+
         private readonly CodeCompleter _CodeCompleter = new CodeCompleter();
 
         private void ShowCompletionWindow(char? completionChar)
@@ -86,11 +87,20 @@ namespace JitPad.Behaviors
                 {
                     App.UiDispatcher.Invoke(() =>
                     {
-                        _completionWindow = new CompletionWindow(AssociatedObject.TextArea)
+                        _completionWindow =
+                            new CompletionWindow(AssociatedObject.TextArea)
+                            {
+                                MinWidth = 300,
+                                CloseWhenCaretAtBeginning = true,
+                            };
+
+                        if (ToolToolField != null)
                         {
-                            MinWidth = 300,
-                            CloseWhenCaretAtBeginning = true,
-                        };
+                            var toolTip = (ToolTip) ToolToolField.GetValue(_completionWindow);
+                            toolTip.Placement = PlacementMode.Left;
+                            toolTip.VerticalOffset = 0;
+                            toolTip.HorizontalOffset = 4;
+                        }
 
                         _completionWindow.Closed += (_, __) => _completionWindow = null;
 
@@ -115,6 +125,8 @@ namespace JitPad.Behaviors
                 }
             });
         }
+
+        private static readonly FieldInfo ToolToolField = typeof(CompletionWindow).GetField("toolTip", BindingFlags.NonPublic | BindingFlags.Instance);
 
         // Biaui
         private static IEnumerable<DependencyObject> Children(DependencyObject obj)
@@ -156,7 +168,8 @@ namespace JitPad.Behaviors
 
     public class CompletionData : ICompletionData
     {
-        public object Content  => _data.Item.DisplayText;
+        public object Content => _data.Item.DisplayText;
+
         public object Description
         {
             get
@@ -164,7 +177,11 @@ namespace JitPad.Behaviors
                 if (_description == null)
                 {
                     _description = new Decorator();
-                    _description.Loaded += (o, e) => { var task = _descriptionTask.Value; };
+                    _description.Loaded += (o, e) =>
+                    {
+                        // ReSharper disable once UnusedVariable
+                        var task = _descriptionTask.Value;
+                    };
                 }
 
                 return _description;
@@ -182,11 +199,9 @@ namespace JitPad.Behaviors
         public CompletionData(CompleteData data)
         {
             _data = data;
-       //     Description = data.Item.DisplayText;
-       
             _descriptionTask = new Lazy<Task>(RetrieveDescriptionAsync);
         }
-        
+
         private async Task RetrieveDescriptionAsync()
         {
             if (_description != null)
