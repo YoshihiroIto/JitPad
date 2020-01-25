@@ -14,6 +14,7 @@ using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Editing;
 using JitPad.Core;
+using JitPad.Core.Processor;
 using Microsoft.Xaml.Behaviors;
 
 namespace JitPad.Behaviors
