@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reactive.Linq;
 
-namespace JitPad.Core
+namespace JitPad.Foundation
 {
     public class FileMonitor : IDisposable
     {
