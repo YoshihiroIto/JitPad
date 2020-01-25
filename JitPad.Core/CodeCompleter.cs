@@ -1,55 +1,139 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using JitPad.Core.Processor;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Recommendations;
+using Microsoft.CodeAnalysis.Completion;
+using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.CodeAnalysis.Text;
 
 namespace JitPad.Core
 {
+    // ref: RoslynPad -- https://github.com/aelij/RoslynPad
+
     public class CodeCompleter
     {
-        public async Task<CompleteItem[]> CompleteAsync(string sourceCode, int position)
+        private readonly MefHostServices _Host = MefHostServices.Create(MefHostServices.DefaultAssemblies);
+
+        public CodeCompleter()
         {
-            var compiler = new Compiler();
-            var semanticModel = compiler.MakeSemanticModel(sourceCode);
+            if (_isInitialized)
+                return;
 
-            var workspace = new AdhocWorkspace();
-            var projectName = "Project";
-            var projectId = ProjectId.CreateNewId();
-            var versionStamp = VersionStamp.Create();
-            var projectInfo = ProjectInfo.Create(projectId, versionStamp, projectName, projectName, LanguageNames.CSharp);
-            var project = workspace.AddProject(projectInfo);
+            Task.Run(async () =>
+            {
+                if (_isInitialized)
+                    return;
 
-            workspace.AddDocument(project.Id, "dummy.cs", SourceText.From(sourceCode));
+                _isInitialized = true;
 
-            var items = await Recommender.GetRecommendedSymbolsAtPositionAsync(semanticModel, position, workspace)
-                .ConfigureAwait(false);
+                // load Roslyn
+                await CompleteAsync("", 0, null)
+                    .ConfigureAwait(false);
+            });
+        }
 
-            return
-                items
-                    .Distinct(x => x.Name)
-                    .OrderBy(x => x.Name)
-                    .Select(x =>
-                        new CompleteItem(
-                            x.Name,
-                            x.Name,
-                            null
-                        )).ToArray();
+        private static bool _isInitialized;
+
+        private CancellationTokenSource? _CancellationTokenSource;
+
+        public async Task<CompletionResult> CompleteAsync(string sourceCode, int position, char? triggerChar)
+        {
+            _CancellationTokenSource?.Cancel();
+            _CancellationTokenSource?.Dispose();
+            _CancellationTokenSource = new CancellationTokenSource();
+
+            try
+            {
+                var workspace = new AdhocWorkspace(_Host);
+
+                var projectInfo = ProjectInfo
+                    .Create(ProjectId.CreateNewId(), VersionStamp.Create(), "Project", "Project", LanguageNames.CSharp)
+                    .WithMetadataReferences(new[] {MetadataReference.CreateFromFile(typeof(object).Assembly.Location)});
+                var project = workspace.AddProject(projectInfo);
+                var document = workspace.AddDocument(project.Id, "File.cs", SourceText.From(sourceCode));
+
+                var completionService = CompletionService.GetService(document);
+                var completionTrigger = GetCompletionTrigger(triggerChar);
+                var data = await completionService.GetCompletionsAsync(document, position, completionTrigger, null, null, _CancellationTokenSource.Token)
+                    .ConfigureAwait(false);
+
+                if (data == null || data.Items == null)
+                    return new CompletionResult(Array.Empty<CompleteData>());
+
+                var helper = CompletionHelper.GetHelper(document);
+                var text = await document.GetTextAsync(_CancellationTokenSource.Token).ConfigureAwait(false);
+                var textSpanToText = new Dictionary<TextSpan, string>();
+
+                var items =
+                    data.Items
+                        .Where(item => MatchesFilterText(helper, item, text, textSpanToText))
+                        .Select(x =>
+                            new CompleteData(
+                                x,
+                                completionService,
+                                document)
+                        ).ToArray();
+
+                return new CompletionResult(items);
+            }
+            catch (OperationCanceledException)
+            {
+                return new CompletionResult(Array.Empty<CompleteData>());
+            }
+        }
+
+        private static CompletionTrigger GetCompletionTrigger(char? triggerChar)
+            => triggerChar != null
+                ? CompletionTrigger.CreateInsertionTrigger(triggerChar.Value)
+                : CompletionTrigger.Invoke;
+
+        private static bool MatchesFilterText(CompletionHelper helper, CompletionItem item, SourceText text, Dictionary<TextSpan, string> textSpanToText)
+        {
+            var filterText = GetFilterText(item, text, textSpanToText);
+
+            return string.IsNullOrEmpty(filterText) || helper.MatchesPattern(item.FilterText, filterText, CultureInfo.InvariantCulture);
+        }
+
+        private static string GetFilterText(CompletionItem item, SourceText text, Dictionary<TextSpan, string> textSpanToText)
+        {
+            var textSpan = item.Span;
+            if (!textSpanToText.TryGetValue(textSpan, out var filterText))
+            {
+                filterText = text.GetSubText(textSpan).ToString();
+                textSpanToText[textSpan] = filterText;
+            }
+
+            return filterText;
         }
     }
 
-    public class CompleteItem
+    public class CompletionResult
     {
-        public readonly string Content;
-        public readonly string Text;
-        public readonly string Description;
+        public readonly CompleteData[] CompletionData;
 
-        public CompleteItem(string content, string text, string description)
+        public CompletionResult(CompleteData[] completionData)
         {
-            Content = content;
-            Text = text;
-            Description = description;
+            CompletionData = completionData;
+        }
+    }
+
+    public class CompleteData
+    {
+        public readonly CompletionItem Item;
+        public readonly CompletionService CompletionService;
+        public readonly Document Document;
+
+        public CompleteData(
+            CompletionItem item,
+            CompletionService completionService,
+            Document document)
+        {
+            Item = item;
+            CompletionService = completionService;
+            Document = document;
         }
     }
 }

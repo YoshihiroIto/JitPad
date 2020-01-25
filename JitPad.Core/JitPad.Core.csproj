@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <Nullable>enable</Nullable>
+        <InternalsAssemblyNames>Microsoft.CodeAnalysis.CSharp;Microsoft.CodeAnalysis.Features;Microsoft.CodeAnalysis.CSharp.Features;Microsoft.CodeAnalysis.Scripting;Microsoft.CodeAnalysis.CSharp.Scripting;Microsoft.CodeAnalysis.Workspaces;Microsoft.CodeAnalysis.CSharp.Workspaces;Microsoft.CodeAnalysis.Extensions;Microsoft.CodeAnalysis.PooledObjects</InternalsAssemblyNames>
     </PropertyGroup>
 
     <ItemGroup>
@@ -10,8 +11,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.4.0" />
+      <PackageReference Include="Microsoft.CodeAnalysis" Version="3.4.0" />
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.4.0" />
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="3.4.0" />
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.4.0" />
+      <PackageReference Include="Microsoft.CodeAnalysis.Features" Version="3.4.0" />
       <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="3.4.0" />
       <PackageReference Include="ReactiveProperty" Version="6.2.0" />
       <PackageReference Include="System.Interactive" Version="4.0.0" />

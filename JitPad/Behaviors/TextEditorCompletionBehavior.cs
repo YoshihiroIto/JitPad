@@ -18,8 +18,6 @@ namespace JitPad.Behaviors
 {
     public sealed class TextEditorCompletionBehavior : Behavior<TextEditor>
     {
-        // ref: https://pierre3.hatenablog.com/entry/2016/07/28/001230
-
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -38,21 +36,26 @@ namespace JitPad.Behaviors
             AssociatedObject.KeyDown -= AssociatedObjectOnKeyDown;
         }
 
-        private CompletionWindow? _CompletionWindow;
+        private CompletionWindow? _completionWindow;
 
         private void TextAreaOnTextEntering(object sender, TextCompositionEventArgs e)
         {
-            if (e.Text.Length == 0 || _CompletionWindow == null)
+            if (_completionWindow == null || e.Text.Length == 0)
                 return;
 
-            if (char.IsLetterOrDigit(e.Text[0]) == false)
-                _CompletionWindow.CompletionList.RequestInsertion(e);
+            if (IsCharIdentifier(e.Text[0]) == false)
+                _completionWindow.CompletionList.RequestInsertion(e);
+
+            static bool IsCharIdentifier(char c) => char.IsLetterOrDigit(c) || c == '_';
         }
+
 
         private void TextAreaOnTextEntered(object sender, TextCompositionEventArgs e)
         {
-            if (e.Text == ".")
-                ShowCompletionWindow();
+            var offset = AssociatedObject.CaretOffset;
+            var c = AssociatedObject.Document.GetCharAt(offset - 1);
+
+            ShowCompletionWindow(c);
         }
 
         private void AssociatedObjectOnKeyDown(object sender, KeyEventArgs e)
@@ -60,42 +63,56 @@ namespace JitPad.Behaviors
             if (e.Key == Key.Space && e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control))
             {
                 e.Handled = true;
-                ShowCompletionWindow();
+                ShowCompletionWindow(null);
             }
         }
+        
+        private readonly CodeCompleter _CodeCompleter = new CodeCompleter();
 
-        private void ShowCompletionWindow()
+        private void ShowCompletionWindow(char? completionChar)
         {
+            if (_completionWindow != null)
+                return;
+
             var text = AssociatedObject.Text;
-            var offset = AssociatedObject.TextArea.Caret.Offset;
+            var offset = AssociatedObject.CaretOffset;
 
             Task.Run(async () =>
             {
-                var codeCompleter = new CodeCompleter();
+                var results = await _CodeCompleter.CompleteAsync(text, offset, completionChar)
+                    .ConfigureAwait(true);
 
-                var items = await codeCompleter.CompleteAsync(text, offset)
-                    .ConfigureAwait(false);
-
-                await App.UiDispatcher.InvokeAsync(() =>
+                if (results.CompletionData.Length > 0)
                 {
-                    _CompletionWindow = new CompletionWindow(AssociatedObject.TextArea);
-                    _CompletionWindow.Closed += (_, __) => _CompletionWindow = null;
-
-                    _CompletionWindow.Loaded += (sender, __) =>
+                    App.UiDispatcher.Invoke(() =>
                     {
-                        var listBox = Descendants((DependencyObject)sender).OfType<ListBox>().FirstOrDefault();
-                        if (listBox != null)
-                            listBox.Background = Brushes.Transparent;
-                    };
+                        _completionWindow = new CompletionWindow(AssociatedObject.TextArea)
+                        {
+                            MinWidth = 300,
+                            CloseWhenCaretAtBeginning = true,
+                        };
 
-                    if (items.Length > 0)
-                    {
-                        foreach (var item in items)
-                            _CompletionWindow.CompletionList.CompletionData.Add(item: new CompletionData(item));
+                        _completionWindow.Closed += (_, __) => _completionWindow = null;
 
-                        _CompletionWindow.Show();
-                    }
-                });
+                        _completionWindow.Loaded += (sender, __) =>
+                        {
+                            var listBox = Descendants((DependencyObject) sender).OfType<ListBox>().FirstOrDefault();
+                            if (listBox != null)
+                                listBox.Background = Brushes.Transparent;
+                        };
+
+                        if (results.CompletionData.Length > 0)
+                        {
+                            if (completionChar != null && char.IsLetterOrDigit(completionChar.Value))
+                                _completionWindow.StartOffset -= 1;
+
+                            foreach (var item in results.CompletionData)
+                                _completionWindow.CompletionList.CompletionData.Add(item: new CompletionData(item));
+
+                            _completionWindow.Show();
+                        }
+                    });
+                }
             });
         }
 
@@ -139,27 +156,76 @@ namespace JitPad.Behaviors
 
     public class CompletionData : ICompletionData
     {
-        public object Content { get; }
+        public object Content  => _data.Item.DisplayText;
+        public object Description
+        {
+            get
+            {
+                if (_description == null)
+                {
+                    _description = new Decorator();
+                    _description.Loaded += (o, e) => { var task = _descriptionTask.Value; };
+                }
 
-        public object Description { get; }
+                return _description;
+            }
+        }
 
-        public ImageSource? Image { get; }
+        public ImageSource? Image { get; } = null;
 
         public double Priority { get; } = 0.0;
 
-        public string Text { get; }
+        public string Text => _data.Item.DisplayText;
 
-        public CompletionData(CompleteItem item)
+        private readonly CompleteData _data;
+
+        public CompletionData(CompleteData data)
         {
-            Content = item.Content;
-            Text = item.Text;
-            Image = null;
-            Description = item.Description;
+            _data = data;
+       //     Description = data.Item.DisplayText;
+       
+            _descriptionTask = new Lazy<Task>(RetrieveDescriptionAsync);
         }
+        
+        private async Task RetrieveDescriptionAsync()
+        {
+            if (_description != null)
+            {
+                var description = await Task.Run(() => _data.CompletionService.GetDescriptionAsync(_data.Document, _data.Item)).ConfigureAwait(true);
+                _description.Child = description.TaggedParts.ToTextBlock();
+            }
+        }
+
+        private Decorator? _description;
+        private readonly Lazy<Task> _descriptionTask;
 
         public void Complete(TextArea textArea, ISegment completionSegment, EventArgs insertionRequestEventArgs)
         {
-            textArea.Document.Replace(completionSegment, Text);
+            // ReSharper disable once AsyncConverter.AsyncWait
+            var changes = _data.CompletionService.GetChangeAsync(_data.Document, _data.Item, null).Result;
+
+            var document = textArea.Document;
+
+            using (document.RunUpdate())
+            {
+                var textChange = changes.TextChange;
+
+                if (completionSegment.EndOffset > textChange.Span.End)
+                {
+                    document.Replace(
+                        new TextSegment
+                        {
+                            StartOffset = textChange.Span.End,
+                            EndOffset = completionSegment.EndOffset
+                        },
+                        string.Empty);
+                }
+
+                document.Replace(textChange.Span.Start, textChange.Span.Length, new StringTextSource(textChange.NewText));
+            }
+
+            if (changes.NewPosition != null)
+                textArea.Caret.Offset = changes.NewPosition.Value;
         }
     }
 }
