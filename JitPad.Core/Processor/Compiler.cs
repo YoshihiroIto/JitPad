@@ -10,21 +10,18 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace JitPad.Core.Processor
 {
-    public class Compiler
+    public static class Compiler
     {
-        public CompileResult Compile(string assemblyName, string sourceCode, string? sourceCodePath,
-            bool isReleaseBuild)
+        public static CompileResult Run(string sourceCode, bool isReleaseBuild)
         {
             using var asmImage = new MemoryStream();
 
-            sourceCodePath ??= Path.ChangeExtension(assemblyName, ".cs");
-
-            var symbolsName = Path.ChangeExtension(assemblyName, ".pdb");
+            var symbolsName = Path.ChangeExtension("compiled.dll", ".pdb");
 
             var buffer = Encoding.UTF8.GetBytes(sourceCode);
             var sourceText = SourceText.From(buffer, buffer.Length, Encoding.UTF8, canBeEmbedded: true);
 
-            var (compilation, _) = GenerateCode(assemblyName, sourceText, sourceCodePath, isReleaseBuild);
+            var compilation = GenerateCode("compiled.dll", sourceText, "source.cs", isReleaseBuild);
 
             var emitOptions = new EmitOptions(
                 debugInformationFormat: DebugInformationFormat.Embedded,
@@ -32,8 +29,8 @@ namespace JitPad.Core.Processor
             );
 
             var result = compilation.Emit(
-                peStream: asmImage,
-                embeddedTexts: new[] {EmbeddedText.FromSource(sourceCodePath, sourceText)},
+                asmImage,
+                embeddedTexts: new[] {EmbeddedText.FromSource("source.cs", sourceText)},
                 options: emitOptions);
 
             if (result.Success)
@@ -64,21 +61,7 @@ namespace JitPad.Core.Processor
             }
         }
 
-        public SemanticModel MakeSemanticModel(string sourceCode)
-        {
-            var sourceCodePath = "dummy";
-            var assemblyName = "dummy";
-            var isReleaseBuild = true;
-
-            var buffer = Encoding.UTF8.GetBytes(sourceCode);
-            var sourceText = SourceText.From(buffer, buffer.Length, Encoding.UTF8, canBeEmbedded: true);
-
-            var (compilation, syntaxTree) = GenerateCode(assemblyName, sourceText, sourceCodePath, isReleaseBuild);
-
-            return compilation.GetSemanticModel(syntaxTree);
-        }
-
-        private static (CSharpCompilation, SyntaxTree) GenerateCode(string assemblyName, SourceText sourceText, string sourceCodePath,
+        private static CSharpCompilation GenerateCode(string assemblyName, SourceText sourceText, string sourceCodePath,
             bool isReleaseBuild)
         {
             var options = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.Default);
@@ -108,7 +91,7 @@ namespace JitPad.Core.Processor
 
             compilation = compilation.AddReferences(references);
 
-            return (compilation, encoded);
+            return compilation;
         }
     }
 }

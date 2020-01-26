@@ -156,10 +156,14 @@ namespace JitPad.Core
             do
             {
                 sourceText = _ProcessedSourceText;
-
-                var jitMaker = new JitDisassembler(_ProcessedSourceText, IsReleaseBuild, IsTieredJit);
-
-                result = jitMaker.Run();
+                
+                // compile
+                var compileResult = Compiler.Run(_ProcessedSourceText, IsReleaseBuild);
+                if (compileResult.IsOk == false)
+                    return (false, "", string.Join("\n", compileResult.Messages));
+                
+                // jit disassemble
+                result = JitDisassembler.Run(_ProcessedSourceText, compileResult.AssembleImage, IsTieredJit);
             } while (sourceText != _ProcessedSourceText);
 
             return (result.IsOk, result.Output, string.Join("\n", result.Messages));

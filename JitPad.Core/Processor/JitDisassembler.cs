@@ -5,41 +5,23 @@ using System.Text;
 
 namespace JitPad.Core.Processor
 {
-    public class JitDisassembler
+    public static class JitDisassembler
     {
-        private readonly string _sourceCode;
-        private readonly bool _isReleaseBuild;
-        private readonly bool _IsTieredJit;
-
-        public JitDisassembler(string sourceCode, bool isReleaseBuild, bool isTieredJit)
+        public static DisassembleResult Run(string sourceText, byte[] assembleImage, bool isTieredJit, string jitDasmExe = null)
         {
-            _sourceCode = sourceCode;
-            _isReleaseBuild = isReleaseBuild;
-            _IsTieredJit = isTieredJit;
-        }
-
-        public DisassembleResult Run()
-        {
-            var sourceCodeTempPath = Path.GetTempFileName() + ".cs";
-            var assemblyTempPath = Path.ChangeExtension(sourceCodeTempPath, ".dll");
+            var sourceTextTempPath = Path.GetTempFileName() + ".cs";
+            var assemblyTempPath = Path.ChangeExtension(sourceTextTempPath, ".dll");
 
             try
             {
-                File.WriteAllText(sourceCodeTempPath, _sourceCode, Encoding.UTF8);
-
-                var compiler = new Compiler();
-
-                var compileResult = compiler.Compile("compiled.dll", _sourceCode, sourceCodeTempPath, _isReleaseBuild);
-                if (compileResult.IsOk == false)
-                    return new DisassembleResult(false, "", compileResult.Messages);
-
-                File.WriteAllBytes(assemblyTempPath, compileResult.AssembleImage);
+                File.WriteAllText(sourceTextTempPath, sourceText);
+                File.WriteAllBytes(assemblyTempPath, assembleImage);
 
                 using var proc = new Process
                 {
                     StartInfo = new ProcessStartInfo
                     {
-                        FileName = "JitDasm/JitDasm.exe",
+                        FileName = jitDasmExe ?? "JitDasm/JitDasm.exe",
                         Arguments = "--diffable -l " + assemblyTempPath,
                         CreateNoWindow = true,
                         UseShellExecute = false,
@@ -47,7 +29,7 @@ namespace JitPad.Core.Processor
                     }
                 };
 
-                proc.StartInfo.Environment["COMPlus_TieredCompilation"] = _IsTieredJit ? "1" : "0";
+                proc.StartInfo.Environment["COMPlus_TieredCompilation"] = isTieredJit ? "1" : "0";
 
                 proc.Start();
 
@@ -69,7 +51,7 @@ namespace JitPad.Core.Processor
             }
             finally
             {
-                SafeFileDelete(sourceCodeTempPath);
+                SafeFileDelete(sourceTextTempPath);
                 SafeFileDelete(assemblyTempPath);
             }
         }

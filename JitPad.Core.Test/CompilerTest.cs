@@ -6,19 +6,12 @@ namespace JitPad.Core.Test
 {
     public class CompilerTest
     {
-        [Fact]
-        public void Smoke()
-        {
-            // ReSharper disable once ObjectCreationAsStatement
-            new Compiler();
-        }
-
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
         public void CompileOk(bool isReleaseBuild)
         {
-            var sourceCode = @"namespace TestNameSpace
+            const string sourceCode = @"namespace TestNameSpace
 {
 public class TestClass
 {
@@ -29,9 +22,7 @@ public class TestClass
 }
 }";
 
-            var compiler = new Compiler();
-
-            var result = compiler.Compile("test.dll", sourceCode, null, isReleaseBuild);
+            var result = Compiler.Run(sourceCode, isReleaseBuild);
 
             Assert.True(result.IsOk);
         }
@@ -41,7 +32,7 @@ public class TestClass
         [InlineData(false)]
         public void CompileNg(bool isReleaseBuild)
         {
-            var sourceCode = @"namespace TestNameSpace
+            const string sourceCode = @"namespace TestNameSpace
 {
 public class TestClass
 {
@@ -52,9 +43,7 @@ public class TestClass
 }
 }";
 
-            var compiler = new Compiler();
-
-            var result = compiler.Compile("test.dll", sourceCode, null, isReleaseBuild);
+            var result = Compiler.Run(sourceCode, isReleaseBuild);
 
             Assert.False(result.IsOk);
             Assert.True(result.Messages.Any());
