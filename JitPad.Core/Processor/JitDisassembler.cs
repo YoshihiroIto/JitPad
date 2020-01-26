@@ -7,14 +7,14 @@ namespace JitPad.Core.Processor
 {
     public static class JitDisassembler
     {
-        public static DisassembleResult Run(string sourceText, byte[] assembleImage, bool isTieredJit, string jitDasmExe = null)
+        public static DisassembleResult Run(string sourceCode, byte[] assembleImage, bool isTieredJit, string jitDasmExe = null)
         {
-            var sourceTextTempPath = Path.GetTempFileName() + ".cs";
-            var assemblyTempPath = Path.ChangeExtension(sourceTextTempPath, ".dll");
+            var sourceCodeTempPath = Path.GetTempFileName() + ".cs";
+            var assemblyTempPath = Path.ChangeExtension(sourceCodeTempPath, ".dll");
 
             try
             {
-                File.WriteAllText(sourceTextTempPath, sourceText);
+                File.WriteAllText(sourceCodeTempPath, sourceCode);
                 File.WriteAllBytes(assemblyTempPath, assembleImage);
 
                 using var proc = new Process
@@ -51,7 +51,7 @@ namespace JitPad.Core.Processor
             }
             finally
             {
-                SafeFileDelete(sourceTextTempPath);
+                SafeFileDelete(sourceCodeTempPath);
                 SafeFileDelete(assemblyTempPath);
             }
         }

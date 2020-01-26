@@ -15,7 +15,7 @@ namespace JitPad
         public ReactiveProperty<string> MonitoringFilePath { get; }
         public ReadOnlyReactiveProperty<bool> IsInProcessing { get; }
 
-        public ReactiveProperty<string> SourceText { get; }
+        public ReactiveProperty<string> SourceCode { get; }
         public ReadOnlyReactiveProperty<string> BuildResult { get; }
         public ReadOnlyReactiveProperty<string> BuildMessage { get; }
         public ReadOnlyReactiveProperty<bool> IsBuildOk { get; }
@@ -34,7 +34,7 @@ namespace JitPad
             MonitoringFilePath = appContext.ToReactivePropertyAsSynchronized(x => x.MonitoringFilePath).AddTo(Trashes);
             IsInProcessing = appContext.ProcessingUnit.ObserveProperty(x => x.IsInProcessing).ToReadOnlyReactiveProperty().AddTo(Trashes);
 
-            SourceText = appContext.ProcessingUnit.ToReactivePropertyAsSynchronized(x => x.SourceText).AddTo(Trashes);
+            SourceCode = appContext.ProcessingUnit.ToReactivePropertyAsSynchronized(x => x.SourceCode).AddTo(Trashes);
             BuildResult = appContext.ProcessingUnit.ObserveProperty(x => x.BuildResult).ToReadOnlyReactiveProperty().AddTo(Trashes);
             BuildMessage = appContext.ProcessingUnit.ObserveProperty(x => x.BuildMessage).ToReadOnlyReactiveProperty().AddTo(Trashes);
             IsBuildOk = appContext.ProcessingUnit.ObserveProperty(x => x.IsBuildOk).ToReadOnlyReactiveProperty().AddTo(Trashes);

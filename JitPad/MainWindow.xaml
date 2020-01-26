@@ -130,7 +130,7 @@
                                Grid.Column="0"
                                SyntaxHighlighting="C#">
             <b:Interaction.Behaviors>
-                <behaviors:TextEditorBindableTextBehavior Text="{Binding SourceText.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <behaviors:TextEditorBindableTextBehavior Text="{Binding SourceCode.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <behaviors:TextEditorCompletionBehavior />
             </b:Interaction.Behaviors>
         </avalonedit:TextEditor>

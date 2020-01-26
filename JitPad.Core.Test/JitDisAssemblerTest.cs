@@ -8,7 +8,7 @@ namespace JitPad.Core.Test
         [Fact]
         public void Ok()
         {
-            const string sourceText = @"
+            const string sourceCode = @"
 namespace TestNameSpace
 {
 public class TestClass
@@ -20,9 +20,9 @@ public class TestClass
 }
 }";
 
-            var compileResult = Compiler.Run(sourceText, true);
+            var compileResult = Compiler.Run(sourceCode, true);
             
-            var result = JitDisassembler.Run(sourceText, compileResult.AssembleImage, true, "../../../../externals/JitDasm/JitDasm/bin/Release/netcoreapp3.0/JitDasm.exe");
+            var result = JitDisassembler.Run(sourceCode, compileResult.AssembleImage, true, "../../../../externals/JitDasm/JitDasm/bin/Release/netcoreapp3.0/JitDasm.exe");
             
             Assert.True(result.IsOk);
         }

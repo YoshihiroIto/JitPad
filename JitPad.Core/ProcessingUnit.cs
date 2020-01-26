@@ -13,12 +13,12 @@ namespace JitPad.Core
     {
         #region SourceCode
 
-        private string _SourceText = "";
+        private string _SourceCode = "";
 
-        public string SourceText
+        public string SourceCode
         {
-            get => _SourceText;
-            set => SetProperty(ref _SourceText, value);
+            get => _SourceCode;
+            set => SetProperty(ref _SourceCode, value);
         }
 
         #endregion
@@ -99,7 +99,7 @@ namespace JitPad.Core
 
         public ProcessingUnit()
         {
-            this.ObserveProperty(x => x.SourceText)
+            this.ObserveProperty(x => x.SourceCode)
                 .Throttle(TimeSpan.FromMilliseconds(500))
                 .ObserveOn(ThreadPoolScheduler.Instance)
                 .Subscribe(x => OnProcess())
@@ -115,7 +115,7 @@ namespace JitPad.Core
 
         private void OnProcess()
         {
-            _ProcessedSourceText = SourceText;
+            _ProcessedSourceCode = SourceCode;
 
             if (IsInProcessing)
                 return;
@@ -139,7 +139,7 @@ namespace JitPad.Core
             }
         }
 
-        private string _ProcessedSourceText = "";
+        private string _ProcessedSourceCode = "";
 
         public void Dispose()
         {
@@ -148,24 +148,24 @@ namespace JitPad.Core
 
         private (bool, string, string) DoProcess()
         {
-            if (string.IsNullOrEmpty(_ProcessedSourceText.Trim()))
+            if (string.IsNullOrEmpty(_ProcessedSourceCode.Trim()))
                 return (true, "", "");
 
             DisassembleResult result;
 
-            string sourceText;
+            string sourceCode;
             do
             {
-                sourceText = _ProcessedSourceText;
+                sourceCode = _ProcessedSourceCode;
                 
                 // compile
-                var compileResult = Compiler.Run(_ProcessedSourceText, IsReleaseBuild);
+                var compileResult = Compiler.Run(_ProcessedSourceCode, IsReleaseBuild);
                 if (compileResult.IsOk == false)
                     return (false, "", string.Join("\n", compileResult.Messages.Select(x => x.ToString())));
                 
                 // jit disassemble
-                result = JitDisassembler.Run(_ProcessedSourceText, compileResult.AssembleImage, IsTieredJit);
-            } while (sourceText != _ProcessedSourceText);
+                result = JitDisassembler.Run(_ProcessedSourceCode, compileResult.AssembleImage, IsTieredJit);
+            } while (sourceCode != _ProcessedSourceCode);
 
             return (result.IsOk, result.Output, string.Join("\n", result.Messages));
         }
