@@ -11,49 +11,13 @@ namespace JitPad.Core
     public class ProcessingUnit : NotificationObject, IDisposable
     {
         #region SourceCode
-        
+
         private string _SourceText = "";
-        
+
         public string SourceText
         {
             get => _SourceText;
             set => SetProperty(ref _SourceText, value);
-        }
-        
-        #endregion
-
-        #region BuildResult
-
-        private string _BuildResult = "";
-
-        public string BuildResult
-        {
-            get => _BuildResult;
-            set => SetProperty(ref _BuildResult, value);
-        }
-
-        #endregion
-
-        #region BuildMessage
-
-        private string _BuildMessage = "";
-
-        public string BuildMessage
-        {
-            get => _BuildMessage;
-            set => SetProperty(ref _BuildMessage, value);
-        }
-
-        #endregion
-
-        #region IsBuildOk
-
-        private bool _IsBuildOk;
-
-        public bool IsBuildOk
-        {
-            get => _IsBuildOk;
-            set => SetProperty(ref _IsBuildOk, value);
         }
 
         #endregion
@@ -82,6 +46,42 @@ namespace JitPad.Core
 
         #endregion
 
+        #region BuildResult
+
+        private string _BuildResult = "";
+
+        public string BuildResult
+        {
+            get => _BuildResult;
+            private set => SetProperty(ref _BuildResult, value);
+        }
+
+        #endregion
+
+        #region BuildMessage
+
+        private string _BuildMessage = "";
+
+        public string BuildMessage
+        {
+            get => _BuildMessage;
+            private set => SetProperty(ref _BuildMessage, value);
+        }
+
+        #endregion
+
+        #region IsBuildOk
+
+        private bool _IsBuildOk;
+
+        public bool IsBuildOk
+        {
+            get => _IsBuildOk;
+            private set => SetProperty(ref _IsBuildOk, value);
+        }
+
+        #endregion
+
         #region IsInProcessing
 
         private bool _IsInProcessing;
@@ -89,7 +89,7 @@ namespace JitPad.Core
         public bool IsInProcessing
         {
             get => _IsInProcessing;
-            set => SetProperty(ref _IsInProcessing, value);
+            private set => SetProperty(ref _IsInProcessing, value);
         }
 
         #endregion
