@@ -20,10 +20,11 @@ namespace JitPad
         public ReadOnlyReactiveProperty<string> BuildMessage { get; }
         public ReadOnlyReactiveProperty<bool> IsBuildOk { get; }
 
+        public ReactiveCommand ClearMonitoringFileCommand { get; }
         public ReactiveCommand OpenMonitoringFileCommand { get; }
-        
+
         public Func<string?>? CsFileOpen { get; set; }
-        
+
         private readonly AppContext _appContext;
 
         public MainWindowViewModel(AppContext appContext, Config config)
@@ -51,6 +52,13 @@ namespace JitPad
                     config.MonitoringFilePath = selectedFile;
                     ReloadMonitoringFile();
                 }
+            }).AddTo(Trashes);
+
+            ClearMonitoringFileCommand = new ReactiveCommand().AddTo(Trashes);
+            ClearMonitoringFileCommand.Subscribe(_ =>
+            {
+                config.MonitoringFilePath = "";
+                ReloadMonitoringFile();
             }).AddTo(Trashes);
         }
 

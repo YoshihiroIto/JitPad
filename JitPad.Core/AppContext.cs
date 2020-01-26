@@ -83,7 +83,7 @@ namespace JitPad.Core
             ProcessingUnit.SourceCode =
                 File.Exists(_config.MonitoringFilePath)
                     ? File.ReadAllText(_config.MonitoringFilePath)
-                    : "";
+                    : _config.CodeTemplate;
         }
 
         private void ReleaseFileMonitor()
