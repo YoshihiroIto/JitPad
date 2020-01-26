@@ -148,7 +148,7 @@ namespace JitPad.Core
 
         private (bool, string, string) DoProcess()
         {
-            if (string.IsNullOrEmpty(_ProcessedSourceText))
+            if (string.IsNullOrEmpty(_ProcessedSourceText.Trim()))
                 return (true, "", "");
 
             DisassembleResult result;
