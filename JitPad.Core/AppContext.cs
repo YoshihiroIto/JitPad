@@ -9,72 +9,31 @@ namespace JitPad.Core
 {
     public class AppContext : NotificationObject, IDisposable
     {
-        #region IsReleaseBuild
-
-        private bool _IsReleaseBuild = true;
-
-        public bool IsReleaseBuild
-        {
-            get => _IsReleaseBuild;
-            set
-            {
-                if (SetProperty(ref _IsReleaseBuild, value))
-                    ProcessingUnit.IsReleaseBuild = value;
-            }
-        }
-
-        #endregion
-        
-        #region IsTieredJit
-
-        private bool _IsTieredJit;
-
-        public bool IsTieredJit
-        {
-            get => _IsTieredJit;
-            set
-            {
-                if (SetProperty(ref _IsTieredJit, value))
-                    ProcessingUnit.IsTieredJit = value;
-            }
-        }
-
-        #endregion
-
-        #region IsFileMonitoring
-
-        private bool _IsFileMonitoring;
-
-        public bool IsFileMonitoring
-        {
-            get => _IsFileMonitoring;
-            set => SetProperty(ref _IsFileMonitoring, value);
-        }
-
-        #endregion
-
-        #region MonitoringFilePath
-
-        private string _MonitoringFilePath = "";
-
-        public string MonitoringFilePath
-        {
-            get => _MonitoringFilePath;
-            set => SetProperty(ref _MonitoringFilePath, value);
-        }
-
-        #endregion
-
         public ProcessingUnit ProcessingUnit { get; }
 
+        private readonly Config _config;
         private readonly CompositeDisposable _Trashes = new CompositeDisposable();
 
-        public AppContext()
+        public AppContext(Config config)
         {
-            ProcessingUnit = new ProcessingUnit
+            _config = config;
+
+            var sourceCode = _config.CodeTemplate;
             {
-                IsReleaseBuild = IsReleaseBuild,
-                IsTieredJit = IsTieredJit
+                try
+                {
+                    sourceCode = File.ReadAllText(config.MonitoringFilePath);
+                }
+                catch
+                {
+                    _config.IsFileMonitoring = false;
+                    _config.MonitoringFilePath = "";
+                }
+            }
+
+            ProcessingUnit = new ProcessingUnit(_config)
+            {
+                SourceCode = sourceCode
             };
 
             SetupFileMonitoring();
@@ -87,12 +46,12 @@ namespace JitPad.Core
             _Trashes.Dispose();
             ProcessingUnit.Dispose();
         }
-        
+
         #region file monitoring
 
         private FileMonitor? _fileMonitor;
         private IDisposable? _fileMonitorChanged;
-        
+
         public void ReloadMonitoringFile()
         {
             LoadMonitoringFile();
@@ -101,8 +60,8 @@ namespace JitPad.Core
         private void SetupFileMonitoring()
         {
             Observable
-                .Merge(this.ObserveProperty(x => IsFileMonitoring).ToUnit())
-                .Merge(this.ObserveProperty(x => MonitoringFilePath).ToUnit())
+                .Merge(_config.ObserveProperty(x => x.IsFileMonitoring).ToUnit())
+                .Merge(_config.ObserveProperty(x => x.MonitoringFilePath).ToUnit())
                 .Subscribe(_ => UpdateFileMonitoring())
                 .AddTo(_Trashes);
         }
@@ -111,9 +70,9 @@ namespace JitPad.Core
         {
             ReleaseFileMonitor();
 
-            if (IsFileMonitoring && File.Exists(MonitoringFilePath))
+            if (_config.IsFileMonitoring && File.Exists(_config.MonitoringFilePath))
             {
-                _fileMonitor = new FileMonitor(MonitoringFilePath);
+                _fileMonitor = new FileMonitor(_config.MonitoringFilePath);
                 _fileMonitorChanged = _fileMonitor.Changed
                     .Subscribe(x => LoadMonitoringFile());
             }
@@ -122,8 +81,8 @@ namespace JitPad.Core
         private void LoadMonitoringFile()
         {
             ProcessingUnit.SourceCode =
-                File.Exists(MonitoringFilePath)
-                    ? File.ReadAllText(MonitoringFilePath)
+                File.Exists(_config.MonitoringFilePath)
+                    ? File.ReadAllText(_config.MonitoringFilePath)
                     : "";
         }
 

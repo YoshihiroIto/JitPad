@@ -23,30 +23,6 @@ namespace JitPad.Core
 
         #endregion
 
-        #region IsReleaseBuild
-
-        private bool _IsReleaseBuild;
-
-        public bool IsReleaseBuild
-        {
-            get => _IsReleaseBuild;
-            set => SetProperty(ref _IsReleaseBuild, value);
-        }
-
-        #endregion
-
-        #region IsTieredJit
-
-        private bool _IsTieredJit;
-
-        public bool IsTieredJit
-        {
-            get => _IsTieredJit;
-            set => SetProperty(ref _IsTieredJit, value);
-        }
-
-        #endregion
-
         #region BuildResult
 
         private string _BuildResult = "";
@@ -95,10 +71,13 @@ namespace JitPad.Core
 
         #endregion
 
+        private readonly Config _config;
         private readonly CompositeDisposable _Trashes = new CompositeDisposable();
 
-        public ProcessingUnit()
+        public ProcessingUnit(Config config)
         {
+            _config = config;
+            
             this.ObserveProperty(x => x.SourceCode)
                 .Throttle(TimeSpan.FromMilliseconds(500))
                 .ObserveOn(ThreadPoolScheduler.Instance)
@@ -106,8 +85,8 @@ namespace JitPad.Core
                 .AddTo(_Trashes);
 
             Observable
-                .Merge(this.ObserveProperty(x => x.IsReleaseBuild))
-                .Merge(this.ObserveProperty(x => x.IsTieredJit))
+                .Merge(config.ObserveProperty(x => x.IsReleaseBuild))
+                .Merge(config.ObserveProperty(x => x.IsTieredJit))
                 .ObserveOn(ThreadPoolScheduler.Instance)
                 .Subscribe(x => OnProcess())
                 .AddTo(_Trashes);
@@ -159,12 +138,12 @@ namespace JitPad.Core
                 sourceCode = _ProcessedSourceCode;
                 
                 // compile
-                var compileResult = Compiler.Run(_ProcessedSourceCode, IsReleaseBuild);
+                var compileResult = Compiler.Run(_ProcessedSourceCode, _config.IsReleaseBuild);
                 if (compileResult.IsOk == false)
                     return (false, "", string.Join("\n", compileResult.Messages.Select(x => x.ToString())));
                 
                 // jit disassemble
-                result = JitDisassembler.Run(_ProcessedSourceCode, compileResult.AssembleImage, IsTieredJit);
+                result = JitDisassembler.Run(_ProcessedSourceCode, compileResult.AssembleImage, _config.IsTieredJit);
             } while (sourceCode != _ProcessedSourceCode);
 
             return (result.IsOk, result.Output, string.Join("\n", result.Messages));

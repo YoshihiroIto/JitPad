@@ -95,6 +95,8 @@
                              Margin="-4,0,0,0"
                              HorizontalAlignment="Left"
                              Panel.ZIndex="-1"
+                             IsHitTestVisible="False"
+                             IsReadOnly="True"
                              Style="{StaticResource FilePathTextBoxStyle}"
                              Text="{Binding MonitoringFilePath.Value, Mode=TwoWay}" />
 

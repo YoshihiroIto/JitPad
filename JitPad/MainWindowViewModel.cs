@@ -1,4 +1,5 @@
 ﻿using System;
+using JitPad.Core;
 using JitPad.Foundation;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -8,7 +9,6 @@ namespace JitPad
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private readonly AppContext _AppContext;
         public ReactiveProperty<bool> IeReleaseBuild { get; }
         public ReactiveProperty<bool> IsTieredJit { get; }
         public ReactiveProperty<bool> IsFileMonitoring { get; }
@@ -23,15 +23,17 @@ namespace JitPad
         public ReactiveCommand OpenMonitoringFileCommand { get; }
         
         public Func<string?>? CsFileOpen { get; set; }
+        
+        private readonly AppContext _appContext;
 
-        public MainWindowViewModel(AppContext appContext)
+        public MainWindowViewModel(AppContext appContext, Config config)
         {
-            _AppContext = appContext;
+            _appContext = appContext;
 
-            IeReleaseBuild = appContext.ToReactivePropertyAsSynchronized(x => x.IsReleaseBuild).AddTo(Trashes);
-            IsTieredJit = appContext.ToReactivePropertyAsSynchronized(x => x.IsTieredJit).AddTo(Trashes);
-            IsFileMonitoring = appContext.ToReactivePropertyAsSynchronized(x => x.IsFileMonitoring).AddTo(Trashes);
-            MonitoringFilePath = appContext.ToReactivePropertyAsSynchronized(x => x.MonitoringFilePath).AddTo(Trashes);
+            IeReleaseBuild = config.ToReactivePropertyAsSynchronized(x => x.IsReleaseBuild).AddTo(Trashes);
+            IsTieredJit = config.ToReactivePropertyAsSynchronized(x => x.IsTieredJit).AddTo(Trashes);
+            IsFileMonitoring = config.ToReactivePropertyAsSynchronized(x => x.IsFileMonitoring).AddTo(Trashes);
+            MonitoringFilePath = config.ToReactivePropertyAsSynchronized(x => x.MonitoringFilePath).AddTo(Trashes);
             IsInProcessing = appContext.ProcessingUnit.ObserveProperty(x => x.IsInProcessing).ToReadOnlyReactiveProperty().AddTo(Trashes);
 
             SourceCode = appContext.ProcessingUnit.ToReactivePropertyAsSynchronized(x => x.SourceCode).AddTo(Trashes);
@@ -46,7 +48,7 @@ namespace JitPad
 
                 if (selectedFile != null)
                 {
-                    _AppContext.MonitoringFilePath = selectedFile;
+                    config.MonitoringFilePath = selectedFile;
                     ReloadMonitoringFile();
                 }
             }).AddTo(Trashes);
@@ -54,7 +56,7 @@ namespace JitPad
 
         public void ReloadMonitoringFile()
         {
-            _AppContext.ReloadMonitoringFile();
+            _appContext.ReloadMonitoringFile();
         }
     }
 }

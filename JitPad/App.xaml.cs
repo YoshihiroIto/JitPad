@@ -6,6 +6,7 @@ using System.Windows.Threading;
 using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using JitPad.Core;
 
 namespace JitPad
 {
@@ -14,11 +15,7 @@ namespace JitPad
         [STAThread]
         public static void Main()
         {
-            var configDir =
-                Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "Jewelry Development/JitPad/"
-                );
+            var configDir = Path.GetDirectoryName(Config.DefaultFilePath) ?? throw new NullReferenceException();
 
             Directory.CreateDirectory(configDir);
             ProfileOptimization.SetProfileRoot(configDir);
@@ -29,12 +26,13 @@ namespace JitPad
             app.Run();
         }
 
-        private readonly JitPad.Core.AppContext _appContext = new JitPad.Core.AppContext();
+        private Config? _config;
+        private Core.AppContext? _appContext;
 
         public static Dispatcher UiDispatcher
         {
             get => _uiDispatcher ?? throw new NullReferenceException();
-            set => _uiDispatcher = value;
+            private set => _uiDispatcher = value;
         }
         private static Dispatcher? _uiDispatcher;
 
@@ -45,16 +43,18 @@ namespace JitPad
             Reactive.Bindings.UIDispatcherScheduler.Initialize();
 
             SetupTextEditor();
+            
+            _config = Config.Load();
+            _appContext = new Core.AppContext(_config);
 
             MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(_appContext)
+                DataContext = new MainWindowViewModel(_appContext, _config)
             };
 
             MainWindow.Show();
 
-            _uiDispatcher = MainWindow?.Dispatcher ?? throw new NullReferenceException();
-
+            UiDispatcher = MainWindow?.Dispatcher ?? throw new NullReferenceException();
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -63,6 +63,7 @@ namespace JitPad
 
             (MainWindow?.DataContext as IDisposable)?.Dispose();
             _appContext?.Dispose();
+            _config?.Save();
         }
 
         private static void SetupTextEditor()
