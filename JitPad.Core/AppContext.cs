@@ -19,7 +19,7 @@ namespace JitPad.Core
             set
             {
                 if (SetProperty(ref _IsReleaseBuild, value))
-                    Primary.IsReleaseBuild = value;
+                    ProcessingUnit.IsReleaseBuild = value;
             }
         }
 
@@ -35,7 +35,7 @@ namespace JitPad.Core
             set
             {
                 if (SetProperty(ref _IsTieredJit, value))
-                    Primary.IsTieredJit = value;
+                    ProcessingUnit.IsTieredJit = value;
             }
         }
 
@@ -65,13 +65,13 @@ namespace JitPad.Core
 
         #endregion
 
-        public ProcessingUnit Primary { get; }
+        public ProcessingUnit ProcessingUnit { get; }
 
         private readonly CompositeDisposable _Trashes = new CompositeDisposable();
 
         public AppContext()
         {
-            Primary = new ProcessingUnit
+            ProcessingUnit = new ProcessingUnit
             {
                 IsReleaseBuild = IsReleaseBuild,
                 IsTieredJit = IsTieredJit
@@ -85,7 +85,7 @@ namespace JitPad.Core
             ReleaseFileMonitor();
 
             _Trashes.Dispose();
-            Primary.Dispose();
+            ProcessingUnit.Dispose();
         }
         
         #region file monitoring
@@ -121,7 +121,7 @@ namespace JitPad.Core
 
         private void LoadMonitoringFile()
         {
-            Primary.SourceText =
+            ProcessingUnit.SourceText =
                 File.Exists(MonitoringFilePath)
                     ? File.ReadAllText(MonitoringFilePath)
                     : "";

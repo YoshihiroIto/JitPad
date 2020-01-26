@@ -130,7 +130,7 @@
                                Grid.Column="0"
                                SyntaxHighlighting="C#">
             <b:Interaction.Behaviors>
-                <behaviors:TextEditorBindableTextBehavior Text="{Binding PrimarySourceText.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <behaviors:TextEditorBindableTextBehavior Text="{Binding ProcessingUnitSourceText.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <behaviors:TextEditorCompletionBehavior />
             </b:Interaction.Behaviors>
         </avalonedit:TextEditor>
@@ -142,7 +142,7 @@
                                SyntaxHighlighting="Asm"
                                WordWrap="True">
             <b:Interaction.Behaviors>
-                <behaviors:TextEditorBindableTextBehavior Text="{Binding PrimaryResult.Value, Mode=OneWay}" />
+                <behaviors:TextEditorBindableTextBehavior Text="{Binding ProcessingUnitResult.Value, Mode=OneWay}" />
             </b:Interaction.Behaviors>
 
             <avalonedit:TextEditor.Style>
@@ -150,7 +150,7 @@
                     <Setter Property="Visibility" Value="Hidden" />
 
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding PrimaryIsOk.Value, Mode=OneWay}" Value="True">
+                        <DataTrigger Binding="{Binding ProcessingUnitIsOk.Value, Mode=OneWay}" Value="True">
                             <Setter Property="Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>
@@ -164,7 +164,7 @@
                                ShowLineNumbers="False"
                                WordWrap="True">
             <b:Interaction.Behaviors>
-                <behaviors:TextEditorBindableTextBehavior Text="{Binding PrimaryMessage.Value, Mode=OneWay}" />
+                <behaviors:TextEditorBindableTextBehavior Text="{Binding ProcessingUnitMessage.Value, Mode=OneWay}" />
             </b:Interaction.Behaviors>
 
             <avalonedit:TextEditor.Style>
@@ -172,7 +172,7 @@
                     <Setter Property="Visibility" Value="Visible" />
 
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding PrimaryIsOk.Value, Mode=OneWay}" Value="True">
+                        <DataTrigger Binding="{Binding ProcessingUnitIsOk.Value, Mode=OneWay}" Value="True">
                             <Setter Property="Visibility" Value="Hidden" />
                         </DataTrigger>
                     </Style.Triggers>
