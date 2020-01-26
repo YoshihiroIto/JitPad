@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -160,7 +161,7 @@ namespace JitPad.Core
                 // compile
                 var compileResult = Compiler.Run(_ProcessedSourceText, IsReleaseBuild);
                 if (compileResult.IsOk == false)
-                    return (false, "", string.Join("\n", compileResult.Messages));
+                    return (false, "", string.Join("\n", compileResult.Messages.Select(x => x.ToString())));
                 
                 // jit disassemble
                 result = JitDisassembler.Run(_ProcessedSourceText, compileResult.AssembleImage, IsTieredJit);

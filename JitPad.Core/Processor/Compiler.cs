@@ -37,7 +37,7 @@ namespace JitPad.Core.Processor
             {
                 asmImage.Seek(0, SeekOrigin.Begin);
 
-                return new CompileResult(asmImage.ToArray(), Array.Empty<string>());
+                return new CompileResult(asmImage.ToArray(), Array.Empty<CompileResult.Message>());
             }
             else
             {
@@ -45,19 +45,25 @@ namespace JitPad.Core.Processor
                     .Where(x =>
                         x.IsWarningAsError ||
                         x.Severity == DiagnosticSeverity.Error)
-                    .OrderBy(x => x.Location.SourceSpan.Start)
-                    .Select(x =>
+                    .OrderBy(x => x.Location.SourceSpan.Start);
+
+                return new CompileResult(Array.Empty<byte>(),
+                    messages.Select(x =>
                     {
                         var lineSpan = x.Location.GetMappedLineSpan().Span;
 
-                        var line = lineSpan.Start.Line + 1;
-                        var character = lineSpan.Start.Character + 1;
+                        var startLine = lineSpan.Start.Line;
+                        var startCharacter = lineSpan.Start.Character;
+                        var endLine = lineSpan.End.Line;
+                        var endCharacter = lineSpan.End.Character;
                         var severity = x.Severity.ToString().ToLower();
 
-                        return $"({line},{character}) {severity} {x.Id}: {x.GetMessage()}";
-                    });
-
-                return new CompileResult(Array.Empty<byte>(), messages.ToArray());
+                        return new CompileResult.Message(
+                            startLine, startCharacter,
+                            endLine, endCharacter,
+                            severity, x.Id, x.GetMessage()
+                        );
+                    }).ToArray());
             }
         }
 
