@@ -95,9 +95,8 @@ namespace JitPad.Behaviors
                                 CloseWhenCaretAtBeginning = true,
                             };
 
-                        if (ToolToolField != null)
+                        if (ToolToolField?.GetValue(_completionWindow) is ToolTip toolTip)
                         {
-                            var toolTip = (ToolTip) ToolToolField.GetValue(_completionWindow);
                             toolTip.Placement = PlacementMode.Left;
                             toolTip.VerticalOffset = 0;
                             toolTip.HorizontalOffset = 4;
@@ -127,7 +126,7 @@ namespace JitPad.Behaviors
             });
         }
 
-        private static readonly FieldInfo ToolToolField = typeof(CompletionWindow).GetField("toolTip", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo? ToolToolField = typeof(CompletionWindow).GetField("toolTip", BindingFlags.NonPublic | BindingFlags.Instance);
 
         // Biaui
         private static IEnumerable<DependencyObject> Children(DependencyObject obj)
