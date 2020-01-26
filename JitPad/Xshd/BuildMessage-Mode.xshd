@@ -1,0 +1,16 @@
+﻿<?xml version="1.0"?>
+<SyntaxDefinition name="BUILD_MSG" extensions=".BUILD_MSG" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+    <Color name="Label" foreground="#4A6DB5" exampleText="" />
+    <Color name="Location" foreground="#AE81FF" exampleText="" />
+    
+    <RuleSet ignoreCase="true">
+        <Rule color="Location">
+                \([0-9]*,[0-9]*\)
+        </Rule>
+    
+        <Rule color="Label">
+                [0-9a-zA-Z_]*:
+        </Rule>
+    </RuleSet>
+</SyntaxDefinition>
+

@@ -78,6 +78,12 @@ namespace JitPad
                 var highlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
                 HighlightingManager.Instance.RegisterHighlighting("Asm", new[] {".asm"}, highlighting);
             }
+            
+            {
+                using var reader = new XmlTextReader(new MemoryStream(JitPad.Properties.Resources.BuildMessage_Mode));
+                var highlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+                HighlightingManager.Instance.RegisterHighlighting("BUILD_MSG", new[] {".BUILD_MSG"}, highlighting);
+            }
         }
     }
 }

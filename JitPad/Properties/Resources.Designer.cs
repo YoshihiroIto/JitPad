@@ -73,6 +73,16 @@ namespace JitPad.Properties {
         /// <summary>
         ///   型 System.Byte[] のローカライズされたリソースを検索します。
         /// </summary>
+        internal static byte[] BuildMessage_Mode {
+            get {
+                object obj = ResourceManager.GetObject("BuildMessage_Mode", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Byte[] のローカライズされたリソースを検索します。
+        /// </summary>
         internal static byte[] CSharp_Mode {
             get {
                 object obj = ResourceManager.GetObject("CSharp_Mode", resourceCulture);

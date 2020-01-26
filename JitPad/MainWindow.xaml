@@ -162,6 +162,7 @@
                                Grid.Column="2"
                                IsReadOnly="True"
                                ShowLineNumbers="False"
+                               SyntaxHighlighting="BUILD_MSG"
                                WordWrap="True">
             <b:Interaction.Behaviors>
                 <behaviors:TextEditorBindableTextBehavior Text="{Binding BuildMessage.Value, Mode=OneWay}" />
