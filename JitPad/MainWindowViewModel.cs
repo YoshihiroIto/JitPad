@@ -1,5 +1,6 @@
 ﻿using System;
 using JitPad.Core;
+using JitPad.Core.Processor;
 using JitPad.Foundation;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -18,6 +19,7 @@ namespace JitPad
         public ReactiveProperty<string> SourceCode { get; }
         public ReadOnlyReactiveProperty<string> BuildResult { get; }
         public ReadOnlyReactiveProperty<string> BuildMessage { get; }
+        public ReadOnlyReactiveProperty<CompileResult.Message[]> BuildDetailMessage { get; }
         public ReadOnlyReactiveProperty<bool> IsBuildOk { get; }
 
         public ReactiveCommand ClearMonitoringFileCommand { get; }
@@ -40,6 +42,7 @@ namespace JitPad
             SourceCode = appContext.ProcessingUnit.ToReactivePropertyAsSynchronized(x => x.SourceCode).AddTo(Trashes);
             BuildResult = appContext.ProcessingUnit.ObserveProperty(x => x.BuildResult).ToReadOnlyReactiveProperty().AddTo(Trashes);
             BuildMessage = appContext.ProcessingUnit.ObserveProperty(x => x.BuildMessage).ToReadOnlyReactiveProperty().AddTo(Trashes);
+            BuildDetailMessage = appContext.ProcessingUnit.ObserveProperty(x => x.BuildDetailMessages).ToReadOnlyReactiveProperty().AddTo(Trashes);
             IsBuildOk = appContext.ProcessingUnit.ObserveProperty(x => x.IsBuildOk).ToReadOnlyReactiveProperty().AddTo(Trashes);
 
             OpenMonitoringFileCommand = new ReactiveCommand().AddTo(Trashes);

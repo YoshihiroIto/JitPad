@@ -18,7 +18,11 @@ namespace JitPad.Core
         public string SourceCode
         {
             get => _SourceCode;
-            set => SetProperty(ref _SourceCode, value);
+            set
+            {
+                if (SetProperty(ref _SourceCode, value))
+                    BuildDetailMessages = Array.Empty<CompileResult.Message>();
+            }
         }
 
         #endregion
@@ -43,6 +47,18 @@ namespace JitPad.Core
         {
             get => _BuildMessage;
             private set => SetProperty(ref _BuildMessage, value);
+        }
+
+        #endregion
+
+        #region BuildDetailMessages
+
+        private CompileResult.Message[] _BuildDetailMessages = Array.Empty<CompileResult.Message>();
+
+        public CompileResult.Message[] BuildDetailMessages
+        {
+            get => _BuildDetailMessages;
+            set => SetProperty(ref _BuildDetailMessages, value);
         }
 
         #endregion
@@ -77,7 +93,7 @@ namespace JitPad.Core
         public ProcessingUnit(Config config)
         {
             _config = config;
-            
+
             this.ObserveProperty(x => x.SourceCode)
                 .Throttle(TimeSpan.FromMilliseconds(500))
                 .ObserveOn(ThreadPoolScheduler.Instance)
@@ -99,18 +115,21 @@ namespace JitPad.Core
             if (IsInProcessing)
                 return;
 
-            IsInProcessing = true;
-
             try
             {
-                var (isOk, result, message) = DoProcess();
+                IsInProcessing = true;
+                
+                BuildDetailMessages = Array.Empty<CompileResult.Message>();
+                
+                var (isOk, result, message, detailMessages) = DoProcess();
+                
+                BuildDetailMessages = detailMessages;
+                IsBuildOk = isOk;
 
                 if (isOk)
                     BuildResult = result;
                 else
                     BuildMessage = message;
-
-                IsBuildOk = isOk;
             }
             finally
             {
@@ -125,10 +144,10 @@ namespace JitPad.Core
             _Trashes.Dispose();
         }
 
-        private (bool, string, string) DoProcess()
+        private (bool, string, string, CompileResult.Message[]) DoProcess()
         {
             if (string.IsNullOrEmpty(_ProcessedSourceCode.Trim()))
-                return (true, "", "");
+                return (true, "", "", Array.Empty<CompileResult.Message>());
 
             DisassembleResult result;
 
@@ -136,17 +155,25 @@ namespace JitPad.Core
             do
             {
                 sourceCode = _ProcessedSourceCode;
-                
+
                 // compile
                 var compileResult = Compiler.Run(_ProcessedSourceCode, _config.IsReleaseBuild);
                 if (compileResult.IsOk == false)
-                    return (false, "", string.Join("\n", compileResult.Messages.Select(x => x.ToString())));
-                
+                    return (
+                        false,
+                        "",
+                        string.Join("\n", compileResult.Messages.Select(x => x.ToString())),
+                        compileResult.Messages);
+
                 // jit disassemble
                 result = JitDisassembler.Run(_ProcessedSourceCode, compileResult.AssembleImage, _config.IsTieredJit);
             } while (sourceCode != _ProcessedSourceCode);
 
-            return (result.IsOk, result.Output, string.Join("\n", result.Messages));
+            return (
+                result.IsOk,
+                result.Output,
+                string.Join("\n", result.Messages),
+                Array.Empty<CompileResult.Message>());
         }
     }
 }

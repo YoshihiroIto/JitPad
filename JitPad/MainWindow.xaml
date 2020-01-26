@@ -135,6 +135,7 @@
             <b:Interaction.Behaviors>
                 <behaviors:TextEditorBindableTextBehavior Text="{Binding SourceCode.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <behaviors:TextEditorCompletionBehavior />
+                <behaviors:SourceCodeTextEditorBehavior BuildDetailMessages="{Binding BuildDetailMessage.Value, Mode=OneWay}" />
             </b:Interaction.Behaviors>
         </avalonedit:TextEditor>
 
