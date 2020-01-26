@@ -117,6 +117,11 @@ namespace JitPad.Behaviors
                             foreach (var item in results.CompletionData)
                                 _completionWindow.CompletionList.CompletionData.Add(item: new CompletionData(item));
 
+                            if (completionChar == null)
+                                if (_completionWindow.CompletionList.CompletionData.Count > 0)
+                                    if (_completionWindow.CompletionList.SelectedItem == null)
+                                        _completionWindow.CompletionList.SelectedItem = _completionWindow.CompletionList.CompletionData[0];
+
                             _completionWindow.Show();
                         }
                     });
