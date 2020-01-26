@@ -93,7 +93,7 @@ public class Class
 
         public static Config Load(string? configFilePath = null, string? codeTemplateFilePath = null)
         {
-            Config config = null;
+            Config? config = null;
 
             // config
             try
