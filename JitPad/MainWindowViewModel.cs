@@ -17,9 +17,9 @@ namespace JitPad
         public ReadOnlyReactiveProperty<bool> IsInProcessing { get; }
 
         public ReactiveProperty<string> SourceCode { get; }
-        public ReadOnlyReactiveProperty<string> BuildResult { get; }
-        public ReadOnlyReactiveProperty<string> BuildMessage { get; }
-        public ReadOnlyReactiveProperty<CompileResult.Message[]> BuildDetailMessage { get; }
+        public ReadOnlyReactiveProperty<string?> BuildResult { get; }
+        public ReadOnlyReactiveProperty<string?> BuildMessage { get; }
+        public ReadOnlyReactiveProperty<CompileResult.Message[]?> BuildDetailMessage { get; }
         public ReadOnlyReactiveProperty<bool> IsBuildOk { get; }
 
         public ReactiveCommand ClearMonitoringFileCommand { get; }
