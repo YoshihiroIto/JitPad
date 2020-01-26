@@ -7,7 +7,7 @@ namespace JitPad.Core.Processor
 {
     public static class JitDisassembler
     {
-        public static DisassembleResult Run(string sourceCode, byte[] assembleImage, bool isTieredJit, string jitDasmExe = null)
+        public static DisassembleResult Run(string sourceCode, byte[] assembleImage, bool isTieredJit, string? jitDasmExe = null)
         {
             var sourceCodeTempPath = Path.GetTempFileName() + ".cs";
             var assemblyTempPath = Path.ChangeExtension(sourceCodeTempPath, ".dll");
