@@ -22,38 +22,38 @@ namespace JitPad.Core
         
         #endregion
 
-        #region Result
+        #region BuildResult
 
-        private string _Result = "";
+        private string _BuildResult = "";
 
-        public string Result
+        public string BuildResult
         {
-            get => _Result;
-            set => SetProperty(ref _Result, value);
+            get => _BuildResult;
+            set => SetProperty(ref _BuildResult, value);
         }
 
         #endregion
 
-        #region Message
+        #region BuildMessage
 
-        private string _Message = "";
+        private string _BuildMessage = "";
 
-        public string Message
+        public string BuildMessage
         {
-            get => _Message;
-            set => SetProperty(ref _Message, value);
+            get => _BuildMessage;
+            set => SetProperty(ref _BuildMessage, value);
         }
 
         #endregion
 
-        #region IsOk
+        #region IsBuildOk
 
-        private bool _IsOk;
+        private bool _IsBuildOk;
 
-        public bool IsOk
+        public bool IsBuildOk
         {
-            get => _IsOk;
-            set => SetProperty(ref _IsOk, value);
+            get => _IsBuildOk;
+            set => SetProperty(ref _IsBuildOk, value);
         }
 
         #endregion
@@ -126,11 +126,11 @@ namespace JitPad.Core
                 var (isOk, result, message) = DoProcess();
 
                 if (isOk)
-                    Result = result;
+                    BuildResult = result;
                 else
-                    Message = message;
+                    BuildMessage = message;
 
-                IsOk = isOk;
+                IsBuildOk = isOk;
             }
             finally
             {
