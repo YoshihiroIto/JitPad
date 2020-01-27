@@ -24,6 +24,10 @@
                     mc:Ignorable="d">
     <controls:BiaWindow.Style>
         <Style BasedOn="{StaticResource BiaWindowDialogStyle}" TargetType="controls:BiaWindow">
+            <Setter Property="IsVisibleMaximizeButton" Value="True" />
+            <Setter Property="IsVisibleMinimizeButton" Value="True" />
+            <Setter Property="IsVisibleNormalizeButton" Value="True" />
+
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
                     <WindowChrome CaptionHeight="48"
@@ -140,7 +144,7 @@
                                       IsChecked="{Binding IsTieredJit.Value, Mode=TwoWay}" />
             <Menu Width="32"
                   Height="32"
-                  Margin="0,-12,20,0"
+                  Margin="0,-12,84,0"
                   Padding="0"
                   HorizontalAlignment="Right"
                   VerticalAlignment="Top"
