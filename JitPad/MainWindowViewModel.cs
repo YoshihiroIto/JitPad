@@ -53,7 +53,11 @@ namespace JitPad
             }).AddTo(Trashes);
 
             ClearMonitoringFileCommand = new ReactiveCommand().AddTo(Trashes);
-            ClearMonitoringFileCommand.Subscribe(_ => config.MonitoringFilePath = "").AddTo(Trashes);
+            ClearMonitoringFileCommand.Subscribe(_ =>
+            {
+                config.MonitoringFilePath = "";
+                appContext.LoadMonitoringFile();
+            }).AddTo(Trashes);
 
             OpenConfigFolderCommand = new ReactiveCommand().AddTo(Trashes);
             OpenConfigFolderCommand.Subscribe(_ => appContext.OpenConfigFolder()).AddTo(Trashes);

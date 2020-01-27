@@ -56,19 +56,6 @@ namespace JitPad.Core
 
         #endregion
 
-        #region CodeTemplate
-
-        private string _CodeTemplate = DefaultCodeTemplate;
-
-        [JsonIgnore]
-        public string CodeTemplate
-        {
-            get => _CodeTemplate;
-            set => SetProperty(ref _CodeTemplate, value);
-        }
-
-        #endregion
-
         #region FilePath
 
         private string _FilePath = "";
@@ -81,6 +68,21 @@ namespace JitPad.Core
         }
 
         #endregion
+
+        public string LoadCodeTemplate()
+        {
+            try
+            {
+                if (File.Exists(_codeTemplateFilePath))
+                    return File.ReadAllText(_codeTemplateFilePath);
+            }
+            catch
+            {
+                // ignored
+            }
+
+            return DefaultCodeTemplate;
+        }
 
         public static readonly string DefaultFilePath =
             Path.Combine(
@@ -103,15 +105,12 @@ public class Class
     {
     }
 }";
+        private string _codeTemplateFilePath = "";
 
         public static Config Load(string? configFilePath = null, string? codeTemplateFilePath = null)
         {
             if (configFilePath == null)
                 configFilePath = DefaultFilePath;
-
-            if (codeTemplateFilePath == null)
-                codeTemplateFilePath = DefaultTemplateFilePath;
-
 
             // config
             Config? config = null;
@@ -132,13 +131,12 @@ public class Class
                 config = new Config();
 
             config.FilePath = configFilePath;
+            config._codeTemplateFilePath = codeTemplateFilePath ?? DefaultTemplateFilePath;
 
-            // code template
+            // setup code template
             try
             {
-                if (File.Exists(codeTemplateFilePath))
-                    config.CodeTemplate = File.ReadAllText(DefaultTemplateFilePath);
-                else
+                if (File.Exists(codeTemplateFilePath) == false)
                     File.WriteAllText(DefaultTemplateFilePath, DefaultCodeTemplate);
             }
             catch

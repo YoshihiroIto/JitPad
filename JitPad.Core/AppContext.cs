@@ -19,11 +19,11 @@ namespace JitPad.Core
         {
             _config = config;
 
-            var sourceCode = _config.CodeTemplate;
+            var sourceCode = "";
             {
                 try
                 {
-                    sourceCode = File.ReadAllText(config.MonitoringFilePath);
+                    sourceCode = _config.LoadCodeTemplate();
                 }
                 catch
                 {
@@ -97,12 +97,12 @@ namespace JitPad.Core
             }
         }
 
-        private void LoadMonitoringFile()
+        public void LoadMonitoringFile()
         {
             ProcessingUnit.SourceCode =
                 File.Exists(_config.MonitoringFilePath)
                     ? File.ReadAllText(_config.MonitoringFilePath)
-                    : _config.CodeTemplate;
+                    : _config.LoadCodeTemplate();
         }
 
         private void ReleaseFileMonitor()
