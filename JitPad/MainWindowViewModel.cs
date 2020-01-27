@@ -23,7 +23,7 @@ namespace JitPad
         public ReadOnlyReactiveProperty<bool> IsBuildOk { get; }
 
         public ReactiveCommand OpenMonitoringFileCommand { get; }
-        public ReactiveCommand ClearMonitoringFileCommand { get; }
+        public ReactiveCommand ApplyTemplateFileCommand { get; }
         public ReactiveCommand OpenConfigFolderCommand { get; }
         public ReactiveCommand OpenAboutJitPadCommand { get; }
 
@@ -52,12 +52,8 @@ namespace JitPad
                     config.MonitoringFilePath = selectedFile;
             }).AddTo(Trashes);
 
-            ClearMonitoringFileCommand = new ReactiveCommand().AddTo(Trashes);
-            ClearMonitoringFileCommand.Subscribe(_ =>
-            {
-                config.MonitoringFilePath = "";
-                appContext.LoadMonitoringFile();
-            }).AddTo(Trashes);
+            ApplyTemplateFileCommand = new ReactiveCommand().AddTo(Trashes);
+            ApplyTemplateFileCommand.Subscribe(_ => appContext.ApplyTemplateFile()).AddTo(Trashes);
 
             OpenConfigFolderCommand = new ReactiveCommand().AddTo(Trashes);
             OpenConfigFolderCommand.Subscribe(_ => appContext.OpenConfigFolder()).AddTo(Trashes);

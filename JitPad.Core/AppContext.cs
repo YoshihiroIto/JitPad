@@ -38,9 +38,9 @@ namespace JitPad.Core
             };
 
             SetupFileMonitoring();
-            
+
             _config.ObserveProperty(x => x.MonitoringFilePath)
-                .Subscribe(_ => ReloadMonitoringFile())
+                .Subscribe(_ => LoadMonitoringFile())
                 .AddTo(_Trashes);
         }
 
@@ -56,11 +56,6 @@ namespace JitPad.Core
 
         private FileMonitor? _fileMonitor;
         private IDisposable? _fileMonitorChanged;
-
-        public void ReloadMonitoringFile()
-        {
-            LoadMonitoringFile();
-        }
 
         public void OpenConfigFolder()
         {
@@ -99,10 +94,16 @@ namespace JitPad.Core
 
         public void LoadMonitoringFile()
         {
-            ProcessingUnit.SourceCode =
-                File.Exists(_config.MonitoringFilePath)
-                    ? File.ReadAllText(_config.MonitoringFilePath)
-                    : _config.LoadCodeTemplate();
+            if (File.Exists(_config.MonitoringFilePath))
+                ProcessingUnit.SourceCode = File.ReadAllText(_config.MonitoringFilePath);
+            else
+                ApplyTemplateFile();
+        }
+
+        public void ApplyTemplateFile()
+        {
+            _config.MonitoringFilePath = "";
+            ProcessingUnit.SourceCode = _config.LoadCodeTemplate();
         }
 
         private void ReleaseFileMonitor()
