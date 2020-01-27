@@ -26,15 +26,11 @@ namespace JitPad
         public ReactiveCommand ClearMonitoringFileCommand { get; }
         public ReactiveCommand OpenConfigFolderCommand { get; }
         public ReactiveCommand OpenAboutJitPadCommand { get; }
-        
-        public Func<string?>? CsFileOpen { get; set; }
 
-        private readonly AppContext _appContext;
+        public Func<string?>? CsFileOpen { get; set; }
 
         public MainWindowViewModel(AppContext appContext, Config config)
         {
-            _appContext = appContext;
-
             IeReleaseBuild = config.ToReactivePropertyAsSynchronized(x => x.IsReleaseBuild).AddTo(Trashes);
             IsTieredJit = config.ToReactivePropertyAsSynchronized(x => x.IsTieredJit).AddTo(Trashes);
             IsFileMonitoring = config.ToReactivePropertyAsSynchronized(x => x.IsFileMonitoring).AddTo(Trashes);
@@ -53,29 +49,17 @@ namespace JitPad
                 var selectedFile = CsFileOpen?.Invoke();
 
                 if (selectedFile != null)
-                {
                     config.MonitoringFilePath = selectedFile;
-                    ReloadMonitoringFile();
-                }
             }).AddTo(Trashes);
 
             ClearMonitoringFileCommand = new ReactiveCommand().AddTo(Trashes);
-            ClearMonitoringFileCommand.Subscribe(_ =>
-            {
-                config.MonitoringFilePath = "";
-                ReloadMonitoringFile();
-            }).AddTo(Trashes);
-            
-           OpenConfigFolderCommand = new ReactiveCommand().AddTo(Trashes);
-           OpenConfigFolderCommand.Subscribe(_ => _appContext.OpenConfigFolder()).AddTo(Trashes);
-            
-           OpenAboutJitPadCommand = new ReactiveCommand().AddTo(Trashes);
-           OpenAboutJitPadCommand.Subscribe(_ => _appContext.OpenAboutJitPad()).AddTo(Trashes);
-        }
+            ClearMonitoringFileCommand.Subscribe(_ => config.MonitoringFilePath = "").AddTo(Trashes);
 
-        public void ReloadMonitoringFile()
-        {
-            _appContext.ReloadMonitoringFile();
+            OpenConfigFolderCommand = new ReactiveCommand().AddTo(Trashes);
+            OpenConfigFolderCommand.Subscribe(_ => appContext.OpenConfigFolder()).AddTo(Trashes);
+
+            OpenAboutJitPadCommand = new ReactiveCommand().AddTo(Trashes);
+            OpenAboutJitPadCommand.Subscribe(_ => appContext.OpenAboutJitPad()).AddTo(Trashes);
         }
     }
 }

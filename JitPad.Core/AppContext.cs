@@ -38,6 +38,10 @@ namespace JitPad.Core
             };
 
             SetupFileMonitoring();
+            
+            _config.ObserveProperty(x => x.MonitoringFilePath)
+                .Subscribe(_ => ReloadMonitoringFile())
+                .AddTo(_Trashes);
         }
 
         public void Dispose()

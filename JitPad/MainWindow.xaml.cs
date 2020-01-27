@@ -15,10 +15,7 @@ namespace JitPad
         private void Window_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetData(DataFormats.FileDrop) is IEnumerable<string> files)
-            {
                 ViewModel.MonitoringFilePath.Value = files.FirstOrDefault() ?? "";
-                ViewModel.ReloadMonitoringFile();
-            }
         }
 
         private void Window_PreviewDragOver(object sender, DragEventArgs e)
