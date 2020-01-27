@@ -21,8 +21,9 @@ public class TestClass
     }
 }
 }";
+            var compiler = new Compiler();
 
-            var result = Compiler.Run(sourceCode, isReleaseBuild);
+            var result = compiler.Run(sourceCode, isReleaseBuild);
 
             Assert.True(result.IsOk);
         }
@@ -43,7 +44,9 @@ public class TestClass
 }
 }";
 
-            var result = Compiler.Run(sourceCode, isReleaseBuild);
+            var compiler = new Compiler();
+            
+            var result = compiler.Run(sourceCode, isReleaseBuild);
 
             Assert.False(result.IsOk);
             Assert.True(result.Messages.Any());

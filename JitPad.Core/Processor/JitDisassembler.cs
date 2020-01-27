@@ -2,12 +2,20 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using JitPad.Core.Processor.Interface;
 
 namespace JitPad.Core.Processor
 {
-    public static class JitDisassembler
+    public class JitDisassembler : IDisassembler
     {
-        public static DisassembleResult Run(string sourceCode, byte[] assembleImage, bool isTieredJit, string? jitDasmExe = null)
+        private readonly string _jitDasmExe;
+
+        public JitDisassembler(string jitDasmExe)
+        {
+            _jitDasmExe = jitDasmExe;
+        }
+        
+        public DisassembleResult Run(string sourceCode, byte[] assembleImage, bool isTieredJit)
         {
             var sourceCodeTempPath = Path.GetTempFileName() + ".cs";
             var assemblyTempPath = Path.ChangeExtension(sourceCodeTempPath, ".dll");
@@ -21,7 +29,7 @@ namespace JitPad.Core.Processor
                 {
                     StartInfo = new ProcessStartInfo
                     {
-                        FileName = jitDasmExe ?? "JitDasm/JitDasm.exe",
+                        FileName = _jitDasmExe,
                         Arguments = "--diffable -l " + assemblyTempPath,
                         CreateNoWindow = true,
                         UseShellExecute = false,

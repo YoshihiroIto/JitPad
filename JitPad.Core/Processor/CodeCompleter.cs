@@ -111,7 +111,7 @@ namespace JitPad.Core.Processor
             return filterText;
         }
     }
-
+    
     public class CompletionResult
     {
         public readonly CompleteData[] CompletionData;
@@ -121,7 +121,7 @@ namespace JitPad.Core.Processor
             CompletionData = completionData;
         }
     }
-
+    
     public class CompleteData
     {
         public readonly CompletionItem Item;
@@ -138,4 +138,5 @@ namespace JitPad.Core.Processor
             Document = document;
         }
     }
+    
 }

@@ -20,9 +20,11 @@ public class TestClass
 }
 }";
 
-            var compileResult = Compiler.Run(sourceCode, true);
+            var compiler = new Compiler();
+            var compileResult = compiler.Run(sourceCode, true);
             
-            var result = JitDisassembler.Run(sourceCode, compileResult.AssembleImage, true, "../../../../externals/JitDasm/JitDasm/bin/Release/netcoreapp3.0/JitDasm.exe");
+            var disassembler = new JitDisassembler("../../../../externals/JitDasm/JitDasm/bin/Release/netcoreapp3.0/JitDasm.exe");
+            var result = disassembler.Run(sourceCode, compileResult.AssembleImage, true);
             
             Assert.True(result.IsOk);
         }

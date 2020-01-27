@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using JitPad.Foundation;
 using Reactive.Bindings.Extensions;
 using System.Diagnostics;
+using JitPad.Core.Processor;
 
 namespace JitPad.Core
 {
@@ -31,8 +32,11 @@ namespace JitPad.Core
                     _config.MonitoringFilePath = "";
                 }
             }
+            
+            var compiler = new Compiler();
+            var disassembler = new JitDisassembler("JitDasm/JitDasm.exe");
 
-            ProcessingUnit = new ProcessingUnit(_config)
+            ProcessingUnit = new ProcessingUnit(_config, compiler, disassembler)
             {
                 SourceCode = sourceCode
             };

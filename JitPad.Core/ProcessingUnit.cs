@@ -4,6 +4,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using JitPad.Core.Processor;
+using JitPad.Core.Processor.Interface;
 using JitPad.Foundation;
 using Reactive.Bindings.Extensions;
 
@@ -88,11 +89,16 @@ namespace JitPad.Core
         #endregion
 
         private readonly Config _config;
+        private readonly ICompiler _compiler;
+        private readonly IDisassembler _disassembler;
+        
         private readonly CompositeDisposable _Trashes = new CompositeDisposable();
-
-        public ProcessingUnit(Config config)
+        
+        public ProcessingUnit(Config config, ICompiler compiler, IDisassembler disassembler)
         {
             _config = config;
+            _compiler = compiler;
+            _disassembler = disassembler;
 
             this.ObserveProperty(x => x.SourceCode)
                 .Throttle(TimeSpan.FromMilliseconds(500))
@@ -157,7 +163,7 @@ namespace JitPad.Core
                 sourceCode = _ProcessedSourceCode;
 
                 // compile
-                var compileResult = Compiler.Run(_ProcessedSourceCode, _config.IsReleaseBuild);
+                var compileResult = _compiler.Run(_ProcessedSourceCode, _config.IsReleaseBuild);
                 if (compileResult.IsOk == false)
                     return (
                         false,
@@ -166,7 +172,7 @@ namespace JitPad.Core
                         compileResult.Messages);
 
                 // jit disassemble
-                result = JitDisassembler.Run(_ProcessedSourceCode, compileResult.AssembleImage, _config.IsTieredJit);
+                result = _disassembler.Run(_ProcessedSourceCode, compileResult.AssembleImage, _config.IsTieredJit);
             } while (sourceCode != _ProcessedSourceCode);
 
             return (

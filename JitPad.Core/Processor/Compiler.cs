@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using JitPad.Core.Processor.Interface;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
@@ -10,9 +11,9 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace JitPad.Core.Processor
 {
-    public static class Compiler
+    public class Compiler : ICompiler
     {
-        public static CompileResult Run(string sourceCode, bool isReleaseBuild)
+        public CompileResult Run(string sourceCode, bool isReleaseBuild)
         {
             using var asmImage = new MemoryStream();
 
