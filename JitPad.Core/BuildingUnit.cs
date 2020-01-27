@@ -11,7 +11,7 @@ using Reactive.Bindings.Extensions;
 
 namespace JitPad.Core
 {
-    public class ProcessingUnit : NotificationObject, IDisposable
+    public class BuildingUnit : NotificationObject, IDisposable
     {
         #region SourceCode
 
@@ -129,7 +129,7 @@ namespace JitPad.Core
 
         private readonly CompositeDisposable _Trashes = new CompositeDisposable();
 
-        public ProcessingUnit(Config config, ICompiler compiler, IDisassembler disassembler)
+        public BuildingUnit(Config config, ICompiler compiler, IDisassembler disassembler)
         {
             _compiler = compiler;
             _disassembler = disassembler;

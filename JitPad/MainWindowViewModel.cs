@@ -14,7 +14,7 @@ namespace JitPad
         public ReactiveProperty<bool> IsTieredJit { get; }
         public ReactiveProperty<bool> IsFileMonitoring { get; }
         public ReactiveProperty<string> MonitoringFilePath { get; }
-        public ReadOnlyReactiveProperty<bool> IsInProcessing { get; }
+        public ReadOnlyReactiveProperty<bool> IsInBuilding { get; }
 
         public ReactiveProperty<string> SourceCode { get; }
         public ReadOnlyReactiveProperty<string?> BuildResult { get; }
@@ -35,13 +35,13 @@ namespace JitPad
             IsTieredJit = config.ToReactivePropertyAsSynchronized(x => x.IsTieredJit).AddTo(Trashes);
             IsFileMonitoring = config.ToReactivePropertyAsSynchronized(x => x.IsFileMonitoring).AddTo(Trashes);
             MonitoringFilePath = config.ToReactivePropertyAsSynchronized(x => x.MonitoringFilePath).AddTo(Trashes);
-            IsInProcessing = appContext.ProcessingUnit.ObserveProperty(x => x.IsInBuilding).ToReadOnlyReactiveProperty().AddTo(Trashes);
+            IsInBuilding = appContext.BuildingUnit.ObserveProperty(x => x.IsInBuilding).ToReadOnlyReactiveProperty().AddTo(Trashes);
 
-            SourceCode = appContext.ProcessingUnit.ToReactivePropertyAsSynchronized(x => x.SourceCode).AddTo(Trashes);
-            BuildResult = appContext.ProcessingUnit.ObserveProperty(x => x.BuildResult).ToReadOnlyReactiveProperty().AddTo(Trashes);
-            BuildMessage = appContext.ProcessingUnit.ObserveProperty(x => x.BuildMessage).ToReadOnlyReactiveProperty().AddTo(Trashes);
-            BuildDetailMessage = appContext.ProcessingUnit.ObserveProperty(x => x.BuildDetailMessages).ToReadOnlyReactiveProperty().AddTo(Trashes);
-            IsBuildOk = appContext.ProcessingUnit.ObserveProperty(x => x.IsBuildOk).ToReadOnlyReactiveProperty().AddTo(Trashes);
+            SourceCode = appContext.BuildingUnit.ToReactivePropertyAsSynchronized(x => x.SourceCode).AddTo(Trashes);
+            BuildResult = appContext.BuildingUnit.ObserveProperty(x => x.BuildResult).ToReadOnlyReactiveProperty().AddTo(Trashes);
+            BuildMessage = appContext.BuildingUnit.ObserveProperty(x => x.BuildMessage).ToReadOnlyReactiveProperty().AddTo(Trashes);
+            BuildDetailMessage = appContext.BuildingUnit.ObserveProperty(x => x.BuildDetailMessages).ToReadOnlyReactiveProperty().AddTo(Trashes);
+            IsBuildOk = appContext.BuildingUnit.ObserveProperty(x => x.IsBuildOk).ToReadOnlyReactiveProperty().AddTo(Trashes);
 
             OpenMonitoringFileCommand = new ReactiveCommand().AddTo(Trashes);
             OpenMonitoringFileCommand.Subscribe(_ =>

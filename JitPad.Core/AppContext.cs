@@ -11,7 +11,7 @@ namespace JitPad.Core
 {
     public class AppContext : NotificationObject, IDisposable
     {
-        public ProcessingUnit ProcessingUnit { get; }
+        public BuildingUnit BuildingUnit { get; }
 
         private readonly Config _config;
         private readonly CompositeDisposable _Trashes = new CompositeDisposable();
@@ -36,7 +36,7 @@ namespace JitPad.Core
             var compiler = new Compiler();
             var disassembler = new JitDisassembler("JitDasm/JitDasm.exe");
 
-            ProcessingUnit = new ProcessingUnit(_config, compiler, disassembler)
+            BuildingUnit = new BuildingUnit(_config, compiler, disassembler)
             {
                 SourceCode = sourceCode
             };
@@ -53,7 +53,7 @@ namespace JitPad.Core
             ReleaseFileMonitor();
 
             _Trashes.Dispose();
-            ProcessingUnit.Dispose();
+            BuildingUnit.Dispose();
         }
 
         #region file monitoring
@@ -99,7 +99,7 @@ namespace JitPad.Core
         public void LoadMonitoringFile()
         {
             if (File.Exists(_config.MonitoringFilePath))
-                ProcessingUnit.SourceCode = File.ReadAllText(_config.MonitoringFilePath);
+                BuildingUnit.SourceCode = File.ReadAllText(_config.MonitoringFilePath);
             else
                 ApplyTemplateFile();
         }
@@ -107,7 +107,7 @@ namespace JitPad.Core
         public void ApplyTemplateFile()
         {
             _config.MonitoringFilePath = "";
-            ProcessingUnit.SourceCode = _config.LoadCodeTemplate();
+            BuildingUnit.SourceCode = _config.LoadCodeTemplate();
         }
 
         private void ReleaseFileMonitor()
