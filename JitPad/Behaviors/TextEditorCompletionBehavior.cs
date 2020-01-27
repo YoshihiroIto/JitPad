@@ -26,6 +26,7 @@ namespace JitPad.Behaviors
             AssociatedObject.TextArea.TextEntered += TextAreaOnTextEntered;
             AssociatedObject.TextArea.TextEntering += TextAreaOnTextEntering;
             AssociatedObject.KeyDown += AssociatedObjectOnKeyDown;
+            AssociatedObject.TextChanged += AssociatedObjectOnTextChanged;
         }
 
         protected override void OnDetaching()
@@ -35,6 +36,7 @@ namespace JitPad.Behaviors
             AssociatedObject.TextArea.TextEntered -= TextAreaOnTextEntered;
             AssociatedObject.TextArea.TextEntering -= TextAreaOnTextEntering;
             AssociatedObject.KeyDown -= AssociatedObjectOnKeyDown;
+            AssociatedObject.TextChanged -= AssociatedObjectOnTextChanged;
         }
 
         private CompletionWindow? _completionWindow;
@@ -65,6 +67,11 @@ namespace JitPad.Behaviors
                 e.Handled = true;
                 ShowCompletionWindow(null);
             }
+        }
+        
+        private void AssociatedObjectOnTextChanged(object? sender, EventArgs e)
+        {
+            _completionWindow?.Close();
         }
 
         private readonly CodeCompleter _CodeCompleter = new CodeCompleter();
