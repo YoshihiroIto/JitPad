@@ -9,6 +9,7 @@
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:jitPad="clr-namespace:JitPad"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    Title="JitPad"
                     Width="1400"
                     Height="1000"
                     d:DataContext="{d:DesignInstance jitPad:MainWindowViewModel}"
