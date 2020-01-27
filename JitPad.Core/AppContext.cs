@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using JitPad.Foundation;
 using Reactive.Bindings.Extensions;
+using System.Diagnostics;
 
 namespace JitPad.Core
 {
@@ -55,6 +56,20 @@ namespace JitPad.Core
         public void ReloadMonitoringFile()
         {
             LoadMonitoringFile();
+        }
+
+        public void OpenConfigFolder()
+        {
+            var dir = Path.GetDirectoryName(_config.FilePath);
+
+            Process.Start("explorer", $"\"{dir}\"");
+        }
+
+        public void OpenAboutJitPad()
+        {
+            const string url = "https://github.com/YoshihiroIto/JitPad";
+
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
         }
 
         private void SetupFileMonitoring()
