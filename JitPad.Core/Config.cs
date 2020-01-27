@@ -69,6 +69,19 @@ namespace JitPad.Core
 
         #endregion
 
+        #region FilePath
+
+        private string _FilePath = "";
+
+        [JsonIgnore]
+        public string FilePath
+        {
+            get => _FilePath;
+            set => SetProperty(ref _FilePath, value);
+        }
+
+        #endregion
+
         public static readonly string DefaultFilePath =
             Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -93,14 +106,17 @@ public class Class
 
         public static Config Load(string? configFilePath = null, string? codeTemplateFilePath = null)
         {
-            Config? config = null;
+            if (configFilePath == null)
+                configFilePath = DefaultFilePath;
+
+            if (codeTemplateFilePath == null)
+                codeTemplateFilePath = DefaultTemplateFilePath;
+
 
             // config
+            Config? config = null;
             try
             {
-                if (configFilePath == null)
-                    configFilePath = DefaultFilePath;
-
                 if (File.Exists(configFilePath))
                 {
                     var json = File.ReadAllText(configFilePath);
@@ -115,12 +131,11 @@ public class Class
             if (config == null)
                 config = new Config();
 
+            config.FilePath = configFilePath;
+
             // code template
             try
             {
-                if (codeTemplateFilePath == null)
-                    codeTemplateFilePath = DefaultTemplateFilePath;
-
                 if (File.Exists(codeTemplateFilePath))
                     config.CodeTemplate = File.ReadAllText(DefaultTemplateFilePath);
                 else
@@ -134,14 +149,11 @@ public class Class
             return config;
         }
 
-        public void Save(string? filePath = null)
+        public void Save()
         {
             var json = JsonSerializer.Serialize(this);
 
-            if (filePath == null)
-                filePath = DefaultFilePath;
-
-            File.WriteAllText(filePath, json);
+            File.WriteAllText(FilePath ?? throw new NullReferenceException(), json);
         }
     }
 }
