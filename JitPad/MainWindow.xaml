@@ -18,11 +18,15 @@
                     d:DataContext="{d:DesignInstance jitPad:MainWindowViewModel}"
                     AllowDrop="True"
                     Drop="Window_Drop"
-                    FocusManager.FocusedElement="{Binding ElementName=CodeTextEditor}"
+                    FocusManager.FocusedElement="{Binding ElementName=CodeEditor, Mode=OneTime}"
                     PreviewDragOver="Window_PreviewDragOver"
                     ShowInTaskbar="True"
                     WindowStartupLocation="CenterScreen"
                     mc:Ignorable="d">
+    <b:Interaction.Behaviors>
+        <behaviors:MainWindowBehavior CodeEditor="{Binding ElementName=CodeEditor, Mode=OneTime}"/>
+    </b:Interaction.Behaviors>
+
     <controls:BiaWindow.Style>
         <Style BasedOn="{StaticResource BiaWindowDialogStyle}" TargetType="controls:BiaWindow">
             <Setter Property="IsVisibleMaximizeButton" Value="True" />
@@ -167,7 +171,7 @@
                    Stroke="{StaticResource AccentBrushKey.Dark}"
                    StrokeThickness="1" />
 
-        <avalonedit:TextEditor x:Name="CodeTextEditor"
+        <avalonedit:TextEditor x:Name="CodeEditor"
                                Grid.Row="1"
                                Grid.Column="0"
                                SyntaxHighlighting="C#">
