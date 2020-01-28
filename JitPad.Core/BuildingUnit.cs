@@ -124,8 +124,24 @@ namespace JitPad.Core
             }
         }
 
-        private readonly LruCache<BuildContext, (bool isOk, string result, string message, CompileResult.Message[] detailMessages)>
-            _resultCache = new LruCache<BuildContext, (bool isOk, string result, string message, CompileResult.Message[] detailMessages)>(16, true);
+        private class BuildResultData
+        {
+            public readonly bool IsOk;
+            public readonly string Result;
+            public readonly string Message;
+            public readonly CompileResult.Message[] DetailMessages;
+
+            public BuildResultData(bool isOk, string result, string message, CompileResult.Message[] detailMessages)
+            {
+                IsOk = isOk;
+                Result = result;
+                Message = message;
+                DetailMessages = detailMessages;
+            }
+        }
+
+        private readonly LruCache<BuildContext, BuildResultData> _buildCaches
+            = new LruCache<BuildContext, BuildResultData>(16, true);
 
         private readonly CompositeDisposable _Trashes = new CompositeDisposable();
 
@@ -141,7 +157,7 @@ namespace JitPad.Core
                 {
                     var buildContext = new BuildContext(x, config.IsReleaseBuild, config.IsTieredJit);
 
-                    if (_resultCache.Contains(buildContext) == false)
+                    if (_buildCaches.Contains(buildContext) == false)
                         Build(buildContext);
                 })
                 .AddTo(_Trashes);
@@ -154,7 +170,7 @@ namespace JitPad.Core
                 {
                     var buildContext = new BuildContext(SourceCode, config.IsReleaseBuild, config.IsTieredJit);
 
-                    if (_resultCache.Contains(buildContext) == false)
+                    if (_buildCaches.Contains(buildContext) == false)
                         Build(buildContext);
                 })
                 .AddTo(_Trashes);
@@ -167,7 +183,7 @@ namespace JitPad.Core
                 {
                     var buildContext = new BuildContext(SourceCode, config.IsReleaseBuild, config.IsTieredJit);
 
-                    if (_resultCache.Contains(buildContext))
+                    if (_buildCaches.Contains(buildContext))
                         LoadFromCache(buildContext);
                 })
                 .AddTo(_Trashes);
@@ -181,19 +197,18 @@ namespace JitPad.Core
 
                 BuildDetailMessages = Array.Empty<CompileResult.Message>();
 
-
-                var r = BuildCore(buildContext);
+                var buildResultData = BuildCore(buildContext);
 
                 // Add to cache
-                _resultCache.Add(buildContext, r);
+                _buildCaches.Add(buildContext, buildResultData);
 
-                BuildDetailMessages = r.detailMessages;
-                IsBuildOk = r.isOk;
+                BuildDetailMessages = buildResultData.DetailMessages;
+                IsBuildOk = buildResultData.IsOk;
 
-                if (r.isOk)
-                    BuildResult = r.result;
+                if (buildResultData.IsOk)
+                    BuildResult = buildResultData.Result;
                 else
-                    BuildMessage = r.message;
+                    BuildMessage = buildResultData.Message;
             }
             finally
             {
@@ -201,15 +216,15 @@ namespace JitPad.Core
             }
         }
 
-        private (bool isOk, string result, string message, CompileResult.Message[] detailMessages) BuildCore(BuildContext buildContext)
+        private BuildResultData BuildCore(BuildContext buildContext)
         {
             if (string.IsNullOrEmpty(buildContext.SourceCode.Trim()))
-                return (true, "", "", Array.Empty<CompileResult.Message>());
+                return new BuildResultData(true, "", "", Array.Empty<CompileResult.Message>());
 
             // compile
             var compileResult = _compiler.Run(buildContext.SourceCode, buildContext.IsReleaseBuild);
             if (compileResult.IsOk == false)
-                return (
+                return new BuildResultData(
                     false,
                     "",
                     string.Join("\n", compileResult.Messages.Select(x => x.ToString())),
@@ -218,7 +233,7 @@ namespace JitPad.Core
             // jit disassemble
             var result = _disassembler.Run(buildContext.SourceCode, compileResult.AssembleImage, buildContext.IsTieredJit);
 
-            return (
+            return new BuildResultData(
                 result.IsOk,
                 result.Output,
                 string.Join("\n", result.Messages),
@@ -227,15 +242,15 @@ namespace JitPad.Core
 
         private void LoadFromCache(BuildContext buildContext)
         {
-            var (isOk, result, message, detailMessages) = _resultCache.Get(buildContext);
+            var buildResultData = _buildCaches.Get(buildContext);
 
-            BuildDetailMessages = detailMessages;
-            IsBuildOk = isOk;
+            BuildDetailMessages = buildResultData.DetailMessages;
+            IsBuildOk = buildResultData.IsOk;
 
-            if (isOk)
-                BuildResult = result;
+            if (buildResultData.IsOk)
+                BuildResult = buildResultData.Result;
             else
-                BuildMessage = message;
+                BuildMessage = buildResultData.Message;
         }
 
         public void Dispose()
