@@ -112,13 +112,15 @@ namespace JitPad.Core
             public override int GetHashCode()
                 => HashCode.Combine(SourceCode, IsReleaseBuild, IsTieredJit);
 
-            public readonly string SourceCode;
+            public string SourceCode => _SourceCode.ToString();
             public readonly bool IsReleaseBuild;
             public readonly bool IsTieredJit;
 
+            private readonly CompressedString _SourceCode;
+
             public BuildContext(string sourceCode, bool isReleaseBuild, bool isTieredJit)
             {
-                SourceCode = sourceCode;
+                _SourceCode = new CompressedString(sourceCode);
                 IsReleaseBuild = isReleaseBuild;
                 IsTieredJit = isTieredJit;
             }
@@ -127,15 +129,18 @@ namespace JitPad.Core
         private class BuildResultData
         {
             public readonly bool IsOk;
-            public readonly string Result;
-            public readonly string Message;
+            public string Result => _Result.ToString();
+            public string Message => _Message.ToString();
             public readonly CompileResult.Message[] DetailMessages;
+            
+            private readonly CompressedString _Result;
+            private readonly CompressedString _Message;
 
             public BuildResultData(bool isOk, string result, string message, CompileResult.Message[] detailMessages)
             {
                 IsOk = isOk;
-                Result = result;
-                Message = message;
+                _Result = new CompressedString(result);
+                _Message = new CompressedString(message);
                 DetailMessages = detailMessages;
             }
         }

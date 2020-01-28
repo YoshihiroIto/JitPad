@@ -42,6 +42,7 @@ Open JitPad.sln
     - [Windows API Code Pack](https://github.com/contre/Windows-API-Code-Pack-1.1) Windows API Code Pack 1.1
     - [ReactiveProperty](https://github.com/runceel/ReactiveProperty) ReactiveProperty provides MVVM and asynchronous support features under Reactive Extensions.
     - [Reactive Extensions](https://github.com/dotnet/reactive) The Reactive Extensions for .NET
+    - [K4os.Compression.LZ4](https://github.com/MiloszKrajewski/K4os.Compression.LZ4) LZ4/LH4HC compression for .NET Standard 1.6/2.0 (formerly known as lz4net)
 
 
 ## Author
