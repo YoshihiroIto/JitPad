@@ -1,5 +1,4 @@
-# JitPad
-
+# JitPad - [Latest release](https://github.com/YoshihiroIto/JitPad/releases)
 On the fly disassemble C# code based on JitDasm
 
 ![JitPad](JitPad.gif)
