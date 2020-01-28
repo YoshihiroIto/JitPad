@@ -172,7 +172,7 @@
                                Grid.Column="0"
                                SyntaxHighlighting="C#">
             <b:Interaction.Behaviors>
-                <behaviors:TextEditorBindableTextBehavior Text="{Binding SourceCode.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <behaviors:TextEditorBehavior Text="{Binding SourceCode.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <behaviors:TextEditorCompletionBehavior />
                 <behaviors:SourceCodeTextEditorBehavior BuildDetailMessages="{Binding BuildDetailMessage.Value, Mode=OneWay}" />
             </b:Interaction.Behaviors>
@@ -185,7 +185,7 @@
                                SyntaxHighlighting="Asm"
                                WordWrap="True">
             <b:Interaction.Behaviors>
-                <behaviors:TextEditorBindableTextBehavior Text="{Binding BuildResult.Value, Mode=OneWay}" />
+                <behaviors:TextEditorBehavior Text="{Binding BuildResult.Value, Mode=OneWay}" />
             </b:Interaction.Behaviors>
 
             <avalonedit:TextEditor.Style>
@@ -208,7 +208,7 @@
                                SyntaxHighlighting="BUILD_MSG"
                                WordWrap="True">
             <b:Interaction.Behaviors>
-                <behaviors:TextEditorBindableTextBehavior Text="{Binding BuildMessage.Value, Mode=OneWay}" />
+                <behaviors:TextEditorBehavior Text="{Binding BuildMessage.Value, Mode=OneWay}" />
             </b:Interaction.Behaviors>
 
             <avalonedit:TextEditor.Style>
