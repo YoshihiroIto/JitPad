@@ -50,6 +50,9 @@ namespace JitPad.Behaviors
             base.OnAttached();
 
             AssociatedObject.TextChanged += AssociatedObjectOnTextChanged;
+            
+            if (AssociatedObject.IsReadOnly)
+                AssociatedObject.Document.UndoStack.SizeLimit = 0;
         }
 
         protected override void OnDetaching()
