@@ -1,5 +1,10 @@
-﻿namespace JitPad.Core.Processor
+﻿namespace JitPad.Core.Interface
 {
+    public interface IDisassembler
+    {
+        DisassembleResult Run(string sourceCode, byte[] assembleImage, bool isTieredJit);
+    }
+    
     public class DisassembleResult
     {
         public readonly bool IsOk;

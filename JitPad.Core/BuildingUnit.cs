@@ -4,8 +4,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Jewelry.Collections;
-using JitPad.Core.Processor;
-using JitPad.Core.Processor.Interface;
+using JitPad.Core.Interface;
 using JitPad.Foundation;
 using Reactive.Bindings.Extensions;
 

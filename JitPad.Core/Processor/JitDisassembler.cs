@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using JitPad.Core.Processor.Interface;
+using JitPad.Core.Interface;
 
 namespace JitPad.Core.Processor
 {

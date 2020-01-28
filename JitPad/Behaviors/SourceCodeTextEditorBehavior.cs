@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
 using ICSharpCode.AvalonEdit;
-using JitPad.Core.Processor;
+using JitPad.Core.Interface;
 using Microsoft.Xaml.Behaviors;
 
 namespace JitPad.Behaviors

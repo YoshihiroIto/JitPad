@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Media;
 using Biaui;
 using ICSharpCode.AvalonEdit.Rendering;
-using JitPad.Core.Processor;
+using JitPad.Core.Interface;
 
 namespace JitPad
 {

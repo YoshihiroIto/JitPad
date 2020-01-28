@@ -1,5 +1,10 @@
-﻿namespace JitPad.Core.Processor
+﻿namespace JitPad.Core.Interface
 {
+    public interface ICompiler
+    {
+        CompileResult Run(string sourceCode, bool isReleaseBuild);
+    }
+    
     public class CompileResult
     {
         public readonly byte[] AssembleImage;
@@ -39,4 +44,5 @@
             }
         }
     }
+    
 }

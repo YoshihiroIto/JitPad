@@ -1,6 +1,6 @@
 ﻿using System;
 using JitPad.Core;
-using JitPad.Core.Processor;
+using JitPad.Core.Interface;
 using JitPad.Foundation;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
