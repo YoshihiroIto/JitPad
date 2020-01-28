@@ -40,31 +40,6 @@
     </controls:BiaWindow.Style>
 
     <controls:BiaWindow.Resources>
-        <Style x:Key="FilePathTextBoxStyle"
-               BasedOn="{StaticResource {x:Type TextBox}}"
-               TargetType="{x:Type TextBox}">
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TextBox}">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="{x:Static biaui:Boxes.BasicCornerRadius}"
-                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-                            <ScrollViewer x:Name="PART_ContentHost"
-                                          Margin="6,1,26,1"
-                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Background="Transparent"
-                                          HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
-                                          VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <Style x:Key="MenuStyle"
                BasedOn="{StaticResource {x:Type Menu}}"
                TargetType="Menu">
@@ -124,21 +99,23 @@
                             <b:EventTrigger EventName="Click">
                                 <messaging:OpenFileDialogInteractionMessageAction>
                                     <messaging:DirectInteractionMessage CallbackCommand="{Binding OpenMonitoringFileCommand, Mode=OneTime}">
-                                        <messaging:OpeningFileSelectionMessage Filter="C# file(*.cs)|*.cs" Title="Open C# file" MultiSelect="False" />
+                                        <messaging:OpeningFileSelectionMessage Title="Open C# file"
+                                                                               Filter="C# file(*.cs)|*.cs"
+                                                                               MultiSelect="False" />
                                     </messaging:DirectInteractionMessage>
                                 </messaging:OpenFileDialogInteractionMessageAction>
                             </b:EventTrigger>
                         </b:Interaction.Triggers>
                     </controls:BiaIconButton>
 
-                    <TextBox Width="320"
-                             Margin="-4,0"
-                             HorizontalAlignment="Left"
-                             Panel.ZIndex="-1"
-                             IsHitTestVisible="False"
-                             IsReadOnly="True"
-                             Style="{StaticResource FilePathTextBoxStyle}"
-                             Text="{Binding MonitoringFilePath.Value, Mode=TwoWay}" />
+                    <controls:BiaTextBox Width="320"
+                                         CornerRadius="0"
+                                         HorizontalAlignment="Left"
+                                         Panel.ZIndex="-1"
+                                         IsHitTestVisible="False"
+                                         IsReadOnly="True"
+                                         Text="{Binding MonitoringFilePath.Value, Mode=OneWay}"
+                                         TextTrimming="Filepath" />
                 </DockPanel>
             </controls:BiaClippingBorder>
 
