@@ -55,12 +55,7 @@ namespace JitPad.Core
             _Trashes.Dispose();
             BuildingUnit.Dispose();
         }
-
-        #region file monitoring
-
-        private FileMonitor? _fileMonitor;
-        private IDisposable? _fileMonitorChanged;
-
+        
         public void OpenConfigFolder()
         {
             var dir = Path.GetDirectoryName(_config.FilePath);
@@ -74,6 +69,11 @@ namespace JitPad.Core
 
             Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
         }
+
+        #region file monitoring
+
+        private FileMonitor? _fileMonitor;
+        private IDisposable? _fileMonitorChanged;
 
         private void SetupFileMonitoring()
         {
@@ -115,8 +115,8 @@ namespace JitPad.Core
             _fileMonitorChanged?.Dispose();
             _fileMonitor?.Dispose();
 
-            _fileMonitor = null;
             _fileMonitorChanged = null;
+            _fileMonitor = null;
         }
 
         #endregion
