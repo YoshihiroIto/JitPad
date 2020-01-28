@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using JitPad.Core;
 using JitPad.Core.Interface;
 using JitPad.Foundation;
+using Livet.Messaging.IO;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using AppContext = JitPad.Core.AppContext;
@@ -22,12 +24,10 @@ namespace JitPad
         public ReadOnlyReactiveProperty<CompileResult.Message[]?> BuildDetailMessage { get; }
         public ReadOnlyReactiveProperty<bool> IsBuildOk { get; }
 
-        public ReactiveCommand OpenMonitoringFileCommand { get; }
+        public ReactiveCommand<OpeningFileSelectionMessage> OpenMonitoringFileCommand { get; }
         public ReactiveCommand ApplyTemplateFileCommand { get; }
         public ReactiveCommand OpenConfigFolderCommand { get; }
         public ReactiveCommand OpenAboutJitPadCommand { get; }
-
-        public Func<string?>? CsFileOpen { get; set; }
 
         public MainWindowViewModel(AppContext appContext, Config config)
         {
@@ -43,13 +43,12 @@ namespace JitPad
             BuildDetailMessage = appContext.BuildingUnit.ObserveProperty(x => x.BuildDetailMessages).ToReadOnlyReactiveProperty().AddTo(Trashes);
             IsBuildOk = appContext.BuildingUnit.ObserveProperty(x => x.IsBuildOk).ToReadOnlyReactiveProperty().AddTo(Trashes);
 
-            OpenMonitoringFileCommand = new ReactiveCommand().AddTo(Trashes);
-            OpenMonitoringFileCommand.Subscribe(_ =>
+            OpenMonitoringFileCommand = new ReactiveCommand<OpeningFileSelectionMessage>().AddTo(Trashes);
+            OpenMonitoringFileCommand.Subscribe(x =>
             {
-                var selectedFile = CsFileOpen?.Invoke();
-
-                if (selectedFile != null)
-                    config.MonitoringFilePath = selectedFile;
+                var selectedFile = x?.Response?.FirstOrDefault();
+                if (string.IsNullOrEmpty(selectedFile) == false)
+                    config.MonitoringFilePath = selectedFile!;
             }).AddTo(Trashes);
 
             ApplyTemplateFileCommand = new ReactiveCommand().AddTo(Trashes);

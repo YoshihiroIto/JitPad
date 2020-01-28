@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace JitPad
 {
@@ -27,32 +26,5 @@ namespace JitPad
         }
 
         private MainWindowViewModel ViewModel => (MainWindowViewModel) DataContext;
-
-        private void MainWindow_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.OldValue is MainWindowViewModel oldVm)
-                oldVm.CsFileOpen = null;
-            
-            if (e.NewValue is MainWindowViewModel newVm)
-                newVm.CsFileOpen = CsFileOpen;
-        }
-
-        private static string? CsFileOpen()
-        {
-            using var dialog = new CommonOpenFileDialog();
-
-            var filter = new CommonFileDialogFilter {DisplayName = "C# file"};
-            filter.Extensions.Add("cs");
-
-            dialog.Filters.Add(filter);
-
-            var window = Application.Current?.MainWindow;
-            if (window == null)
-                return null;
-
-            return dialog.ShowDialog(window) == CommonFileDialogResult.Ok
-                ? dialog.FileNames.FirstOrDefault()
-                : null;
-        }
     }
 }

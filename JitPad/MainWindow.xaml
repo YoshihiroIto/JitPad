@@ -9,6 +9,7 @@
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:jitPad="clr-namespace:JitPad"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:messaging="http://schemas.livet-mvvm.net/2011/wpf"
                     Title="JitPad"
                     Width="1400"
                     Height="1000"
@@ -16,7 +17,6 @@
                     MinHeight="700"
                     d:DataContext="{d:DesignInstance jitPad:MainWindowViewModel}"
                     AllowDrop="True"
-                    DataContextChanged="MainWindow_OnDataContextChanged"
                     Drop="Window_Drop"
                     PreviewDragOver="Window_PreviewDragOver"
                     ShowInTaskbar="True"
@@ -119,7 +119,17 @@
                                             Content="M6.1,10L4,18V8H21A2,2 0 0,0 19,6H12L10,4H4A2,2 0 0,0 2,6V18A2,2 0 0,0 4,20H19C19.9,20 20.7,19.4 20.9,18.5L23.2,10H6.1M19,18H6L7.6,12H20.6L19,18Z"
                                             CornerRadius="0"
                                             DockPanel.Dock="Right"
-                                            ToolTip="Open C# file" />
+                                            ToolTip="Open C# file">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="Click">
+                                <messaging:OpenFileDialogInteractionMessageAction>
+                                    <messaging:DirectInteractionMessage CallbackCommand="{Binding OpenMonitoringFileCommand, Mode=OneTime}">
+                                        <messaging:OpeningFileSelectionMessage Filter="C# file(*.cs)|*.cs" Title="Open C# file" MultiSelect="False" />
+                                    </messaging:DirectInteractionMessage>
+                                </messaging:OpenFileDialogInteractionMessageAction>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </controls:BiaIconButton>
 
                     <TextBox Width="320"
                              Margin="-4,0"
