@@ -9,6 +9,11 @@
     <Style BasedOn="{StaticResource GridSplitterTransparentStyle}" TargetType="GridSplitter" />
 
     <Style TargetType="codeCompletion:CompletionWindow">
+        <Style.Resources>
+            <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
+            <Style TargetType="ScrollViewer" BasedOn="{StaticResource BasicScrollViewerStyle}" />
+        </Style.Resources>
+
         <Setter Property="WindowStyle" Value="None" />
         <Setter Property="ResizeMode" Value="NoResize" />
         <Setter Property="BorderThickness" Value="0" />
@@ -39,6 +44,7 @@
                     <Border Background="{TemplateBinding Background}"
                             BorderThickness="0"
                             CornerRadius="0">
+                        <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
                         <ScrollViewer Name="PART_ScrollViewer"
                                       Padding="{TemplateBinding Padding}"
                                       HorizontalContentAlignment="Left"
