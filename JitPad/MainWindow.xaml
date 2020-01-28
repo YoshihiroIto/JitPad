@@ -110,9 +110,9 @@
                     </controls:BiaIconButton>
 
                     <controls:BiaTextBox Width="320"
-                                         CornerRadius="0"
                                          HorizontalAlignment="Left"
                                          Panel.ZIndex="-1"
+                                         CornerRadius="0"
                                          IsHitTestVisible="False"
                                          IsReadOnly="True"
                                          Text="{Binding MonitoringFilePath.Value, Mode=OneWay}"
