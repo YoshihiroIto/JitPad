@@ -49,13 +49,13 @@ namespace JitPad.Core.Processor
                 proc.CancelOutputRead();
 
                 if (r == false)
-                    return new DisassembleResult(false, "", new[] {"Timeout"});
+                    return new DisassembleResult(false, "", "Timeout");
 
                 var output = stdout.ToString();
 
                 return proc.ExitCode == 0
-                    ? new DisassembleResult(true, output, Array.Empty<string>())
-                    : new DisassembleResult(false, "", output.Split("\n"));
+                    ? new DisassembleResult(true, output, "")
+                    : new DisassembleResult(false, "", output);
             }
             finally
             {

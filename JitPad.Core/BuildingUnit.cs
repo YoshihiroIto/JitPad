@@ -236,12 +236,12 @@ namespace JitPad.Core
                     compileResult.Messages);
 
             // jit disassemble
-            var result = _disassembler.Run(buildContext.SourceCode, compileResult.AssembleImage, buildContext.IsTieredJit);
+            var disassembleResult = _disassembler.Run(buildContext.SourceCode, compileResult.AssembleImage, buildContext.IsTieredJit);
 
             return new BuildResultData(
-                result.IsOk,
-                result.Output,
-                string.Join("\n", result.Messages),
+                disassembleResult.IsOk,
+                disassembleResult.Output,
+                disassembleResult.Message,
                 Array.Empty<CompileResult.Message>());
         }
 

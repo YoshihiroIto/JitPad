@@ -4,13 +4,13 @@
     {
         public readonly bool IsOk;
         public readonly string Output;
-        public readonly string[] Messages;
+        public readonly string Message;
 
-        public DisassembleResult(bool isOk, string output, string[] messages)
+        public DisassembleResult(bool isOk, string output, string messages)
         {
             IsOk = isOk;
             Output = output;
-            Messages = messages;
+            Message = messages;
         }
     }
 }
