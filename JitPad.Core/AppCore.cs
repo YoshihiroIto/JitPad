@@ -9,14 +9,14 @@ using JitPad.Core.Processor;
 
 namespace JitPad.Core
 {
-    public class AppContext : NotificationObject, IDisposable
+    public class AppCore : NotificationObject, IDisposable
     {
         public BuildingUnit BuildingUnit { get; }
 
         private readonly Config _config;
         private readonly CompositeDisposable _Trashes = new CompositeDisposable();
 
-        public AppContext(Config config)
+        public AppCore(Config config)
         {
             _config = config;
 

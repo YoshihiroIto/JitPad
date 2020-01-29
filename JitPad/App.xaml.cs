@@ -27,7 +27,7 @@ namespace JitPad
         }
 
         private Config? _config;
-        private Core.AppContext? _appContext;
+        private AppCore? _appCore;
 
         public static Dispatcher UiDispatcher
         {
@@ -45,11 +45,11 @@ namespace JitPad
             SetupTextEditor();
             
             _config = Config.Load();
-            _appContext = new Core.AppContext(_config);
+            _appCore = new AppCore(_config);
 
             MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(_appContext, _config)
+                DataContext = new MainWindowViewModel(_appCore, _config)
             };
 
             MainWindow.Show();
@@ -62,7 +62,7 @@ namespace JitPad
             base.OnExit(e);
 
             (MainWindow?.DataContext as IDisposable)?.Dispose();
-            _appContext?.Dispose();
+            _appCore?.Dispose();
             _config?.Save();
         }
 

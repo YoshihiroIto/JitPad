@@ -6,7 +6,6 @@ using JitPad.Foundation;
 using Livet.Messaging.IO;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using AppContext = JitPad.Core.AppContext;
 
 namespace JitPad
 {
@@ -29,19 +28,19 @@ namespace JitPad
         public ReactiveCommand OpenConfigFolderCommand { get; }
         public ReactiveCommand OpenAboutJitPadCommand { get; }
 
-        public MainWindowViewModel(AppContext appContext, Config config)
+        public MainWindowViewModel(AppCore appCore, Config config)
         {
             IeReleaseBuild = config.ToReactivePropertyAsSynchronized(x => x.IsReleaseBuild).AddTo(Trashes);
             IsTieredJit = config.ToReactivePropertyAsSynchronized(x => x.IsTieredJit).AddTo(Trashes);
             IsFileMonitoring = config.ToReactivePropertyAsSynchronized(x => x.IsFileMonitoring).AddTo(Trashes);
             MonitoringFilePath = config.ToReactivePropertyAsSynchronized(x => x.MonitoringFilePath).AddTo(Trashes);
-            IsInBuilding = appContext.BuildingUnit.ObserveProperty(x => x.IsInBuilding).ToReadOnlyReactiveProperty().AddTo(Trashes);
+            IsInBuilding = appCore.BuildingUnit.ObserveProperty(x => x.IsInBuilding).ToReadOnlyReactiveProperty().AddTo(Trashes);
 
-            SourceCode = appContext.BuildingUnit.ToReactivePropertyAsSynchronized(x => x.SourceCode).AddTo(Trashes);
-            BuildResult = appContext.BuildingUnit.ObserveProperty(x => x.BuildResult).ToReadOnlyReactiveProperty().AddTo(Trashes);
-            BuildMessage = appContext.BuildingUnit.ObserveProperty(x => x.BuildMessage).ToReadOnlyReactiveProperty().AddTo(Trashes);
-            BuildDetailMessage = appContext.BuildingUnit.ObserveProperty(x => x.BuildDetailMessages).ToReadOnlyReactiveProperty().AddTo(Trashes);
-            IsBuildOk = appContext.BuildingUnit.ObserveProperty(x => x.IsBuildOk).ToReadOnlyReactiveProperty().AddTo(Trashes);
+            SourceCode = appCore.BuildingUnit.ToReactivePropertyAsSynchronized(x => x.SourceCode).AddTo(Trashes);
+            BuildResult = appCore.BuildingUnit.ObserveProperty(x => x.BuildResult).ToReadOnlyReactiveProperty().AddTo(Trashes);
+            BuildMessage = appCore.BuildingUnit.ObserveProperty(x => x.BuildMessage).ToReadOnlyReactiveProperty().AddTo(Trashes);
+            BuildDetailMessage = appCore.BuildingUnit.ObserveProperty(x => x.BuildDetailMessages).ToReadOnlyReactiveProperty().AddTo(Trashes);
+            IsBuildOk = appCore.BuildingUnit.ObserveProperty(x => x.IsBuildOk).ToReadOnlyReactiveProperty().AddTo(Trashes);
 
             OpenMonitoringFileCommand = new ReactiveCommand<OpeningFileSelectionMessage>().AddTo(Trashes);
             OpenMonitoringFileCommand.Subscribe(x =>
@@ -52,13 +51,13 @@ namespace JitPad
             }).AddTo(Trashes);
 
             ApplyTemplateFileCommand = new ReactiveCommand().AddTo(Trashes);
-            ApplyTemplateFileCommand.Subscribe(_ => appContext.ApplyTemplateFile()).AddTo(Trashes);
+            ApplyTemplateFileCommand.Subscribe(_ => appCore.ApplyTemplateFile()).AddTo(Trashes);
 
             OpenConfigFolderCommand = new ReactiveCommand().AddTo(Trashes);
-            OpenConfigFolderCommand.Subscribe(_ => appContext.OpenConfigFolder()).AddTo(Trashes);
+            OpenConfigFolderCommand.Subscribe(_ => appCore.OpenConfigFolder()).AddTo(Trashes);
 
             OpenAboutJitPadCommand = new ReactiveCommand().AddTo(Trashes);
-            OpenAboutJitPadCommand.Subscribe(_ => appContext.OpenAboutJitPad()).AddTo(Trashes);
+            OpenAboutJitPadCommand.Subscribe(_ => appCore.OpenAboutJitPad()).AddTo(Trashes);
         }
     }
 }
