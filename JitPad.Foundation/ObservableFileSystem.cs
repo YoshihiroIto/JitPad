@@ -4,13 +4,13 @@ using System.Reactive.Linq;
 
 namespace JitPad.Foundation
 {
-    public class FileMonitor : IDisposable
+    public class ObservableFileSystem : IDisposable
     {
         public IObservable<FileSystemEventArgs> Changed { get; }
         
         private readonly FileSystemWatcher _watcher;
 
-        public FileMonitor(string filePath)
+        public ObservableFileSystem(string filePath)
         {
             var path = Path.GetDirectoryName(filePath);
 

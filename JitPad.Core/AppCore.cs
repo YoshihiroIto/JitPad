@@ -69,10 +69,16 @@ namespace JitPad.Core
 
             Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
         }
+        
+        public void ApplyTemplateFile()
+        {
+            _config.MonitoringFilePath = "";
+            BuildingUnit.SourceCode = _config.LoadCodeTemplate();
+        }
 
         #region file monitoring
 
-        private FileMonitor? _fileMonitor;
+        private ObservableFileSystem? _monitoringFileObservable;
         private IDisposable? _fileMonitorChanged;
 
         private void SetupFileMonitoring()
@@ -90,8 +96,8 @@ namespace JitPad.Core
 
             if (_config.IsFileMonitoring && File.Exists(_config.MonitoringFilePath))
             {
-                _fileMonitor = new FileMonitor(_config.MonitoringFilePath);
-                _fileMonitorChanged = _fileMonitor.Changed
+                _monitoringFileObservable = new ObservableFileSystem(_config.MonitoringFilePath);
+                _fileMonitorChanged = _monitoringFileObservable.Changed
                     .Subscribe(x => LoadMonitoringFile());
             }
         }
@@ -104,19 +110,13 @@ namespace JitPad.Core
                 ApplyTemplateFile();
         }
 
-        public void ApplyTemplateFile()
-        {
-            _config.MonitoringFilePath = "";
-            BuildingUnit.SourceCode = _config.LoadCodeTemplate();
-        }
-
         private void ReleaseFileMonitor()
         {
             _fileMonitorChanged?.Dispose();
-            _fileMonitor?.Dispose();
+            _monitoringFileObservable?.Dispose();
 
             _fileMonitorChanged = null;
-            _fileMonitor = null;
+            _monitoringFileObservable = null;
         }
 
         #endregion
