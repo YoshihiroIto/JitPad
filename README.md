@@ -1,8 +1,9 @@
-# JitPad - [Latest release](https://github.com/YoshihiroIto/JitPad/releases)
+# JitPad
+[![Releases](https://img.shields.io/github/release/YoshihiroIto/JitPad.svg)](https://github.com/YoshihiroIto/JitPad/releases) [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
+
 On the fly disassemble C# code based on JitDasm
 
 ![JitPad](JitPad.gif)
-
 
 ## Build and Run
 ```
