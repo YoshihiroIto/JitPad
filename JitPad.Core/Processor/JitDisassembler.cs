@@ -30,7 +30,7 @@ namespace JitPad.Core.Processor
                     StartInfo = new ProcessStartInfo
                     {
                         FileName = _jitDasmExe,
-                        Arguments = "--diffable -l " + assemblyTempPath,
+                        Arguments = "--method-exclude .ctor --diffable -l " + assemblyTempPath,
                         CreateNoWindow = true,
                         UseShellExecute = false,
                         RedirectStandardOutput = true
