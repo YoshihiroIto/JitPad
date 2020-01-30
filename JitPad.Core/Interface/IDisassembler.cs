@@ -2,7 +2,7 @@
 {
     public interface IDisassembler
     {
-        DisassembleResult Run(string sourceCode, byte[] assembleImage, bool isTieredJit);
+        DisassembleResult Run(string sourceCodePath, string sourceCode, byte[] assembleImage, bool isTieredJit);
     }
     
     public class DisassembleResult

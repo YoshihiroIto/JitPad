@@ -15,9 +15,9 @@ namespace JitPad.Core.Processor
             _jitDasmExe = jitDasmExe;
         }
         
-        public DisassembleResult Run(string sourceCode, byte[] assembleImage, bool isTieredJit)
+        public DisassembleResult Run(string sourceCodePath, string sourceCode, byte[] assembleImage, bool isTieredJit)
         {
-            var sourceCodeTempPath = Path.GetTempFileName() + ".cs";
+            var sourceCodeTempPath = sourceCodePath;
             var assemblyTempPath = Path.ChangeExtension(sourceCodeTempPath, ".dll");
 
             try

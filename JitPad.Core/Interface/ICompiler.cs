@@ -2,7 +2,7 @@
 {
     public interface ICompiler
     {
-        CompileResult Run(string sourceCode, bool isReleaseBuild);
+        CompileResult Run(string sourceCodePath, string sourceCode, bool isReleaseBuild);
     }
     
     public class CompileResult

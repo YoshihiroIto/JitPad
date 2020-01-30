@@ -13,7 +13,7 @@ namespace JitPad.Core.Processor
 {
     public class Compiler : ICompiler
     {
-        public CompileResult Run(string sourceCode, bool isReleaseBuild)
+        public CompileResult Run(string sourceCodePath, string sourceCode, bool isReleaseBuild)
         {
             using var asmImage = new MemoryStream();
 
@@ -22,7 +22,7 @@ namespace JitPad.Core.Processor
             var buffer = Encoding.UTF8.GetBytes(sourceCode);
             var sourceText = SourceText.From(buffer, buffer.Length, Encoding.UTF8, canBeEmbedded: true);
 
-            var compilation = GenerateCode("compiled.dll", sourceText, "source.cs", isReleaseBuild);
+            var compilation = GenerateCode("compiled.dll", sourceText, sourceCodePath, isReleaseBuild);
 
             var emitOptions = new EmitOptions(
                 debugInformationFormat: DebugInformationFormat.Embedded,
@@ -31,7 +31,7 @@ namespace JitPad.Core.Processor
 
             var result = compilation.Emit(
                 asmImage,
-                embeddedTexts: new[] {EmbeddedText.FromSource("source.cs", sourceText)},
+                embeddedTexts: new[] {EmbeddedText.FromSource(sourceCodePath, sourceText)},
                 options: emitOptions);
 
             if (result.Success)

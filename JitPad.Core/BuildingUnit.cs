@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
@@ -224,9 +225,11 @@ namespace JitPad.Core
         {
             if (string.IsNullOrWhiteSpace(buildContext.SourceCode))
                 return new BuildResultData(true, "", "", Array.Empty<CompileResult.Message>());
+            
+            var sourceCodePath = Path.GetTempFileName() + ".cs";
 
             // compile
-            var compileResult = _compiler.Run(buildContext.SourceCode, buildContext.IsReleaseBuild);
+            var compileResult = _compiler.Run(sourceCodePath, buildContext.SourceCode, buildContext.IsReleaseBuild);
             if (compileResult.IsOk == false)
                 return new BuildResultData(
                     false,
@@ -235,7 +238,7 @@ namespace JitPad.Core
                     compileResult.Messages);
 
             // jit disassemble
-            var disassembleResult = _disassembler.Run(buildContext.SourceCode, compileResult.AssembleImage, buildContext.IsTieredJit);
+            var disassembleResult = _disassembler.Run(sourceCodePath, buildContext.SourceCode, compileResult.AssembleImage, buildContext.IsTieredJit);
 
             return new BuildResultData(
                 disassembleResult.IsOk,
