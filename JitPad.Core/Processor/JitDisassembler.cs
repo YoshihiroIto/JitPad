@@ -14,7 +14,7 @@ namespace JitPad.Core.Processor
         {
             _jitDasmExe = jitDasmExe;
         }
-        
+
         public DisassembleResult Run(string sourceCodePath, string sourceCode, byte[] assembleImage, bool isTieredJit)
         {
             var sourceCodeTempPath = sourceCodePath;
@@ -45,17 +45,12 @@ namespace JitPad.Core.Processor
 
                 proc.OutputDataReceived += (_, e) => stdout.AppendLine(e.Data);
                 proc.BeginOutputReadLine();
-                var r = proc.WaitForExit(5 * 1000);
+                var exited = proc.WaitForExit(5 * 1000);
                 proc.CancelOutputRead();
 
-                if (r == false)
-                    return new DisassembleResult(false, "", "Timeout");
-
-                var output = stdout.ToString();
-
-                return proc.ExitCode == 0
-                    ? new DisassembleResult(true, output, "")
-                    : new DisassembleResult(false, "", output);
+                return exited
+                    ? new DisassembleResult(proc.ExitCode == 0, stdout.ToString())
+                    : new DisassembleResult(false, "Timeout");
             }
             finally
             {

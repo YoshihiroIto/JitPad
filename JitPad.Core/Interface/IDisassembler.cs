@@ -9,13 +9,11 @@
     {
         public readonly bool IsOk;
         public readonly string Output;
-        public readonly string Message;
 
-        public DisassembleResult(bool isOk, string output, string messages)
+        public DisassembleResult(bool isOk, string output)
         {
             IsOk = isOk;
             Output = output;
-            Message = messages;
         }
     }
 }

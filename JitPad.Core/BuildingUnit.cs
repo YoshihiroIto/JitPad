@@ -130,17 +130,14 @@ namespace JitPad.Core
         {
             public readonly bool IsOk;
             public string Result => _Result.ToString();
-            public string Message => _Message.ToString();
             public readonly CompileResult.Message[] DetailMessages;
             
             private readonly CompressedString _Result;
-            private readonly CompressedString _Message;
 
-            public BuildResultData(bool isOk, string result, string message, CompileResult.Message[] detailMessages)
+            public BuildResultData(bool isOk, string result, CompileResult.Message[] detailMessages)
             {
                 IsOk = isOk;
                 _Result = new CompressedString(result);
-                _Message = new CompressedString(message);
                 DetailMessages = detailMessages;
             }
         }
@@ -213,7 +210,7 @@ namespace JitPad.Core
                 if (buildResultData.IsOk)
                     BuildResult = buildResultData.Result;
                 else
-                    BuildMessage = buildResultData.Message;
+                    BuildMessage = buildResultData.Result;
             }
             finally
             {
@@ -224,7 +221,7 @@ namespace JitPad.Core
         private BuildResultData BuildCore(BuildContext buildContext)
         {
             if (string.IsNullOrWhiteSpace(buildContext.SourceCode))
-                return new BuildResultData(true, "", "", Array.Empty<CompileResult.Message>());
+                return new BuildResultData(true, "", Array.Empty<CompileResult.Message>());
             
             var sourceCodePath = Path.GetTempFileName() + ".cs";
 
@@ -233,7 +230,6 @@ namespace JitPad.Core
             if (compileResult.IsOk == false)
                 return new BuildResultData(
                     false,
-                    "",
                     string.Join("\n", compileResult.Messages.Select(x => x.ToString())),
                     compileResult.Messages);
 
@@ -243,7 +239,6 @@ namespace JitPad.Core
             return new BuildResultData(
                 disassembleResult.IsOk,
                 disassembleResult.Output,
-                disassembleResult.Message,
                 Array.Empty<CompileResult.Message>());
         }
 
@@ -257,7 +252,7 @@ namespace JitPad.Core
             if (buildResultData.IsOk)
                 BuildResult = buildResultData.Result;
             else
-                BuildMessage = buildResultData.Message;
+                BuildMessage = buildResultData.Result;
         }
 
         public void Dispose()
