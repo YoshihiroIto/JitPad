@@ -9,7 +9,7 @@ namespace JitPad.Core
 {
     public class FileMonitor : IDisposable
     {
-        public event EventHandler MonitoringFileChanged;
+        public event EventHandler? MonitoringFileChanged;
         
         private ObservableFileSystem? _monitoringFileObservable;
         private IDisposable? _fileMonitorChanged;
