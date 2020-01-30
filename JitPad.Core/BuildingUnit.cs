@@ -222,7 +222,7 @@ namespace JitPad.Core
 
         private BuildResultData BuildCore(BuildContext buildContext)
         {
-            if (string.IsNullOrEmpty(buildContext.SourceCode.Trim()))
+            if (string.IsNullOrWhiteSpace(buildContext.SourceCode))
                 return new BuildResultData(true, "", "", Array.Empty<CompileResult.Message>());
 
             // compile
