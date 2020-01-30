@@ -1,5 +1,5 @@
 # JitPad
-[![Releases](https://img.shields.io/github/release/YoshihiroIto/JitPad.svg)](https://github.com/YoshihiroIto/JitPad/releases) [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
+[![Releases](https://img.shields.io/github/release/YoshihiroIto/JitPad.svg)](https://github.com/YoshihiroIto/JitPad/releases/latest) [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 On the fly disassemble C# code based on JitDasm
 
