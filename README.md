@@ -9,7 +9,6 @@ On the fly disassemble C# code based on JitDasm
 ```
 > git clone --recursive https://github.com/YoshihiroIto/JitPad.git
 > cd JitPad
-> SetupDevEnv.bat
 > dotnet build
 > JitPad\bin\Debug\netcoreapp3.1\JitPad.exe
 
