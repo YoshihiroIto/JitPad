@@ -82,7 +82,8 @@ namespace JitPad.Core.Processor
                 new[] {encoded},
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
                     .WithOptimizationLevel(isReleaseBuild ? OptimizationLevel.Release : OptimizationLevel.Debug)
-                    .WithPlatform(Platform.AnyCpu));
+                    .WithPlatform(Platform.AnyCpu)
+                    .WithAllowUnsafe(true));
 
             var references = new List<MetadataReference>();
             var assemblyPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
