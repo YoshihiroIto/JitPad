@@ -90,7 +90,7 @@
                         <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
                         <Button Margin="0,0,0,4"
                                 d:DataContext="{d:DesignInstance core:OpenSourceMetadata}"
-                                Command="{Binding DataContext.OpenOpenSourceCommand, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type dialog:AboutDialog}}}"
+                                Command="{Binding DataContext.OpenOpenSourceCommand, Mode=OneWay, RelativeSource={RelativeSource AncestorType=dialog:AboutDialog}}"
                                 CommandParameter="{Binding Mode=OneWay}"
                                 Focusable="False">
                             <Button.ToolTip>

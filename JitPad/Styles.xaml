@@ -24,7 +24,7 @@
         <Setter Property="TextOptions.TextHintingMode" Value="Animated" />
     </Style>
 
-    <Style TargetType="{x:Type avalonedit:TextEditor}">
+    <Style TargetType="avalonedit:TextEditor">
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Foreground" Value="{StaticResource TextBoxForegroundBrushKey}" />
         <Setter Property="Background" Value="{StaticResource TextBoxBackgroundBrushKey}" />
@@ -40,7 +40,7 @@
 
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type avalonedit:TextEditor}">
+                <ControlTemplate TargetType="avalonedit:TextEditor">
                     <Border Background="{TemplateBinding Background}"
                             BorderThickness="0"
                             CornerRadius="0">
@@ -66,7 +66,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type avalonedit:TextArea}">
+    <Style TargetType="avalonedit:TextArea">
         <Setter Property="Margin" Value="4" />
         <Setter Property="SelectionCornerRadius" Value="0" />
         <Setter Property="SelectionBorder" Value="{x:Null}" />
