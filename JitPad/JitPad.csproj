@@ -6,7 +6,9 @@
         <UseWPF>true</UseWPF>
         <Nullable>enable</Nullable>
         <ApplicationIcon>Resources/icon.ico</ApplicationIcon>
-        <PackageVersion>1.0.1</PackageVersion>
+        <PackageVersion></PackageVersion>
+        <AssemblyVersion>1.0.4</AssemblyVersion>
+        <FileVersion></FileVersion>
     </PropertyGroup>
 
     <ItemGroup>

@@ -1,0 +1,134 @@
+[
+  {
+    "Name": "AvalonEdit",
+    "Author": "AvalonEdit Contributors",
+    "Summary": "AvalonEdit is the WPF-based text editor used in SharpDevelop. There are three builds of AvalonEdit included in this package: .NET 4.0, 4.5 and .NET Core 3.0.",
+    "Url": "http://www.avalonedit.net/"
+  },
+  {
+    "Name": "coverlet.collector",
+    "Author": "tonerdo",
+    "Summary": "Coverlet is a cross platform code coverage library for .NET, with support for line, branch and method coverage.",
+    "Url": "http://github.com/tonerdo/coverlet"
+  },
+  {
+    "Name": "IgnoresAccessChecksToGenerator",
+    "Author": "aelij",
+    "Summary": "Generates IgnoresAccessChecksTo attributes and reference assemblies to allow compile-time access to internals",
+    "Url": "https://github.com/aelij/IgnoresAccessChecksToGenerator"
+  },
+  {
+    "Name": "Jewelry",
+    "Author": "Yoshihiro Ito",
+    "Summary": ".NET support",
+    "Url": "https://github.com/YoshihiroIto/Jewelry"
+  },
+  {
+    "Name": "JitDasm",
+    "Author": "0xd4d",
+    "Summary": "Disassemble jitted .NET methods",
+    "Url": "https://github.com/0xd4d/JitDasm"
+  },
+  {
+    "Name": "K4os.Compression.LZ4",
+    "Author": "Milosz Krajewski",
+    "Summary": "Port of LZ4 compression algorithm for .NET",
+    "Url": "https://github.com/MiloszKrajewski/K4os.Compression.LZ4"
+  },
+  {
+    "Name": "LivetCask.Messaging",
+    "Author": "Livet Project",
+    "Summary": "Livet is the infrastructure of MVVM pattern on WPF.\nIt supports .NET Framework 4.5.2 or later and .NET Core 3.0, and licensed as zlib/libpng.\nThis package is for useful messaging features between View layer and ViewModel layer for MVVM pattern.",
+    "Url": "https://github.com/runceel/Livet"
+  },
+  {
+    "Name": "material-design-icons",
+    "Author": "Google",
+    "Summary": "Material Design icons by Google",
+    "Url": "https://github.com/google/material-design-icons"
+  },
+  {
+    "Name": "Microsoft.CodeAnalysis",
+    "Author": "Microsoft",
+    "Summary": ".NET Compiler Platform (\"Roslyn\").\n\n      This is the all-in-one package (a superset of all assemblies). You can install any of these sub-packages if you only want part of the functionality:\n      - \"Microsoft.CodeAnalysis.CSharp.Workspaces\" (C# compiler + services)\n      - \"Microsoft.CodeAnalysis.VisualBasic.Workspaces\" (VB compiler + services)\n      - \"Microsoft.CodeAnalysis.Compilers\" (both compilers)\n      - \"Microsoft.CodeAnalysis.CSharp\" (only the C# compiler)\n      - \"Microsoft.CodeAnalysis.VisualBasic (only the VB compiler)\n    \n      More details at https://aka.ms/roslyn-packages\n      This package was built from the source at https://github.com/dotnet/roslyn/commit/82f2e2541478e239dc4b04f231e90dc2b3dcb422.",
+    "Url": "https://github.com/dotnet/roslyn"
+  },
+  {
+    "Name": "Microsoft.CodeAnalysis.CSharp",
+    "Author": "Microsoft",
+    "Summary": ".NET Compiler Platform (\"Roslyn\") support for C#, Microsoft.CodeAnalysis.CSharp.dll.\n    \n      More details at https://aka.ms/roslyn-packages\n      This package was built from the source at https://github.com/dotnet/roslyn/commit/82f2e2541478e239dc4b04f231e90dc2b3dcb422.",
+    "Url": "https://github.com/dotnet/roslyn"
+  },
+  {
+    "Name": "Microsoft.CodeAnalysis.CSharp.Features",
+    "Author": "Microsoft",
+    "Summary": ".NET Compiler Platform (\"Roslyn\") support for creating C# editing experiences.\n    \n      More details at https://aka.ms/roslyn-packages\n      This package was built from the source at https://github.com/dotnet/roslyn/commit/82f2e2541478e239dc4b04f231e90dc2b3dcb422.",
+    "Url": "https://github.com/dotnet/roslyn"
+  },
+  {
+    "Name": "Microsoft.CodeAnalysis.CSharp.Workspaces",
+    "Author": "Microsoft",
+    "Summary": ".NET Compiler Platform (\"Roslyn\") support for analyzing C# projects and solutions.\n    \n      More details at https://aka.ms/roslyn-packages\n      This package was built from the source at https://github.com/dotnet/roslyn/commit/82f2e2541478e239dc4b04f231e90dc2b3dcb422.",
+    "Url": "https://github.com/dotnet/roslyn"
+  },
+  {
+    "Name": "Microsoft.CodeAnalysis.Features",
+    "Author": "Microsoft",
+    "Summary": ".NET Compiler Platform (\"Roslyn\") support for creating editing experiences.\n    \n      More details at https://aka.ms/roslyn-packages\n      This package was built from the source at https://github.com/dotnet/roslyn/commit/82f2e2541478e239dc4b04f231e90dc2b3dcb422.",
+    "Url": "https://github.com/dotnet/roslyn"
+  },
+  {
+    "Name": "Microsoft.CodeAnalysis.Workspaces.Common",
+    "Author": "Microsoft",
+    "Summary": "A shared package used by the .NET Compiler Platform (\"Roslyn\") including support for analyzing projects and solutions.\n      Do not install this package manually, it will be added as a prerequisite by other packages that require it.\n    \n      More details at https://aka.ms/roslyn-packages\n      This package was built from the source at https://github.com/dotnet/roslyn/commit/82f2e2541478e239dc4b04f231e90dc2b3dcb422.",
+    "Url": "https://github.com/dotnet/roslyn"
+  },
+  {
+    "Name": "Microsoft.NET.Test.Sdk",
+    "Author": "Microsoft",
+    "Summary": "The MSbuild targets and properties for building .NET test projects.",
+    "Url": "https://github.com/microsoft/vstest/"
+  },
+  {
+    "Name": "Microsoft.Xaml.Behaviors.Wpf",
+    "Author": "Microsoft",
+    "Summary": "Easily add interactivity to your apps using XAML Behaviors for WPF. Behaviors encapsulate reusable functionalities for elements that can be easily added to your XAML without the need for more imperative code.",
+    "Url": "https://github.com/Microsoft/XamlBehaviorsWpf"
+  },
+  {
+    "Name": "ReactiveProperty",
+    "Author": "neuecc xin9le okazuki",
+    "Summary": "ReactiveProperty is MVVM and Asynchronous Extensions for Reactive Extensions(System.Reactive). Target platform is .NET Standard 2.0, UWP, .NET Framework 4.6.1 or lator and .NET Core 3.0.",
+    "Url": "https://github.com/runceel/ReactiveProperty"
+  },
+  {
+    "Name": "System.Interactive",
+    "Author": "Microsoft",
+    "Summary": "Interactive Extensions Main Library used to express queries over enumerable sequences.",
+    "Url": "https://github.com/dotnet/reactive"
+  },
+  {
+    "Name": "System.Reactive",
+    "Author": ".NET Foundation and Contributors",
+    "Summary": "Reactive Extensions (Rx) for .NET",
+    "Url": "https://github.com/dotnet/reactive"
+  },
+  {
+    "Name": "WPF dark theme and controls for .NET Core 3.1.",
+    "Author": "Yoshihiro Ito",
+    "Summary": "Package Description",
+    "Url": "https://github.com/YoshihiroIto/Biaui"
+  },
+  {
+    "Name": "xUnit.net",
+    "Author": "James Newkirk, Brad Wilson",
+    "Summary": "xUnit.net is a developer testing framework, built to support Test Driven Development.",
+    "Url": "https://github.com/xunit/xunit"
+  },
+  {
+    "Name": "xUnit.net [Runner: Visual Studio]",
+    "Author": "James Newkirk, Brad Wilson",
+    "Summary": "Visual Studio 2012+ Test Explorer runner for the xUnit.net framework. Capable of running xUnit.net v1.9.2 and v2.0+ tests. Supports .NET 2.0 or later, .NET Core 1.0 or later, and Universal Windows 10.0 or later.",
+    "Url": "https://github.com/xunit/xunit"
+  }
+]

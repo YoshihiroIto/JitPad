@@ -23,8 +23,18 @@
                     ShowInTaskbar="True"
                     WindowStartupLocation="CenterScreen"
                     mc:Ignorable="d">
+    <b:Interaction.Triggers>
+        <messaging:InteractionMessageTrigger MessageKey="OpenAboutDialog"
+                                             Messenger="{Binding Messenger, Mode=OneTime}">
+            <messaging:TransitionInteractionMessageAction WindowType="jitPad:AboutDialog"
+                                                          Mode="Modal"
+                                                          IsOwned="True"
+                                                          InvokeActionOnlyWhenWindowIsActive="False" />
+        </messaging:InteractionMessageTrigger>
+    </b:Interaction.Triggers>
+
     <b:Interaction.Behaviors>
-        <behaviors:MainWindowBehavior CodeEditor="{Binding ElementName=CodeEditor, Mode=OneTime}"/>
+        <behaviors:MainWindowBehavior CodeEditor="{Binding ElementName=CodeEditor, Mode=OneTime}" />
     </b:Interaction.Behaviors>
 
     <controls:BiaWindow.Style>
@@ -158,7 +168,7 @@
                     </MenuItem.Header>
 
                     <MenuItem Command="{Binding OpenConfigFolderCommand, Mode=OneTime}" Header="Open Config Folder..." />
-                    <MenuItem Command="{Binding OpenAboutJitPadCommand, Mode=OneTime}" Header="About JitPad..." />
+                    <MenuItem Command="{Binding OpenAboutDialogCommand, Mode=OneTime}" Header="About JitPad..." />
                 </MenuItem>
             </Menu>
         </DockPanel>

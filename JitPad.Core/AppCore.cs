@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using JitPad.Foundation;
 using Reactive.Bindings.Extensions;
 using System.Diagnostics;
+using System.Reflection;
 using JitPad.Core.Processor;
 
 namespace JitPad.Core
@@ -15,6 +16,11 @@ namespace JitPad.Core
         private readonly Config _config;
         private readonly CompositeDisposable _Trashes = new CompositeDisposable();
 
+        public OpenSourceMetadata[] OpenSources => _OpenSources ??= new OpenSource().OpenSources;
+        private OpenSourceMetadata[]? _OpenSources;
+
+        public string Version => Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? throw new NullReferenceException();
+        
         public AppCore(Config config)
         {
             _config = config;
@@ -57,10 +63,15 @@ namespace JitPad.Core
             Process.Start("explorer", $"\"{dir}\"");
         }
 
-        public void OpenAboutJitPad()
+        public void OpenJitPadWebSite()
         {
             const string url = "https://github.com/YoshihiroIto/JitPad";
-
+            
+            OpenWeb(url);
+        }
+        
+        public void OpenWeb(string url)
+        {
             Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
         }
 

@@ -3,6 +3,7 @@ using System.Linq;
 using JitPad.Core;
 using JitPad.Core.Interface;
 using JitPad.Foundation;
+using Livet.Messaging;
 using Livet.Messaging.IO;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -26,7 +27,9 @@ namespace JitPad
         public ReactiveCommand<OpeningFileSelectionMessage> OpenMonitoringFileCommand { get; }
         public ReactiveCommand ApplyTemplateFileCommand { get; }
         public ReactiveCommand OpenConfigFolderCommand { get; }
-        public ReactiveCommand OpenAboutJitPadCommand { get; }
+        public AsyncReactiveCommand OpenAboutDialogCommand { get; }
+
+        public InteractionMessenger Messenger { get; } = new InteractionMessenger();
 
         public MainWindowViewModel(AppCore appCore, Config config)
         {
@@ -56,8 +59,14 @@ namespace JitPad
             OpenConfigFolderCommand = new ReactiveCommand().AddTo(Trashes);
             OpenConfigFolderCommand.Subscribe(_ => appCore.OpenConfigFolder()).AddTo(Trashes);
 
-            OpenAboutJitPadCommand = new ReactiveCommand().AddTo(Trashes);
-            OpenAboutJitPadCommand.Subscribe(_ => appCore.OpenAboutJitPad()).AddTo(Trashes);
+            OpenAboutDialogCommand = new AsyncReactiveCommand().AddTo(Trashes);
+            OpenAboutDialogCommand.Subscribe(async _ =>
+            {
+                using var aboutDialogViewModel = new AboutDialogViewModel(appCore);
+
+                // ReSharper disable once AsyncConverter.AsyncAwaitMayBeElidedHighlighting
+                await Messenger.RaiseAsync(new TransitionMessage(aboutDialogViewModel, "OpenAboutDialog")).ConfigureAwait(false);
+            } ).AddTo(Trashes);
         }
     }
 }

@@ -1,0 +1,103 @@
+﻿<controls:BiaWindow x:Class="JitPad.AboutDialog"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Biaui.Controls;assembly=Biaui"
+                    xmlns:core="clr-namespace:JitPad.Core;assembly=JitPad.Core"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:dialog="clr-namespace:JitPad"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    Title="AboutDialog"
+                    Width="460"
+                    Height="460"
+                    d:DataContext="{d:DesignInstance dialog:AboutDialogViewModel}"
+                    ResizeMode="NoResize"
+                    Style="{StaticResource BiaWindowDialogStyle}"
+                    WindowStartupLocation="CenterOwner"
+                    mc:Ignorable="d">
+    <DockPanel Margin="16,12,16,16">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <TextBlock FontSize="18" Text="JitPad" />
+            <controls:BiaTextBlock Margin="12,0,0,2"
+                                   VerticalAlignment="Bottom"
+                                   Text="Version: " />
+            <controls:BiaTextBlock Margin="0,0,0,2"
+                                   VerticalAlignment="Bottom"
+                                   Text="{Binding Version, Mode=OneTime}" />
+        </StackPanel>
+
+        <controls:BiaButton Margin="0,8,0,0"
+                            HorizontalAlignment="Left"
+                            Command="{Binding OpenJitPadWebSiteCommand, Mode=OneTime}"
+                            Content="Web site"
+                            DockPanel.Dock="Top" />
+
+        <controls:BiaTextBlock Margin="0,24,0,4"
+                               DockPanel.Dock="Top"
+                               Text="Using Libraries" />
+
+        <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
+        <ScrollViewer Margin="0,0,-8,0"
+                      PanningMode="VerticalOnly"
+                      Style="{StaticResource BasicScrollViewerStyle}"
+                      VerticalScrollBarVisibility="Visible">
+            <ItemsControl ItemsSource="{Binding OpenSources, Mode=OneTime}"
+                          VirtualizingPanel.IsVirtualizing="True"
+                          VirtualizingPanel.VirtualizationMode="Recycling">
+                <ItemsControl.Resources>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Cursor" Value="Hand" />
+
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <TextBlock HorizontalAlignment="Left"
+                                               d:DataContext="{d:DesignInstance core:OpenSourceMetadata}"
+                                               Foreground="SlateBlue"
+                                               Text="{Binding Name, Mode=OneTime}"
+                                               TextDecorations="Underline" />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ItemsControl.Resources>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
+                        <Button Margin="0,0,0,4"
+                                d:DataContext="{d:DesignInstance core:OpenSourceMetadata}"
+                                Command="{Binding DataContext.OpenOpenSourceCommand, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type dialog:AboutDialog}}}"
+                                CommandParameter="{Binding Mode=OneWay}">
+                            <Button.ToolTip>
+                                <ToolTip>
+                                    <StackPanel MaxWidth="600">
+                                        <StackPanel.Resources>
+                                            <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
+                                                <Setter Property="TextWrapping" Value="Wrap" />
+                                            </Style>
+                                        </StackPanel.Resources>
+
+
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock FontSize="18" Text="{Binding Name, Mode=OneTime}" />
+                                            <TextBlock Margin="8,0,0,1"
+                                                       VerticalAlignment="Bottom"
+                                                       Text="by " />
+                                            <TextBlock Margin="0,0,0,1"
+                                                       VerticalAlignment="Bottom"
+                                                       Text="{Binding Author, Mode=OneTime}" />
+                                        </StackPanel>
+
+                                        <TextBlock Margin="0,8,0,0"
+                                                   Foreground="#A0A0A0"
+                                                   Text="{Binding Summary, Mode=OneTime}" />
+                                    </StackPanel>
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
+</controls:BiaWindow>
