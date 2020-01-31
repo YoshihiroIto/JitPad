@@ -25,6 +25,10 @@
                                    Text="{Binding Version, Mode=OneTime}" />
         </StackPanel>
 
+        <controls:BiaTextBlock Margin="0,2,0,0"
+                               DockPanel.Dock="Top"
+                               Text="Copyright © 2020 Yoshihiro Ito. All rights reserved." />
+
         <controls:BiaButton Margin="0,8,0,0"
                             HorizontalAlignment="Left"
                             Command="{Binding OpenJitPadWebSiteCommand, Mode=OneTime}"
@@ -33,9 +37,9 @@
 
         <controls:BiaTextBlock Margin="0,24,0,4"
                                DockPanel.Dock="Top"
-                               Text="Using Libraries" />
+                               Text="3rd party dependencies" />
 
-        <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
+        <!--  ReSharper disable once Xaml.StaticResourceNotResolved  -->
         <ScrollViewer Margin="0,0,-8,0"
                       PanningMode="VerticalOnly"
                       Style="{StaticResource BasicScrollViewerStyle}"
