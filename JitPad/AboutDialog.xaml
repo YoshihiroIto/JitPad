@@ -10,6 +10,7 @@
                     Width="460"
                     Height="460"
                     d:DataContext="{d:DesignInstance dialog:AboutDialogViewModel}"
+                    PreviewKeyDown="OnPreviewKeyDown"
                     ResizeMode="NoResize"
                     Style="{StaticResource BiaWindowDialogStyle}"
                     WindowStartupLocation="CenterOwner"
