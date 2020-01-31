@@ -19,10 +19,11 @@ namespace JitPad
             var messages = BuildDetailMessages.ToLookup(x => x.StartLine);
 
             var pen = Caches.GetPen(ByteColor.Tomato, 2);
-            var lineNo = 0;
 
             foreach (var visualLine in textView.VisualLines)
             {
+                var lineNo = visualLine.FirstDocumentLine.LineNumber - 1;
+
                 if (messages.Contains(lineNo))
                 {
                     foreach (var message in messages[lineNo])
@@ -44,8 +45,6 @@ namespace JitPad
                                 new Point(segment.Right, segment.Bottom - 1));
                     }
                 }
-
-                ++lineNo;
             }
         }
     }
