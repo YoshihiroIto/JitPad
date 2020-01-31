@@ -139,7 +139,7 @@ public class Class
             // setup code template
             try
             {
-                if (File.Exists(codeTemplateFilePath) == false)
+                if (File.Exists(config._codeTemplateFilePath) == false)
                     File.WriteAllText(DefaultTemplateFilePath, DefaultCodeTemplate);
             }
             catch
