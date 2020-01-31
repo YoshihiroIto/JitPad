@@ -9,16 +9,23 @@
                     Title="AboutDialog"
                     Width="460"
                     Height="460"
+                    MinWidth="460"
+                    MinHeight="460"
                     d:DataContext="{d:DesignInstance dialog:AboutDialogViewModel}"
                     PreviewKeyDown="OnPreviewKeyDown"
-                    ResizeMode="NoResize"
                     Style="{StaticResource BiaWindowDialogStyle}"
                     WindowStartupLocation="CenterOwner"
                     mc:Ignorable="d">
+    <controls:BiaWindow.Resources>
+        <Style BasedOn="{StaticResource {x:Type ToolTip}}" TargetType="ToolTip">
+            <Setter Property="Placement" Value="Right" />
+        </Style>
+    </controls:BiaWindow.Resources>
+
     <DockPanel Margin="16,12,16,16">
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <TextBlock FontSize="18" Text="JitPad" />
-            <controls:BiaTextBlock Margin="12,0,0,2"
+            <controls:BiaTextBlock Margin="8,0,0,2"
                                    VerticalAlignment="Bottom"
                                    Text="Version: " />
             <controls:BiaTextBlock Margin="0,0,0,2"
@@ -50,7 +57,7 @@
                           VirtualizingPanel.IsVirtualizing="True"
                           VirtualizingPanel.VirtualizationMode="Recycling">
                 <ItemsControl.Resources>
-                    <Style TargetType="{x:Type Button}">
+                    <Style TargetType="Button">
                         <Setter Property="Cursor" Value="Hand" />
 
                         <Setter Property="Template">
@@ -58,9 +65,20 @@
                                 <ControlTemplate TargetType="Button">
                                     <TextBlock HorizontalAlignment="Left"
                                                d:DataContext="{d:DesignInstance core:OpenSourceMetadata}"
-                                               Foreground="SlateBlue"
                                                Text="{Binding Name, Mode=OneTime}"
-                                               TextDecorations="Underline" />
+                                               TextDecorations="Underline">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{StaticResource AccentBrushKey}" />
+
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Foreground" Value="{StaticResource AccentBrushKey.IsMouseOver}" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -79,11 +97,10 @@
                                 <ToolTip>
                                     <StackPanel MaxWidth="600">
                                         <StackPanel.Resources>
-                                            <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
+                                            <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="TextBlock">
                                                 <Setter Property="TextWrapping" Value="Wrap" />
                                             </Style>
                                         </StackPanel.Resources>
-
 
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock FontSize="18" Text="{Binding Name, Mode=OneTime}" />
