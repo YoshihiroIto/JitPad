@@ -6,6 +6,18 @@
     "Url": "http://www.avalonedit.net/"
   },
   {
+    "Name": "Biaui",
+    "Author": "Yoshihiro Ito",
+    "Summary": "WPF dark theme and controls for .NET Core 3.1.",
+    "Url": "https://github.com/YoshihiroIto/Biaui"
+  },
+  {
+    "Name": "CLR Memory Diagnostics (ClrMD)",
+    "Author": "Microsoft",
+    "Summary": "ClrMD is a set of advanced APIs for programmatically inspecting a crash dump of a .NET program much in the same way that the SOS Debugging Extensions (SOS) do. This allows you to write automated crash analysis for your applications as well as automate many common debugger tasks. In addition to reading crash dumps ClrMD also allows supports attaching to live processes.",
+    "Url": "https://github.com/Microsoft/clrmd"
+  },
+  {
     "Name": "coverlet.collector",
     "Author": "tonerdo",
     "Summary": "Coverlet is a cross platform code coverage library for .NET, with support for line, branch and method coverage.",
@@ -90,6 +102,18 @@
     "Url": "https://github.com/microsoft/vstest/"
   },
   {
+    "Name": "Microsoft.NETFramework.ReferenceAssemblies",
+    "Author": "Microsoft",
+    "Summary": "Microsoft .NET Framework Reference Assemblies",
+    "Url": "https://github.com/Microsoft/dotnet/tree/master/releases/reference-assemblies"
+  },
+  {
+    "Name": "Microsoft.SourceLink.GitHub",
+    "Author": "Microsoft",
+    "Summary": "Generates source link for GitHub repositories.",
+    "Url": "https://github.com/dotnet/sourcelink"
+  },
+  {
     "Name": "Microsoft.Xaml.Behaviors.Wpf",
     "Author": "Microsoft",
     "Summary": "Easily add interactivity to your apps using XAML Behaviors for WPF. Behaviors encapsulate reusable functionalities for elements that can be easily added to your XAML without the need for more imperative code.",
@@ -100,6 +124,12 @@
     "Author": "neuecc xin9le okazuki",
     "Summary": "ReactiveProperty is MVVM and Asynchronous Extensions for Reactive Extensions(System.Reactive). Target platform is .NET Standard 2.0, UWP, .NET Framework 4.6.1 or lator and .NET Core 3.0.",
     "Url": "https://github.com/runceel/ReactiveProperty"
+  },
+  {
+    "Name": "Reads and writes .NET assemblies and modules",
+    "Author": "0xd4d",
+    "Summary": "Reads and writes .NET assemblies and modules, Windows PDBs and Portable PDBs.\n\nFor better *Windows PDB* writer support, you should add a reference to `Microsoft.DiaSymReader.Native` nuget package too, see the dnlib README for more info: https://github.com/0xd4d/dnlib#windows-pdbs . You don't need to do anything special for *Portable PDB* support.",
+    "Url": "https://github.com/0xd4d/dnlib"
   },
   {
     "Name": "System.Interactive",
@@ -114,10 +144,10 @@
     "Url": "https://github.com/dotnet/reactive"
   },
   {
-    "Name": "WPF dark theme and controls for .NET Core 3.1.",
-    "Author": "Yoshihiro Ito",
-    "Summary": "Package Description",
-    "Url": "https://github.com/YoshihiroIto/Biaui"
+    "Name": "x86/x64 disassembler, assembler, instruction decoder",
+    "Author": "0xd4d",
+    "Summary": "High performance x86 (16/32/64-bit) instruction decoder, disassembler and assembler.\nIt can be used for static analysis of x86/x64 binaries, to rewrite code (eg. remove garbage instructions), to relocate code or as a disassembler.\n\n- Supports all Intel and AMD instructions\n- High level Assembler providing a simple and lean syntax (e.g `asm.mov(eax, edx)`))\n- Decoding and disassembler support:\n  - The decoder doesn't allocate any memory and is 2x-5x+ faster than other similar libraries written in C or C#\n  - Small decoded instructions, only 32 bytes\n  - The formatter supports masm, nasm, gas (AT&T), Intel (XED) and there are many options to customize the output\n- Encoding support:  \n  - The encoder can be used to re-encode decoded instructions at any address\n  - The block encoder encodes a list of instructions and optimizes branches to short, near or 'long' (64-bit: 1 or more instructions)\n- API to get instruction info, eg. read/written registers, memory and rflags bits; CPUID feature flag, flow control info, etc\n- All instructions are tested (decode, encode, format, instruction info)\n- Supports `.NET Standard 2.0/2.1+` and `.NET Framework 4.5+`\n\nLicense: MIT",
+    "Url": "https://github.com/0xd4d/iced"
   },
   {
     "Name": "xUnit.net",
