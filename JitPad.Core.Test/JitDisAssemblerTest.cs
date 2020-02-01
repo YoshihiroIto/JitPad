@@ -1,3 +1,4 @@
+using JitPad.Core.Interface;
 using JitPad.Core.Processor;
 using Xunit;
 
@@ -24,7 +25,7 @@ public class TestClass
             var compileResult = compiler.Run("source.cs", sourceCode, true);
             
             var disassembler = new JitDisassembler("../../../../externals/JitDasm/JitDasm/bin/Release/netcoreapp3.0/JitDasm.exe");
-            var result = disassembler.Run("source.cs", sourceCode, compileResult.AssembleImage, true);
+            var result = disassembler.Run("source.cs", sourceCode, compileResult.AssembleImage, JitFlags.None);
             
             Assert.True(result.IsOk);
         }

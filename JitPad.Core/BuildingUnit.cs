@@ -98,7 +98,7 @@ namespace JitPad.Core
             {
                 if (ReferenceEquals(null, other)) return false;
                 if (ReferenceEquals(this, other)) return true;
-                return SourceCode == other.SourceCode && IsReleaseBuild == other.IsReleaseBuild && IsTieredJit == other.IsTieredJit;
+                return SourceCode == other.SourceCode && IsReleaseBuild == other.IsReleaseBuild && JitFlags == other.JitFlags;
             }
 
             public override bool Equals(object? obj)
@@ -110,19 +110,19 @@ namespace JitPad.Core
             }
 
             public override int GetHashCode()
-                => HashCode.Combine(SourceCode, IsReleaseBuild, IsTieredJit);
+                => HashCode.Combine(SourceCode, IsReleaseBuild, JitFlags);
 
             public string SourceCode => _SourceCode.ToString();
             public readonly bool IsReleaseBuild;
-            public readonly bool IsTieredJit;
+            public readonly JitFlags JitFlags;
 
             private readonly CompressedString _SourceCode;
 
-            public BuildContext(string sourceCode, bool isReleaseBuild, bool isTieredJit)
+            public BuildContext(string sourceCode, bool isReleaseBuild, JitFlags jitFlags)
             {
                 _SourceCode = new CompressedString(sourceCode);
                 IsReleaseBuild = isReleaseBuild;
-                IsTieredJit = isTieredJit;
+                JitFlags = jitFlags;
             }
         }
 
@@ -157,7 +157,7 @@ namespace JitPad.Core
                 .ObserveOn(ThreadPoolScheduler.Instance)
                 .Subscribe(x =>
                 {
-                    var buildContext = new BuildContext(x, config.IsReleaseBuild, config.IsTieredJit);
+                    var buildContext = new BuildContext(x, config.IsReleaseBuild, config.JitFlags);
 
                     if (_buildCaches.Contains(buildContext) == false)
                         Build(buildContext);
@@ -165,12 +165,12 @@ namespace JitPad.Core
                 .AddTo(_Trashes);
 
             Observable
-                .Merge(config.ObserveProperty(x => x.IsReleaseBuild))
-                .Merge(config.ObserveProperty(x => x.IsTieredJit))
+                .Merge(config.ObserveProperty(x => x.IsReleaseBuild).ToUnit())
+                .Merge(config.ObserveProperty(x => x.JitFlags).ToUnit())
                 .ObserveOn(ThreadPoolScheduler.Instance)
                 .Subscribe(x =>
                 {
-                    var buildContext = new BuildContext(SourceCode, config.IsReleaseBuild, config.IsTieredJit);
+                    var buildContext = new BuildContext(SourceCode, config.IsReleaseBuild, config.JitFlags);
 
                     if (_buildCaches.Contains(buildContext) == false)
                         Build(buildContext);
@@ -180,10 +180,10 @@ namespace JitPad.Core
             Observable
                 .Merge(this.ObserveProperty(x => x.SourceCode).ToUnit())
                 .Merge(config.ObserveProperty(x => x.IsReleaseBuild).ToUnit())
-                .Merge(config.ObserveProperty(x => x.IsTieredJit).ToUnit())
+                .Merge(config.ObserveProperty(x => x.JitFlags).ToUnit())
                 .Subscribe(x =>
                 {
-                    var buildContext = new BuildContext(SourceCode, config.IsReleaseBuild, config.IsTieredJit);
+                    var buildContext = new BuildContext(SourceCode, config.IsReleaseBuild, config.JitFlags);
 
                     if (_buildCaches.Contains(buildContext))
                         LoadFromCache(buildContext);
@@ -234,7 +234,7 @@ namespace JitPad.Core
                     compileResult.Messages);
 
             // jit disassemble
-            var disassembleResult = _disassembler.Run(sourceCodePath, buildContext.SourceCode, compileResult.AssembleImage, buildContext.IsTieredJit);
+            var disassembleResult = _disassembler.Run(sourceCodePath, buildContext.SourceCode, compileResult.AssembleImage, buildContext.JitFlags);
 
             return new BuildResultData(
                 disassembleResult.IsOk,

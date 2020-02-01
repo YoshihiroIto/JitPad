@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using JitPad.Core.Interface;
 using JitPad.Foundation;
 
 namespace JitPad.Core
@@ -22,12 +23,12 @@ namespace JitPad.Core
 
         #region IsTieredJit
 
-        private bool _IsTieredJit;
+        private JitFlags _JitFlags = JitFlags.TieredCompilation | JitFlags.TC_QuickJit;
 
-        public bool IsTieredJit
+        public JitFlags JitFlags
         {
-            get => _IsTieredJit;
-            set => SetProperty(ref _IsTieredJit, value);
+            get => _JitFlags;
+            set => SetProperty(ref _JitFlags, value);
         }
 
         #endregion

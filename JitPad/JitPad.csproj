@@ -7,7 +7,7 @@
         <Nullable>enable</Nullable>
         <ApplicationIcon>Resources/icon.ico</ApplicationIcon>
         <PackageVersion></PackageVersion>
-        <AssemblyVersion>1.0.4</AssemblyVersion>
+        <AssemblyVersion>1.0.5</AssemblyVersion>
         <FileVersion></FileVersion>
 
         <InternalsAssemblyNames>Biaui</InternalsAssemblyNames>

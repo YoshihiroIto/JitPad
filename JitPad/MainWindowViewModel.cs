@@ -13,10 +13,14 @@ namespace JitPad
     public class MainWindowViewModel : ViewModelBase
     {
         public ReactiveProperty<bool> IeReleaseBuild { get; }
-        public ReactiveProperty<bool> IsTieredJit { get; }
         public ReactiveProperty<bool> IsFileMonitoring { get; }
         public ReactiveProperty<string> MonitoringFilePath { get; }
         public ReadOnlyReactiveProperty<bool> IsInBuilding { get; }
+
+
+        public ReactiveProperty<bool> IsTieredCompilation { get; }
+        public ReactiveProperty<bool> IsTcQuickJit { get; }
+        public ReactiveProperty<bool> IsTcQuickJitForLoops { get; }
 
         public ReactiveProperty<string> SourceCode { get; }
         public ReadOnlyReactiveProperty<string?> BuildResult { get; }
@@ -34,10 +38,31 @@ namespace JitPad
         public MainWindowViewModel(AppCore appCore, Config config)
         {
             IeReleaseBuild = config.ToReactivePropertyAsSynchronized(x => x.IsReleaseBuild).AddTo(Trashes);
-            IsTieredJit = config.ToReactivePropertyAsSynchronized(x => x.IsTieredJit).AddTo(Trashes);
+
             IsFileMonitoring = config.ToReactivePropertyAsSynchronized(x => x.IsFileMonitoring).AddTo(Trashes);
             MonitoringFilePath = config.ToReactivePropertyAsSynchronized(x => x.MonitoringFilePath).AddTo(Trashes);
             IsInBuilding = appCore.BuildingUnit.ObserveProperty(x => x.IsInBuilding).ToReadOnlyReactiveProperty().AddTo(Trashes);
+
+            IsTieredCompilation = config.ToReactivePropertyAsSynchronized(
+                x => x.JitFlags,
+                x => x.HasFlag(JitFlags.TieredCompilation),
+                x => x
+                    ? config.JitFlags | JitFlags.TieredCompilation
+                    : config.JitFlags & ~JitFlags.TieredCompilation).AddTo(Trashes);
+            
+            IsTcQuickJit = config.ToReactivePropertyAsSynchronized(
+                x => x.JitFlags,
+                x => x.HasFlag(JitFlags.TC_QuickJit),
+                x => x
+                    ? config.JitFlags | JitFlags.TC_QuickJit
+                    : config.JitFlags & ~JitFlags.TC_QuickJit).AddTo(Trashes);
+
+            IsTcQuickJitForLoops = config.ToReactivePropertyAsSynchronized(
+                x => x.JitFlags,
+                x => x.HasFlag(JitFlags.TC_QuickJitForLoops),
+                x => x
+                    ? config.JitFlags | JitFlags.TC_QuickJitForLoops
+                    : config.JitFlags & ~JitFlags.TC_QuickJitForLoops).AddTo(Trashes);
 
             SourceCode = appCore.BuildingUnit.ToReactivePropertyAsSynchronized(x => x.SourceCode).AddTo(Trashes);
             BuildResult = appCore.BuildingUnit.ObserveProperty(x => x.BuildResult).ToReadOnlyReactiveProperty().AddTo(Trashes);
@@ -66,7 +91,7 @@ namespace JitPad
 
                 // ReSharper disable once AsyncConverter.AsyncAwaitMayBeElidedHighlighting
                 await Messenger.RaiseAsync(new TransitionMessage(aboutDialogViewModel, "OpenAboutDialog")).ConfigureAwait(false);
-            } ).AddTo(Trashes);
+            }).AddTo(Trashes);
         }
     }
 }

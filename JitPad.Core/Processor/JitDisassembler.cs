@@ -15,7 +15,7 @@ namespace JitPad.Core.Processor
             _jitDasmExe = jitDasmExe;
         }
 
-        public DisassembleResult Run(string sourceCodePath, string sourceCode, byte[] assembleImage, bool isTieredJit)
+        public DisassembleResult Run(string sourceCodePath, string sourceCode, byte[] assembleImage, JitFlags flags)
         {
             var sourceCodeTempPath = sourceCodePath;
             var assemblyTempPath = Path.ChangeExtension(sourceCodeTempPath, ".dll");
@@ -37,7 +37,9 @@ namespace JitPad.Core.Processor
                     }
                 };
 
-                proc.StartInfo.Environment["COMPlus_TieredCompilation"] = isTieredJit ? "1" : "0";
+                proc.StartInfo.Environment["COMPlus_TieredCompilation"] = flags.HasFlag(JitFlags.TieredCompilation) ? "1" : "0";
+                proc.StartInfo.Environment["COMPlus_TC_QuickJit"] = flags.HasFlag(JitFlags.TC_QuickJit) ? "1" : "0";
+                proc.StartInfo.Environment["COMPlus_TC_QuickJitForLoops"] = flags.HasFlag(JitFlags.TC_QuickJitForLoops) ? "1" : "0";
 
                 proc.Start();
 

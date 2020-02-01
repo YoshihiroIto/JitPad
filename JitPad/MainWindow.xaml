@@ -24,12 +24,11 @@
                     WindowStartupLocation="CenterScreen"
                     mc:Ignorable="d">
     <b:Interaction.Triggers>
-        <messaging:InteractionMessageTrigger MessageKey="OpenAboutDialog"
-                                             Messenger="{Binding Messenger, Mode=OneTime}">
-            <messaging:TransitionInteractionMessageAction WindowType="jitPad:AboutDialog"
-                                                          Mode="Modal"
+        <messaging:InteractionMessageTrigger MessageKey="OpenAboutDialog" Messenger="{Binding Messenger, Mode=OneTime}">
+            <messaging:TransitionInteractionMessageAction InvokeActionOnlyWhenWindowIsActive="False"
                                                           IsOwned="True"
-                                                          InvokeActionOnlyWhenWindowIsActive="False" />
+                                                          Mode="Modal"
+                                                          WindowType="jitPad:AboutDialog" />
         </messaging:InteractionMessageTrigger>
     </b:Interaction.Triggers>
 
@@ -140,10 +139,25 @@
                                       EnabledLabel="Release"
                                       IsChecked="{Binding IeReleaseBuild.Value, Mode=TwoWay}" />
 
-            <controls:BiaToggleButton Margin="12,0,0,0"
-                                      HorizontalAlignment="Left"
-                                      Content="Tiered JIT"
-                                      IsChecked="{Binding IsTieredJit.Value, Mode=TwoWay}" />
+            <controls:BiaClippingBorder Margin="12,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        CornerRadius="4">
+                <controls:BiaUniformGrid Columns="3">
+                    <controls:BiaToggleButton Content="TC"
+                                              CornerRadius="0"
+                                              IsChecked="{Binding IsTieredCompilation.Value, Mode=TwoWay}"
+                                              ToolTip="Tiered compilation" />
+                    <controls:BiaToggleButton Content="QJ"
+                                              CornerRadius="0"
+                                              IsChecked="{Binding IsTcQuickJit.Value, Mode=TwoWay}"
+                                              ToolTip="Quick JIT" />
+                    <controls:BiaToggleButton Content="QJ loops"
+                                              CornerRadius="0"
+                                              IsChecked="{Binding IsTcQuickJitForLoops.Value, Mode=TwoWay}"
+                                              ToolTip="Quick JIT for loops" />
+                </controls:BiaUniformGrid>
+            </controls:BiaClippingBorder>
+
             <Menu Width="32"
                   Height="32"
                   Margin="0,-12,84,0"

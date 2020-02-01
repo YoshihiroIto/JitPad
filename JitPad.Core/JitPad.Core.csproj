@@ -19,6 +19,7 @@
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.4.0" />
       <PackageReference Include="Microsoft.CodeAnalysis.Features" Version="3.4.0" />
       <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="3.4.0" />
+      <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="3.4.0" />
       <PackageReference Include="ReactiveProperty" Version="6.2.0" />
       <PackageReference Include="System.Interactive" Version="4.0.0" />
     </ItemGroup>

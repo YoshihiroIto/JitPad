@@ -16,7 +16,7 @@ namespace JitPad.Core.Processor
         public CompileResult Run(string sourceCodePath, string sourceCode, bool isReleaseBuild)
         {
             using var asmImage = new MemoryStream();
-
+            
             var symbolsName = Path.ChangeExtension("compiled.dll", ".pdb");
 
             var buffer = Encoding.UTF8.GetBytes(sourceCode);

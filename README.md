@@ -18,7 +18,6 @@ Open JitPad.sln
 ```
 
 ## Credits
-
 - Disassembler
     - [JitDasm](https://github.com/0xd4d/JitDasm) Disassemble jitted .NET methods
 
@@ -45,13 +44,18 @@ Open JitPad.sln
     - [Livet](https://github.com/runceel/Livet) WPF MVVM Infrastructure.
 
 
-## Author
+## Reference
 
+- [Tiered Compilation Guide](https://github.com/dotnet/runtime/blob/master/docs/design/features/tiered-compilation-guide.md)
+- [Run-time configuration options for compilation](https://docs.microsoft.com/en-us/dotnet/core/run-time-config/compilation)
+
+
+## Author
 Yoshihiro Ito  
 Twitter: [https://twitter.com/yoiyoi322](https://twitter.com/yoiyoi322)  
 Email: yo.i.jewelry.bab@gmail.com  
 
 
 ## License
-
 MIT
+
