@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,6 +12,12 @@ using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Editing;
 using JitPad.Core.Processor;
 using Microsoft.Xaml.Behaviors;
+
+// ReSharper disable RedundantUsingDirective
+// fot Descendants
+using System.Linq;
+using Biaui.Internals;
+// ReSharper restore RedundantUsingDirective
 
 namespace JitPad.Behaviors
 {
@@ -104,7 +108,7 @@ namespace JitPad.Behaviors
 
                         _completionWindow.Loaded += (sender, __) =>
                         {
-                            var listBox = Descendants((DependencyObject) sender).OfType<ListBox>().FirstOrDefault();
+                            var listBox = ((DependencyObject) sender).Descendants().OfType<ListBox>().FirstOrDefault();
                             if (listBox != null)
                                 listBox.Background = Brushes.Transparent;
                         };
@@ -130,43 +134,6 @@ namespace JitPad.Behaviors
         }
 
         private static readonly FieldInfo? ToolToolField = typeof(CompletionWindow).GetField("toolTip", BindingFlags.NonPublic | BindingFlags.Instance);
-
-        // Biaui
-        private static IEnumerable<DependencyObject> Children(DependencyObject obj)
-        {
-            if (obj == null)
-                throw new ArgumentNullException(nameof(obj));
-
-            if (obj is Popup popup)
-            {
-                if (popup.Child != null)
-                    yield return popup.Child;
-            }
-
-            var count = VisualTreeHelper.GetChildrenCount(obj);
-            if (count == 0)
-                yield break;
-
-            for (var i = 0; i != count; i++)
-            {
-                var child = VisualTreeHelper.GetChild(obj, i);
-                yield return child;
-            }
-        }
-
-        private static IEnumerable<DependencyObject> Descendants(DependencyObject obj)
-        {
-            if (obj == null)
-                throw new ArgumentNullException(nameof(obj));
-
-            foreach (var child in Children(obj))
-            {
-                yield return child;
-
-                foreach (var grandChild in Descendants(child))
-                    yield return grandChild;
-            }
-        }
     }
 
     public class CompletionData : ICompletionData
