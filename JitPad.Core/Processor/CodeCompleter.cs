@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using JitPad.Core.Interface;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Completion;
 using Microsoft.CodeAnalysis.Host.Mef;
@@ -15,10 +16,12 @@ namespace JitPad.Core.Processor
 
     public class CodeCompleter
     {
+        private readonly ICompiler _compiler;
         private readonly MefHostServices _Host = MefHostServices.Create(MefHostServices.DefaultAssemblies);
 
-        public CodeCompleter()
+        public CodeCompleter(ICompiler compiler)
         {
+            _compiler = compiler;
             if (_isInitialized)
                 return;
 
@@ -51,7 +54,7 @@ namespace JitPad.Core.Processor
 
                 var projectInfo = ProjectInfo
                     .Create(ProjectId.CreateNewId(), VersionStamp.Create(), "Project", "Project", LanguageNames.CSharp)
-                    .WithMetadataReferences(new[] {MetadataReference.CreateFromFile(typeof(object).Assembly.Location)});
+                    .WithMetadataReferences(_compiler.MetadataReferences);
                 var project = workspace.AddProject(projectInfo);
                 var document = workspace.AddDocument(project.Id, "File.cs", SourceText.From(sourceCode));
 

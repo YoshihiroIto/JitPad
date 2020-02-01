@@ -84,12 +84,12 @@ namespace JitPad.Core.Processor
                     .WithPlatform(Platform.AnyCpu)
                     .WithAllowUnsafe(true));
 
-            compilation = compilation.AddReferences(_metadataReferences);
+            compilation = compilation.AddReferences(MetadataReferences);
 
             return compilation;
         }
 
-        private readonly MetadataReference[] _metadataReferences = EnumMetadataReferences().ToArray();
+        public MetadataReference[] MetadataReferences { get; } = EnumMetadataReferences().ToArray();
 
         private static IEnumerable<MetadataReference> EnumMetadataReferences()
         {

@@ -10,6 +10,7 @@ using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Editing;
+using JitPad.Core.Interface;
 using JitPad.Core.Processor;
 using Microsoft.Xaml.Behaviors;
 
@@ -17,12 +18,44 @@ using Microsoft.Xaml.Behaviors;
 // fot Descendants
 using System.Linq;
 using Biaui.Internals;
+
 // ReSharper restore RedundantUsingDirective
 
 namespace JitPad.Behaviors
 {
     public sealed class TextEditorCompletionBehavior : Behavior<TextEditor>
     {
+        #region Compiler
+        
+        public ICompiler Compiler
+        {
+            get => _Compiler ?? throw new NullReferenceException();
+            set
+            {
+                if (value != _Compiler)
+                    SetValue(CompilerProperty, value);
+            }
+        }
+        
+        private ICompiler? _Compiler;
+        
+        public static readonly DependencyProperty CompilerProperty =
+            DependencyProperty.Register(
+                nameof(Compiler),
+                typeof(ICompiler),
+                typeof(TextEditorCompletionBehavior),
+                new PropertyMetadata(
+                    default,
+                    (s, e) =>
+                    {
+                        var self = (TextEditorCompletionBehavior) s;
+                        self._Compiler = (ICompiler)e.NewValue;
+                        
+                        self._codeCompleter = new CodeCompleter(self._Compiler);
+                    }));
+        
+        #endregion
+
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -71,8 +104,8 @@ namespace JitPad.Behaviors
             }
         }
 
-        private readonly CodeCompleter _CodeCompleter = new CodeCompleter();
-
+        private CodeCompleter? _codeCompleter;
+        
         private void ShowCompletionWindow(char? completionChar)
         {
             if (_completionWindow != null)
@@ -83,7 +116,10 @@ namespace JitPad.Behaviors
 
             Task.Run(async () =>
             {
-                var results = await _CodeCompleter.CompleteAsync(text, offset, completionChar)
+                if (_codeCompleter == null)
+                    return;
+                
+                var results = await _codeCompleter.CompleteAsync(text, offset, completionChar)
                     .ConfigureAwait(true);
 
                 if (results.CompletionData.Length > 0)

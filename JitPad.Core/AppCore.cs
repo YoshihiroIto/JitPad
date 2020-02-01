@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using System.Reactive.Disposables;
 using JitPad.Foundation;
 using Reactive.Bindings.Extensions;
 using System.Diagnostics;
 using System.Reflection;
+using JitPad.Core.Interface;
 using JitPad.Core.Processor;
 
 namespace JitPad.Core
@@ -20,6 +22,9 @@ namespace JitPad.Core
         private OpenSourceMetadata[]? _OpenSources;
 
         public string Version => Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? throw new NullReferenceException();
+
+        public readonly ICompiler Compiler;
+        public readonly IDisassembler Disassembler;
         
         public AppCore(Config config)
         {
@@ -38,9 +43,10 @@ namespace JitPad.Core
                 }
             }
 
-            var compiler = new Compiler();
-            var disassembler = new JitDisassembler("JitDasm/JitDasm.exe");
-            BuildingUnit = new BuildingUnit(_config, compiler, disassembler) {SourceCode = initialSourceCode}
+            Compiler = new Compiler();
+            Disassembler = new JitDisassembler("JitDasm/JitDasm.exe");
+            
+            BuildingUnit = new BuildingUnit(_config, Compiler, Disassembler) {SourceCode = initialSourceCode}
                 .AddTo(_Trashes);
 
             var fileMonitor = new FileMonitor(_config).AddTo(_Trashes);

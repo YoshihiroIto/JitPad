@@ -1,10 +1,14 @@
-﻿namespace JitPad.Core.Interface
+﻿using Microsoft.CodeAnalysis;
+
+namespace JitPad.Core.Interface
 {
     public interface ICompiler
     {
+        MetadataReference[] MetadataReferences { get; }
+
         CompileResult Run(string sourceCodePath, string sourceCode, bool isReleaseBuild);
     }
-    
+
     public class CompileResult
     {
         public readonly byte[] AssembleImage;
@@ -24,7 +28,7 @@
             public readonly int StartCharacter;
             public readonly int EndLine;
             public readonly int EndCharacter;
-            
+
             public readonly string Severity;
             public readonly string Id;
             public readonly string Text;
@@ -44,5 +48,4 @@
             }
         }
     }
-    
 }

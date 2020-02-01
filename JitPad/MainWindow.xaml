@@ -201,7 +201,7 @@
                                SyntaxHighlighting="C#">
             <b:Interaction.Behaviors>
                 <behaviors:TextEditorBehavior Text="{Binding SourceCode.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <behaviors:TextEditorCompletionBehavior />
+                <behaviors:TextEditorCompletionBehavior Compiler="{Binding Compiler, Mode=OneTime}" />
                 <behaviors:SourceCodeTextEditorBehavior BuildDetailMessages="{Binding BuildDetailMessage.Value, Mode=OneWay}" />
             </b:Interaction.Behaviors>
         </avalonedit:TextEditor>

@@ -17,7 +17,6 @@ namespace JitPad
         public ReactiveProperty<string> MonitoringFilePath { get; }
         public ReadOnlyReactiveProperty<bool> IsInBuilding { get; }
 
-
         public ReactiveProperty<bool> IsTieredCompilation { get; }
         public ReactiveProperty<bool> IsTcQuickJit { get; }
         public ReactiveProperty<bool> IsTcQuickJitForLoops { get; }
@@ -35,8 +34,13 @@ namespace JitPad
 
         public InteractionMessenger Messenger { get; } = new InteractionMessenger();
 
+        // for TextEditorCompletionBehavior
+        public ICompiler Compiler { get; }
+
         public MainWindowViewModel(AppCore appCore, Config config)
         {
+            Compiler = appCore.Compiler;
+            
             IeReleaseBuild = config.ToReactivePropertyAsSynchronized(x => x.IsReleaseBuild).AddTo(Trashes);
 
             IsFileMonitoring = config.ToReactivePropertyAsSynchronized(x => x.IsFileMonitoring).AddTo(Trashes);
