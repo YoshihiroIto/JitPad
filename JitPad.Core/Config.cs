@@ -55,6 +55,8 @@ namespace JitPad.Core
             set
             {
                 // Always RaisePropertyChanged()
+                // MonitoringFilePath Because the process that observes the change wants to process it with the assignment to MonitoringFilePath.
+                
                 if (SetProperty(ref _MonitoringFilePath, value) == false)
                     RaisePropertyChanged();
             }
