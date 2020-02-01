@@ -18,8 +18,10 @@ namespace JitPad.Core.Processor
                 File.WriteAllText(sourceCodeTempPath, sourceCode);
                 File.WriteAllBytes(assemblyTempPath, assembleImage);
 
-                var output = new StringBuilder();
+                // todo:
+                //Environment.SetEnvironmentVariable("COMPlus_TieredCompilation", isTieredJit ? "1" : "0");
 
+                var output = new StringBuilder();
                 var exitCode = JitDasm.Program.Main(output, new[] {"--method-exclude", ".ctor", "--diffable", "-l", assemblyTempPath});
 
                 return new DisassembleResult(exitCode == 0, output.ToString());
