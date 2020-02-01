@@ -49,8 +49,4 @@
       </Page>
     </ItemGroup>
 
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="if not exist $(OutDir)JitDasm (&#xD;&#xA;md  $(OutDir)JitDasm&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;del $(OutDir)JitDasm\*.*&#xD;&#xA;copy $(SolutionDir)externals\JitDasm\JitDasm\bin\Release\netcoreapp3.0\*.* $(OutDir)JitDasm\&#xD;&#xA;" />
-    </Target>
-
 </Project>

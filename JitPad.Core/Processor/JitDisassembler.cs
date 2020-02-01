@@ -8,13 +8,6 @@ namespace JitPad.Core.Processor
 {
     public class JitDisassembler : IDisassembler
     {
-        private readonly string _jitDasmExe;
-
-        public JitDisassembler(string jitDasmExe)
-        {
-            _jitDasmExe = jitDasmExe;
-        }
-
         public DisassembleResult Run(string sourceCodePath, string sourceCode, byte[] assembleImage, bool isTieredJit)
         {
             var sourceCodeTempPath = sourceCodePath;
@@ -25,32 +18,11 @@ namespace JitPad.Core.Processor
                 File.WriteAllText(sourceCodeTempPath, sourceCode);
                 File.WriteAllBytes(assemblyTempPath, assembleImage);
 
-                using var proc = new Process
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = _jitDasmExe,
-                        Arguments = "--method-exclude .ctor --diffable -l " + assemblyTempPath,
-                        CreateNoWindow = true,
-                        UseShellExecute = false,
-                        RedirectStandardOutput = true
-                    }
-                };
+                var output = new StringBuilder();
 
-                proc.StartInfo.Environment["COMPlus_TieredCompilation"] = isTieredJit ? "1" : "0";
+                var exitCode = JitDasm.Program.Main(output, new[] {"--method-exclude", ".ctor", "--diffable", "-l", assemblyTempPath});
 
-                proc.Start();
-
-                var stdout = new StringBuilder();
-
-                proc.OutputDataReceived += (_, e) => stdout.AppendLine(e.Data);
-                proc.BeginOutputReadLine();
-                var exited = proc.WaitForExit(5 * 1000);
-                proc.CancelOutputRead();
-
-                return exited
-                    ? new DisassembleResult(proc.ExitCode == 0, stdout.ToString())
-                    : new DisassembleResult(false, "Timeout");
+                return new DisassembleResult(exitCode == 0, output.ToString());
             }
             finally
             {

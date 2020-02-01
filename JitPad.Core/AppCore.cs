@@ -39,7 +39,7 @@ namespace JitPad.Core
             }
 
             var compiler = new Compiler();
-            var disassembler = new JitDisassembler("JitDasm/JitDasm.exe");
+            var disassembler = new JitDisassembler();
             BuildingUnit = new BuildingUnit(_config, compiler, disassembler) {SourceCode = initialSourceCode}
                 .AddTo(_Trashes);
 

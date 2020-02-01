@@ -23,7 +23,7 @@ public class TestClass
             var compiler = new Compiler();
             var compileResult = compiler.Run("source.cs", sourceCode, true);
             
-            var disassembler = new JitDisassembler("../../../../externals/JitDasm/JitDasm/bin/Release/netcoreapp3.0/JitDasm.exe");
+            var disassembler = new JitDisassembler();
             var result = disassembler.Run("source.cs", sourceCode, compileResult.AssembleImage, true);
             
             Assert.True(result.IsOk);

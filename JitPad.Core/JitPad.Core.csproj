@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\externals\JitDasm\JitDasm\JitDasm.csproj" />
       <ProjectReference Include="..\JitPad.Foundation\JitPad.Foundation.csproj" />
     </ItemGroup>
 
