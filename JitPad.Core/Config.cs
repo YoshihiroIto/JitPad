@@ -52,12 +52,7 @@ namespace JitPad.Core
         public string MonitoringFilePath
         {
             get => _MonitoringFilePath;
-            set
-            {
-                // Always RaisePropertyChanged()
-                if (SetProperty(ref _MonitoringFilePath, value) == false)
-                    RaisePropertyChanged();
-            }
+            set => SetProperty(ref _MonitoringFilePath, value);
         }
 
         #endregion
@@ -114,7 +109,6 @@ public class Class
     {
     }
 }";
-
         private string _codeTemplateFilePath = "";
 
         public static Config Load(string? configFilePath = null, string? codeTemplateFilePath = null)
