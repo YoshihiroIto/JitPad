@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.IO;
 using System.Reactive.Disposables;
 using JitPad.Foundation;
@@ -18,8 +17,7 @@ namespace JitPad.Core
         private readonly Config _config;
         private readonly CompositeDisposable _Trashes = new CompositeDisposable();
 
-        public OpenSourceMetadata[] OpenSources => _OpenSources ??= new OpenSource().OpenSources;
-        private OpenSourceMetadata[]? _OpenSources;
+        public OpenSourceMetadata[] OpenSources => OpenSource.OpenSources;
 
         public string Version => Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? throw new NullReferenceException();
 

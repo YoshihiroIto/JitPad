@@ -68,20 +68,28 @@ namespace JitPad
 
         private static void SetupTextEditor()
         {
+            var asm = typeof(App).Assembly;
+            
             {
-                using var reader = new XmlTextReader(new MemoryStream(JitPad.Properties.Resources.CSharp_Mode));
+                using var stream = asm.GetManifestResourceStream("JitPad.Resources.Xshd.CSharp-Mode.xshd") ?? throw new NullReferenceException();
+                using var reader = new XmlTextReader(stream);
+                
                 var highlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
                 HighlightingManager.Instance.RegisterHighlighting("C#", new[] {".cs"}, highlighting);
             }
 
             {
-                using var reader = new XmlTextReader(new MemoryStream(JitPad.Properties.Resources.Asm_Mode));
+                using var stream = asm.GetManifestResourceStream("JitPad.Resources.Xshd.Asm-Mode.xshd") ?? throw new NullReferenceException();
+                using var reader = new XmlTextReader(stream);
+                
                 var highlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
                 HighlightingManager.Instance.RegisterHighlighting("Asm", new[] {".asm"}, highlighting);
             }
             
             {
-                using var reader = new XmlTextReader(new MemoryStream(JitPad.Properties.Resources.BuildMessage_Mode));
+                using var stream = asm.GetManifestResourceStream("JitPad.Resources.Xshd.BuildMessage-Mode.xshd") ?? throw new NullReferenceException();
+                using var reader = new XmlTextReader(stream);
+                
                 var highlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
                 HighlightingManager.Instance.RegisterHighlighting("BUILD_MSG", new[] {".BUILD_MSG"}, highlighting);
             }

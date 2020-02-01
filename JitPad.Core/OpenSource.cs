@@ -1,22 +1,14 @@
-﻿using System.Text.Json;
-using JitPad.Core.Properties;
+﻿using JitPad.Foundation;
 
 namespace JitPad.Core
 {
     public class OpenSource
     {
-        #region OpenSources
-
-        private OpenSourceMetadata[]? _OpenSources;
-
-        public OpenSourceMetadata[] OpenSources => _OpenSources ??= ReadOpenSources();
-
-        #endregion
-
-        private static OpenSourceMetadata[] ReadOpenSources()
-            => JsonSerializer.Deserialize<OpenSourceMetadata[]>(Resources.OssList);
+        public static readonly OpenSourceMetadata[] OpenSources =
+            EmbeddedResourceReader.Read<OpenSourceMetadata[]>(
+                typeof(OpenSource).Assembly, "JitPad.Core.Resources.OssList.json");
     }
-    
+
     public class OpenSourceMetadata
     {
         public string? Name { get; set; }
