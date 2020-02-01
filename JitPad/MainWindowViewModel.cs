@@ -40,7 +40,7 @@ namespace JitPad
         public MainWindowViewModel(AppCore appCore, Config config)
         {
             Compiler = appCore.Compiler;
-            
+
             IeReleaseBuild = config.ToReactivePropertyAsSynchronized(x => x.IsReleaseBuild).AddTo(Trashes);
 
             IsFileMonitoring = config.ToReactivePropertyAsSynchronized(x => x.IsFileMonitoring).AddTo(Trashes);
@@ -53,7 +53,7 @@ namespace JitPad
                 x => x
                     ? config.JitFlags | JitFlags.TieredCompilation
                     : config.JitFlags & ~JitFlags.TieredCompilation).AddTo(Trashes);
-            
+
             IsTcQuickJit = config.ToReactivePropertyAsSynchronized(
                 x => x.JitFlags,
                 x => x.HasFlag(JitFlags.TC_QuickJit),
@@ -78,8 +78,8 @@ namespace JitPad
             OpenMonitoringFileCommand.Subscribe(x =>
             {
                 var selectedFile = x?.Response?.FirstOrDefault();
-                if (string.IsNullOrEmpty(selectedFile) == false)
-                    config.MonitoringFilePath = selectedFile!;
+                if (selectedFile != null)
+                    appCore.SetMonitoringFilePath(selectedFile);
             }).AddTo(Trashes);
 
             ApplyTemplateFileCommand = new ReactiveCommand().AddTo(Trashes);

@@ -85,7 +85,15 @@ namespace JitPad.Core
             BuildingUnit.SourceCode = _config.LoadCodeTemplate();
         }
 
-        public void LoadMonitoringFile()
+        public void SetMonitoringFilePath(string filePath)
+        {
+            if (_config.MonitoringFilePath != filePath)
+                _config.MonitoringFilePath = filePath;
+            else
+                LoadMonitoringFile();
+        }
+
+        private void LoadMonitoringFile()
         {
             if (File.Exists(_config.MonitoringFilePath))
                 BuildingUnit.SourceCode = File.ReadAllText(_config.MonitoringFilePath);

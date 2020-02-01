@@ -109,6 +109,7 @@ public class Class
     {
     }
 }";
+
         private string _codeTemplateFilePath = "";
 
         public static Config Load(string? configFilePath = null, string? codeTemplateFilePath = null)
