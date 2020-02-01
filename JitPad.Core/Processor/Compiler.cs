@@ -16,7 +16,7 @@ namespace JitPad.Core.Processor
         public CompileResult Run(string sourceCodePath, string sourceCode, bool isReleaseBuild)
         {
             using var asmImage = new MemoryStream();
-            
+
             var symbolsName = Path.ChangeExtension("compiled.dll", ".pdb");
 
             var buffer = Encoding.UTF8.GetBytes(sourceCode);
@@ -68,8 +68,7 @@ namespace JitPad.Core.Processor
             }
         }
 
-        private static CSharpCompilation GenerateCode(string assemblyName, SourceText sourceText, string sourceCodePath,
-            bool isReleaseBuild)
+        private CSharpCompilation GenerateCode(string assemblyName, SourceText sourceText, string sourceCodePath, bool isReleaseBuild)
         {
             var options = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.Default);
             var syntaxTree = CSharpSyntaxTree.ParseText(sourceText, options, path: sourceCodePath);
@@ -85,7 +84,15 @@ namespace JitPad.Core.Processor
                     .WithPlatform(Platform.AnyCpu)
                     .WithAllowUnsafe(true));
 
-            var references = new List<MetadataReference>();
+            compilation = compilation.AddReferences(_metadataReferences);
+
+            return compilation;
+        }
+
+        private readonly MetadataReference[] _metadataReferences = EnumMetadataReferences().ToArray();
+
+        private static IEnumerable<MetadataReference> EnumMetadataReferences()
+        {
             var assemblyPath = Path.GetDirectoryName(typeof(object).Assembly.Location);
 
             foreach (var x in Directory.EnumerateFiles(assemblyPath, "*.dll"))
@@ -94,12 +101,8 @@ namespace JitPad.Core.Processor
 
                 if (fileName.IndexOf("Native", StringComparison.Ordinal) == -1 &&
                     (fileName.StartsWith("System.") || fileName.StartsWith("Microsoft.")))
-                    references.Add(MetadataReference.CreateFromFile(x));
+                    yield return MetadataReference.CreateFromFile(x);
             }
-
-            compilation = compilation.AddReferences(references);
-
-            return compilation;
         }
     }
 }
