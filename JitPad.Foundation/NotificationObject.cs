@@ -24,14 +24,14 @@ namespace JitPad.Foundation
         protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = "")
         {
             // ReSharper disable once InconsistentlySynchronizedField
-            var pc = (PropertyChangedEventArgs)PropChanged[propertyName];
+            var pc = (PropertyChangedEventArgs?)PropChanged[propertyName];
 
             if (pc == null)
             {
                 // double-checked;
                 lock (PropChanged)
                 {
-                    pc = (PropertyChangedEventArgs)PropChanged[propertyName];
+                    pc = (PropertyChangedEventArgs?)PropChanged[propertyName];
 
                     if (pc == null)
                     {
