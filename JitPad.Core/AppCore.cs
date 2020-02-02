@@ -64,7 +64,9 @@ namespace JitPad.Core
         {
             var dir = Path.GetDirectoryName(_config.FilePath);
 
-            Process.Start("explorer", $"\"{dir}\"");
+            using var proc = Process.Start("explorer", $"\"{dir}\"");
+            
+            proc?.WaitForExit();
         }
 
         public void OpenJitPadWebSite()
@@ -76,7 +78,9 @@ namespace JitPad.Core
         
         public void OpenWeb(string url)
         {
-            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
+            using var proc = Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
+            
+            proc?.WaitForExit();
         }
 
         public void ApplyTemplateFile()
