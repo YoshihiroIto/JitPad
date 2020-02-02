@@ -12,16 +12,18 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace JitPad.Core.Processor
 {
-    // ref: RoslynPad -- https://github.com/aelij/RoslynPad
-
-    public class CodeCompleter
+    public class CodeCompleter : IDisposable
     {
-        private readonly ICompiler _compiler;
-        private readonly MefHostServices _Host = MefHostServices.Create(MefHostServices.DefaultAssemblies);
-
         public CodeCompleter(ICompiler compiler)
         {
-            _compiler = compiler;
+            _workspace = new AdhocWorkspace(MefHostServices.Create(MefHostServices.DefaultAssemblies));
+
+            var projectInfo = ProjectInfo
+                .Create(ProjectId.CreateNewId(), VersionStamp.Create(), "Project", "Project", LanguageNames.CSharp)
+                .WithMetadataReferences(compiler.MetadataReferences);
+
+            _project = _workspace.AddProject(projectInfo);
+
             if (_isInitialized)
                 return;
 
@@ -40,53 +42,59 @@ namespace JitPad.Core.Processor
 
         private static bool _isInitialized;
 
-        private CancellationTokenSource? _CancellationTokenSource;
-
-        public async Task<CompletionResult> CompleteAsync(string sourceCode, int position, char? triggerChar)
+        public void Dispose()
         {
             _CancellationTokenSource?.Cancel();
             _CancellationTokenSource?.Dispose();
             _CancellationTokenSource = new CancellationTokenSource();
 
+            _workspace.Dispose();
+        }
+
+        private readonly AdhocWorkspace _workspace;
+        private Project _project;
+
+        private CancellationTokenSource? _CancellationTokenSource;
+
+        public async Task<CompleteData[]> CompleteAsync(string sourceCode, int position, char? triggerChar)
+        {
+            _CancellationTokenSource?.Cancel();
+            _CancellationTokenSource?.Dispose();
+            _CancellationTokenSource = new CancellationTokenSource();
+
+            var sourceText = SourceText.From(sourceCode);
+            var document = _project.AddDocument("File.cs", sourceText);
+
+            _project = document.Project;
+
             try
             {
-                var workspace = new AdhocWorkspace(_Host);
-
-                var projectInfo = ProjectInfo
-                    .Create(ProjectId.CreateNewId(), VersionStamp.Create(), "Project", "Project", LanguageNames.CSharp)
-                    .WithMetadataReferences(_compiler.MetadataReferences);
-                var project = workspace.AddProject(projectInfo);
-                var document = workspace.AddDocument(project.Id, "File.cs", SourceText.From(sourceCode));
-
                 var completionService = CompletionService.GetService(document);
                 var completionTrigger = GetCompletionTrigger(triggerChar);
-                var data = await completionService.GetCompletionsAsync(document, position, completionTrigger, null, null, _CancellationTokenSource.Token)
+
+                var data = await completionService
+                    .GetCompletionsAsync(document, position, completionTrigger, null, null, _CancellationTokenSource.Token)
                     .ConfigureAwait(false);
 
                 if (data == null || data.Items == null)
-                    return new CompletionResult(Array.Empty<CompleteData>());
+                    return Array.Empty<CompleteData>();
 
                 var helper = CompletionHelper.GetHelper(document);
-                var text = await document.GetTextAsync(_CancellationTokenSource.Token).ConfigureAwait(false);
                 var textSpanToText = new Dictionary<TextSpan, string>();
 
-                var items =
-                    data.Items
-                        .Where(item => MatchesFilterText(helper, item, text, textSpanToText))
-                        .OrderBy(x => x.DisplayText)
-                        .Distinct(x => x.DisplayText)
-                        .Select(x =>
-                            new CompleteData(
-                                x,
-                                completionService,
-                                document)
-                        ).ToArray();
-
-                return new CompletionResult(items);
+                return data.Items
+                    .Where(item => MatchesFilterText(helper, item, sourceText, textSpanToText))
+                    .Distinct(x => x.DisplayText)
+                    .Select(x => new CompleteData(x, completionService, document))
+                    .ToArray();
             }
             catch (OperationCanceledException)
             {
-                return new CompletionResult(Array.Empty<CompleteData>());
+                return Array.Empty<CompleteData>();
+            }
+            finally
+            {
+                _project = _project.RemoveDocument(document.Id);
             }
         }
 
@@ -95,6 +103,7 @@ namespace JitPad.Core.Processor
                 ? CompletionTrigger.CreateInsertionTrigger(triggerChar.Value)
                 : CompletionTrigger.Invoke;
 
+        // ref: RoslynPad -- https://github.com/aelij/RoslynPad
         private static bool MatchesFilterText(CompletionHelper helper, CompletionItem item, SourceText text, Dictionary<TextSpan, string> textSpanToText)
         {
             var filterText = GetFilterText(item, text, textSpanToText);
@@ -102,10 +111,11 @@ namespace JitPad.Core.Processor
             return string.IsNullOrEmpty(filterText) || helper.MatchesPattern(item.FilterText, filterText, CultureInfo.InvariantCulture);
         }
 
-        private static string GetFilterText(CompletionItem item, SourceText text, Dictionary<TextSpan, string> textSpanToText)
+        private static string? GetFilterText(CompletionItem item, SourceText text, Dictionary<TextSpan, string> textSpanToText)
         {
             var textSpan = item.Span;
-            if (!textSpanToText.TryGetValue(textSpan, out var filterText))
+
+            if (textSpanToText.TryGetValue(textSpan, out var filterText) == false)
             {
                 filterText = text.GetSubText(textSpan).ToString();
                 textSpanToText[textSpan] = filterText;
@@ -114,17 +124,7 @@ namespace JitPad.Core.Processor
             return filterText;
         }
     }
-    
-    public class CompletionResult
-    {
-        public readonly CompleteData[] CompletionData;
 
-        public CompletionResult(CompleteData[] completionData)
-        {
-            CompletionData = completionData;
-        }
-    }
-    
     public class CompleteData
     {
         public readonly CompletionItem Item;
@@ -141,5 +141,4 @@ namespace JitPad.Core.Processor
             Document = document;
         }
     }
-    
 }

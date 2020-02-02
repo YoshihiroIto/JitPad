@@ -51,6 +51,7 @@ namespace JitPad.Behaviors
                         var self = (TextEditorCompletionBehavior) s;
                         self._Compiler = (ICompiler)e.NewValue;
                         
+                        self._codeCompleter?.Dispose();
                         self._codeCompleter = new CodeCompleter(self._Compiler);
                     }));
         
@@ -122,7 +123,7 @@ namespace JitPad.Behaviors
                 var results = await _codeCompleter.CompleteAsync(text, offset, completionChar)
                     .ConfigureAwait(true);
 
-                if (results.CompletionData.Length > 0)
+                if (results.Length > 0)
                 {
                     App.UiDispatcher.Invoke(() =>
                     {
@@ -149,12 +150,12 @@ namespace JitPad.Behaviors
                                 listBox.Background = Brushes.Transparent;
                         };
 
-                        if (results.CompletionData.Length > 0)
+                        if (results.Length > 0)
                         {
                             if (completionChar != null && char.IsLetterOrDigit(completionChar.Value))
                                 _completionWindow.StartOffset -= 1;
 
-                            foreach (var item in results.CompletionData)
+                            foreach (var item in results)
                                 _completionWindow.CompletionList.CompletionData.Add(item: new CompletionData(item));
 
                             if (completionChar == null)
