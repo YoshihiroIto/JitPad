@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,6 +16,7 @@ using JitPad.Core.Processor;
 using Microsoft.Xaml.Behaviors;
 
 // ReSharper disable RedundantUsingDirective
+
 // fot Descendants
 using System.Linq;
 using Biaui.Internals;
@@ -26,7 +28,7 @@ namespace JitPad.Behaviors
     public sealed class TextEditorCompletionBehavior : Behavior<TextEditor>
     {
         #region Compiler
-        
+
         public ICompiler Compiler
         {
             get => _Compiler ?? throw new NullReferenceException();
@@ -36,9 +38,9 @@ namespace JitPad.Behaviors
                     SetValue(CompilerProperty, value);
             }
         }
-        
+
         private ICompiler? _Compiler;
-        
+
         public static readonly DependencyProperty CompilerProperty =
             DependencyProperty.Register(
                 nameof(Compiler),
@@ -49,12 +51,12 @@ namespace JitPad.Behaviors
                     (s, e) =>
                     {
                         var self = (TextEditorCompletionBehavior) s;
-                        self._Compiler = (ICompiler)e.NewValue;
-                        
+                        self._Compiler = (ICompiler) e.NewValue;
+
                         self._codeCompleter?.Dispose();
                         self._codeCompleter = new CodeCompleter(self._Compiler);
                     }));
-        
+
         #endregion
 
         protected override void OnAttached()
@@ -106,7 +108,7 @@ namespace JitPad.Behaviors
         }
 
         private CodeCompleter? _codeCompleter;
-        
+
         private void ShowCompletionWindow(char? completionChar)
         {
             if (_completionWindow != null)
@@ -119,54 +121,54 @@ namespace JitPad.Behaviors
             {
                 if (_codeCompleter == null)
                     return;
-                
+
                 var results = await _codeCompleter.CompleteAsync(text, offset, completionChar)
-                    .ConfigureAwait(true);
+                    .ConfigureAwait(false);
 
-                if (results.Length > 0)
+                if (results.Length == 0)
+                    return;
+
+                App.UiDispatcher.Invoke(() =>
                 {
-                    App.UiDispatcher.Invoke(() =>
-                    {
-                        _completionWindow =
-                            new CompletionWindow(AssociatedObject.TextArea)
-                            {
-                                MinWidth = 300,
-                                CloseWhenCaretAtBeginning = true,
-                            };
-
-                        if (ToolToolField?.GetValue(_completionWindow) is ToolTip toolTip)
+                    _completionWindow =
+                        new CompletionWindow(AssociatedObject.TextArea)
                         {
-                            toolTip.Placement = PlacementMode.Left;
-                            toolTip.VerticalOffset = 0;
-                            toolTip.HorizontalOffset = 4;
-                        }
-
-                        _completionWindow.Closed += (_, __) => _completionWindow = null;
-
-                        _completionWindow.Loaded += (sender, __) =>
-                        {
-                            var listBox = ((DependencyObject) sender).Descendants().OfType<ListBox>().FirstOrDefault();
-                            if (listBox != null)
-                                listBox.Background = Brushes.Transparent;
+                            MinWidth = 300,
+                            CloseWhenCaretAtBeginning = true,
                         };
 
-                        if (results.Length > 0)
-                        {
-                            if (completionChar != null && char.IsLetterOrDigit(completionChar.Value))
-                                _completionWindow.StartOffset -= 1;
+                    if (ToolToolField?.GetValue(_completionWindow) is ToolTip toolTip)
+                    {
+                        toolTip.Placement = PlacementMode.Left;
+                        toolTip.VerticalOffset = 0;
+                        toolTip.HorizontalOffset = 4;
+                    }
 
-                            foreach (var item in results)
-                                _completionWindow.CompletionList.CompletionData.Add(item: new CompletionData(item));
+                    _completionWindow.Closed += (_, __) => _completionWindow = null;
 
-                            if (completionChar == null)
-                                if (_completionWindow.CompletionList.CompletionData.Count > 0)
-                                    if (_completionWindow.CompletionList.SelectedItem == null)
-                                        _completionWindow.CompletionList.SelectedItem = _completionWindow.CompletionList.CompletionData[0];
+                    _completionWindow.Loaded += (sender, __) =>
+                    {
+                        var listBox = ((DependencyObject) sender).Descendants().OfType<ListBox>().FirstOrDefault();
+                        if (listBox != null)
+                            listBox.Background = Brushes.Transparent;
+                    };
 
-                            _completionWindow.Show();
-                        }
-                    });
-                }
+                    if (results.Length > 0)
+                    {
+                        if (completionChar != null && char.IsLetterOrDigit(completionChar.Value))
+                            _completionWindow.StartOffset -= 1;
+
+                        foreach (var item in results)
+                            _completionWindow.CompletionList.CompletionData.Add(item: new CompletionData(item));
+
+                        if (completionChar == null)
+                            if (_completionWindow.CompletionList.CompletionData.Count > 0)
+                                if (_completionWindow.CompletionList.SelectedItem == null)
+                                    _completionWindow.CompletionList.SelectedItem = _completionWindow.CompletionList.CompletionData[0];
+
+                        _completionWindow.Show();
+                    }
+                });
             });
         }
 
@@ -175,8 +177,6 @@ namespace JitPad.Behaviors
 
     public class CompletionData : ICompletionData
     {
-        public object Content => _data.Item.DisplayText;
-
         public object Description
         {
             get
@@ -184,42 +184,38 @@ namespace JitPad.Behaviors
                 if (_description == null)
                 {
                     _description = new Decorator();
-                    _description.Loaded += (o, e) =>
-                    {
-                        // ReSharper disable once UnusedVariable
-                        var task = _descriptionTask.Value;
-                    };
+                    _description.Loaded += DescriptionOnLoaded;
                 }
 
                 return _description;
             }
         }
 
+        public object Content => _data.Item.DisplayText;
         public ImageSource? Image { get; } = null;
-
         public double Priority { get; } = 0.0;
-
         public string Text => _data.Item.DisplayText;
 
         private readonly CompleteData _data;
+        private Decorator? _description;
 
         public CompletionData(CompleteData data)
         {
             _data = data;
-            _descriptionTask = new Lazy<Task>(RetrieveDescriptionAsync);
         }
 
-        private async Task RetrieveDescriptionAsync()
+        private void DescriptionOnLoaded(object sender, RoutedEventArgs e)
         {
-            if (_description != null)
+            Debug.Assert(_description != null);
+            
+            _description.Loaded -= DescriptionOnLoaded;
+            
+            Task.Run(async () =>
             {
-                var description = await Task.Run(() => _data.CompletionService.GetDescriptionAsync(_data.Document, _data.Item)).ConfigureAwait(true);
-                _description.Child = description.TaggedParts.ToTextBlock();
-            }
+                var description = await _data.CompletionService.GetDescriptionAsync(_data.Document, _data.Item).ConfigureAwait(false);
+                App.UiDispatcher.Invoke(() => _description.Child = description.TaggedParts.ToTextBlock());
+            });
         }
-
-        private Decorator? _description;
-        private readonly Lazy<Task> _descriptionTask;
 
         public void Complete(TextArea textArea, ISegment completionSegment, EventArgs insertionRequestEventArgs)
         {
