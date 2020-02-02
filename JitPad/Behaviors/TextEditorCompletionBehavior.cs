@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -77,6 +78,11 @@ namespace JitPad.Behaviors
             AssociatedObject.KeyDown -= AssociatedObjectOnKeyDown;
         }
 
+        public void CloseCompletionWindow()
+        {
+            _completionWindow?.Close();
+        }
+
         private CompletionWindow? _completionWindow;
 
         private void TextAreaOnTextEntering(object sender, TextCompositionEventArgs e)
@@ -153,24 +159,42 @@ namespace JitPad.Behaviors
                             listBox.Background = Brushes.Transparent;
                     };
 
-                    if (results.Length > 0)
-                    {
-                        if (completionChar != null && char.IsLetterOrDigit(completionChar.Value))
-                            _completionWindow.StartOffset -= 1;
+                    if (_itemsSourceChangeNotifier != null)
+                        _itemsSourceChangeNotifier.ValueChanged -= ItemsSourceChangeNotifierOnValueChanged;
 
-                        foreach (var item in results)
-                            _completionWindow.CompletionList.CompletionData.Add(item: new CompletionData(item));
+                    _itemsSourceChangeNotifier = new PropertyChangeNotifier(_completionWindow.CompletionList.ListBox, ItemsControl.ItemsSourceProperty);
+                    _itemsSourceChangeNotifier.ValueChanged += ItemsSourceChangeNotifierOnValueChanged;
 
-                        if (completionChar == null)
-                            if (_completionWindow.CompletionList.CompletionData.Count > 0)
-                                if (_completionWindow.CompletionList.SelectedItem == null)
-                                    _completionWindow.CompletionList.SelectedItem = _completionWindow.CompletionList.CompletionData[0];
+                    if (completionChar != null && char.IsLetterOrDigit(completionChar.Value))
+                        _completionWindow.StartOffset -= 1;
 
-                        _completionWindow.Show();
-                    }
+                    foreach (var item in results)
+                        _completionWindow.CompletionList.CompletionData.Add(item: new CompletionData(item));
+
+                    if (completionChar == null)
+                        if (_completionWindow.CompletionList.CompletionData.Count > 0)
+                            if (_completionWindow.CompletionList.SelectedItem == null)
+                                _completionWindow.CompletionList.SelectedItem = _completionWindow.CompletionList.CompletionData[0];
+
+                    _completionWindow.Show();
                 });
             });
         }
+
+        private void ItemsSourceChangeNotifierOnValueChanged(object? sender, EventArgs e)
+        {
+            if (!(_completionWindow?.CompletionList?.ListBox?.ItemsSource is ICollection collection))
+                return;
+
+            var visibility = collection.Count == 0 ? Visibility.Hidden : Visibility.Visible;
+
+            _completionWindow.Visibility = visibility;
+
+            if (ToolToolField?.GetValue(_completionWindow) is ToolTip toolTip)
+                toolTip.Visibility = visibility;
+        }
+
+        private PropertyChangeNotifier? _itemsSourceChangeNotifier;
 
         private static readonly FieldInfo? ToolToolField = typeof(CompletionWindow).GetField("toolTip", BindingFlags.NonPublic | BindingFlags.Instance);
     }
@@ -207,9 +231,9 @@ namespace JitPad.Behaviors
         private void DescriptionOnLoaded(object sender, RoutedEventArgs e)
         {
             Debug.Assert(_description != null);
-            
+
             _description.Loaded -= DescriptionOnLoaded;
-            
+
             Task.Run(async () =>
             {
                 var description = await _data.CompletionService.GetDescriptionAsync(_data.Document, _data.Item).ConfigureAwait(false);

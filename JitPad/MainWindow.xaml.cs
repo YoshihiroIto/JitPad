@@ -26,5 +26,10 @@ namespace JitPad
         }
 
         private MainWindowViewModel ViewModel => (MainWindowViewModel) DataContext;
+
+        private void EditButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            TextEditorCompletionBehavior.CloseCompletionWindow();
+        }
     }
 }
