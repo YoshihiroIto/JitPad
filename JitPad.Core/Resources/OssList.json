@@ -60,39 +60,9 @@
     "Url": "https://github.com/google/material-design-icons"
   },
   {
-    "Name": "Microsoft.CodeAnalysis",
-    "Author": "Microsoft",
-    "Summary": ".NET Compiler Platform (\"Roslyn\").\n\n      This is the all-in-one package (a superset of all assemblies). You can install any of these sub-packages if you only want part of the functionality:\n      - \"Microsoft.CodeAnalysis.CSharp.Workspaces\" (C# compiler + services)\n      - \"Microsoft.CodeAnalysis.VisualBasic.Workspaces\" (VB compiler + services)\n      - \"Microsoft.CodeAnalysis.Compilers\" (both compilers)\n      - \"Microsoft.CodeAnalysis.CSharp\" (only the C# compiler)\n      - \"Microsoft.CodeAnalysis.VisualBasic (only the VB compiler)\n    \n      More details at https://aka.ms/roslyn-packages\n      This package was built from the source at https://github.com/dotnet/roslyn/commit/82f2e2541478e239dc4b04f231e90dc2b3dcb422.",
-    "Url": "https://github.com/dotnet/roslyn"
-  },
-  {
-    "Name": "Microsoft.CodeAnalysis.CSharp",
-    "Author": "Microsoft",
-    "Summary": ".NET Compiler Platform (\"Roslyn\") support for C#, Microsoft.CodeAnalysis.CSharp.dll.\n    \n      More details at https://aka.ms/roslyn-packages\n      This package was built from the source at https://github.com/dotnet/roslyn/commit/82f2e2541478e239dc4b04f231e90dc2b3dcb422.",
-    "Url": "https://github.com/dotnet/roslyn"
-  },
-  {
     "Name": "Microsoft.CodeAnalysis.CSharp.Features",
     "Author": "Microsoft",
     "Summary": ".NET Compiler Platform (\"Roslyn\") support for creating C# editing experiences.\n    \n      More details at https://aka.ms/roslyn-packages\n      This package was built from the source at https://github.com/dotnet/roslyn/commit/82f2e2541478e239dc4b04f231e90dc2b3dcb422.",
-    "Url": "https://github.com/dotnet/roslyn"
-  },
-  {
-    "Name": "Microsoft.CodeAnalysis.CSharp.Workspaces",
-    "Author": "Microsoft",
-    "Summary": ".NET Compiler Platform (\"Roslyn\") support for analyzing C# projects and solutions.\n    \n      More details at https://aka.ms/roslyn-packages\n      This package was built from the source at https://github.com/dotnet/roslyn/commit/82f2e2541478e239dc4b04f231e90dc2b3dcb422.",
-    "Url": "https://github.com/dotnet/roslyn"
-  },
-  {
-    "Name": "Microsoft.CodeAnalysis.Features",
-    "Author": "Microsoft",
-    "Summary": ".NET Compiler Platform (\"Roslyn\") support for creating editing experiences.\n    \n      More details at https://aka.ms/roslyn-packages\n      This package was built from the source at https://github.com/dotnet/roslyn/commit/82f2e2541478e239dc4b04f231e90dc2b3dcb422.",
-    "Url": "https://github.com/dotnet/roslyn"
-  },
-  {
-    "Name": "Microsoft.CodeAnalysis.Workspaces.Common",
-    "Author": "Microsoft",
-    "Summary": "A shared package used by the .NET Compiler Platform (\"Roslyn\") including support for analyzing projects and solutions.\n      Do not install this package manually, it will be added as a prerequisite by other packages that require it.\n    \n      More details at https://aka.ms/roslyn-packages\n      This package was built from the source at https://github.com/dotnet/roslyn/commit/82f2e2541478e239dc4b04f231e90dc2b3dcb422.",
     "Url": "https://github.com/dotnet/roslyn"
   },
   {
