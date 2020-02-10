@@ -44,10 +44,27 @@ Open JitPad.sln
     - [Livet](https://github.com/runceel/Livet) WPF MVVM Infrastructure.
 
 
-## Reference
+## References
 
 - [Tiered Compilation Guide](https://github.com/dotnet/runtime/blob/master/docs/design/features/tiered-compilation-guide.md)
 - [Run-time configuration options for compilation](https://docs.microsoft.com/en-us/dotnet/core/run-time-config/compilation)
+
+
+## Useful Patterns
+
+This solution is made on a very small scale. Therefore it is very readable. I hope you find it helpful.
+
+- Basic WPF
+    - Style
+    - Behavior
+- Non freeze GUI
+- MVVM
+- Dependency Injection
+- C# compilation by Roslyn
+- C# code completion by Roslyn
+- C# editor by AvalonEdit
+    - Popup code completion
+    - Error indication
 
 
 ## Author
