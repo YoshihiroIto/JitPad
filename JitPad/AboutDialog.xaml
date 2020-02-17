@@ -6,6 +6,7 @@
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:dialog="clr-namespace:JitPad"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:biaui="clr-namespace:Biaui;assembly=Biaui"
                     Title="AboutDialog"
                     Width="460"
                     Height="460"
@@ -13,7 +14,6 @@
                     MinHeight="460"
                     d:DataContext="{d:DesignInstance dialog:AboutDialogViewModel}"
                     PreviewKeyDown="OnPreviewKeyDown"
-                    Style="{StaticResource BiaWindowDialogStyle}"
                     WindowStartupLocation="CenterOwner"
                     mc:Ignorable="d">
     <controls:BiaWindow.Resources>
@@ -21,6 +21,19 @@
             <Setter Property="Placement" Value="Right" />
         </Style>
     </controls:BiaWindow.Resources>
+    
+    <controls:BiaWindow.Style>
+        <Style BasedOn="{StaticResource BiaWindowDialogStyle}" TargetType="controls:BiaWindow">
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome CaptionHeight="56"
+                                  CornerRadius="{x:Static biaui:Boxes.CornerRadius0}"
+                                  GlassFrameThickness="{x:Static biaui:Boxes.Thickness1}"
+                                  ResizeBorderThickness="{x:Static biaui:Boxes.Thickness8}" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </controls:BiaWindow.Style>
 
     <DockPanel Margin="16,12,16,16">
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
