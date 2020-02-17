@@ -1,12 +1,12 @@
 ﻿<controls:BiaWindow x:Class="JitPad.AboutDialog"
                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:biaui="clr-namespace:Biaui;assembly=Biaui"
                     xmlns:controls="clr-namespace:Biaui.Controls;assembly=Biaui"
                     xmlns:core="clr-namespace:JitPad.Core;assembly=JitPad.Core"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:dialog="clr-namespace:JitPad"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                    xmlns:biaui="clr-namespace:Biaui;assembly=Biaui"
                     Title="AboutDialog"
                     Width="460"
                     Height="460"
@@ -20,8 +20,26 @@
         <Style BasedOn="{StaticResource {x:Type ToolTip}}" TargetType="ToolTip">
             <Setter Property="Placement" Value="Right" />
         </Style>
+
+        <Style x:Key="LinkButtonStyle" TargetType="Button">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+
+        <Style x:Key="LinkTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource AccentBrushKey}" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="TextDecorations" Value="Underline" />
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource AccentBrushKey.IsMouseOver}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </controls:BiaWindow.Resources>
-    
+
     <controls:BiaWindow.Style>
         <Style BasedOn="{StaticResource BiaWindowDialogStyle}" TargetType="controls:BiaWindow">
             <Setter Property="WindowChrome.WindowChrome">
@@ -50,13 +68,24 @@
                                DockPanel.Dock="Top"
                                Text="Copyright © 2020 Yoshihiro Ito. All rights reserved." />
 
-        <controls:BiaButton Margin="0,8,0,0"
-                            HorizontalAlignment="Left"
-                            Command="{Binding OpenJitPadWebSiteCommand, Mode=OneTime}"
-                            Content="Web site"
-                            DockPanel.Dock="Top" />
+        <Button Margin="0,2,0,0"
+                Command="{Binding OpenJitPadWebSiteCommand, Mode=OneTime}"
+                Content="https://github.com/YoshihiroIto/JitPad"
+                DockPanel.Dock="Top">
+            <Button.Style>
+                <Style BasedOn="{StaticResource LinkButtonStyle}" TargetType="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <TextBlock Style="{StaticResource LinkTextBlockStyle}" Text="{TemplateBinding Content}" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+        </Button>
 
-        <controls:BiaTextBlock Margin="0,24,0,4"
+        <controls:BiaTextBlock Margin="0,32,0,4"
                                DockPanel.Dock="Top"
                                Text="3rd party dependencies" />
 
@@ -70,28 +99,13 @@
                           VirtualizingPanel.IsVirtualizing="True"
                           VirtualizingPanel.VirtualizationMode="Recycling">
                 <ItemsControl.Resources>
-                    <Style TargetType="Button">
-                        <Setter Property="Cursor" Value="Hand" />
-
+                    <Style BasedOn="{StaticResource LinkButtonStyle}" TargetType="Button">
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="Button">
-                                    <TextBlock HorizontalAlignment="Left"
-                                               d:DataContext="{d:DesignInstance core:OpenSourceMetadata}"
-                                               Text="{Binding Name, Mode=OneTime}"
-                                               TextDecorations="Underline">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Foreground" Value="{StaticResource AccentBrushKey}" />
-
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="Foreground" Value="{StaticResource AccentBrushKey.IsMouseOver}" />
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
+                                    <TextBlock d:DataContext="{d:DesignInstance core:OpenSourceMetadata}"
+                                               Style="{StaticResource LinkTextBlockStyle}"
+                                               Text="{Binding Name, Mode=OneTime}" />
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -104,8 +118,7 @@
                         <Button Margin="0,0,0,4"
                                 d:DataContext="{d:DesignInstance core:OpenSourceMetadata}"
                                 Command="{Binding DataContext.OpenOpenSourceCommand, Mode=OneWay, RelativeSource={RelativeSource AncestorType=dialog:AboutDialog}}"
-                                CommandParameter="{Binding Mode=OneWay}"
-                                Focusable="False">
+                                CommandParameter="{Binding Mode=OneWay}">
                             <Button.ToolTip>
                                 <ToolTip>
                                     <StackPanel MaxWidth="600">
