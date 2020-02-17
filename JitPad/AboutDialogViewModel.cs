@@ -8,17 +8,19 @@ namespace JitPad
 {
     public class AboutDialogViewModel : ViewModelBase
     {
-        public OpenSourceMetadata[] OpenSources { get; }
-        
-        public string Version { get; }
+        public OpenSourceMetadata[] OpenSources => _appCore.OpenSources;
+        public string Version => _appCore.Version;
+        public string Copyright => _appCore.Copyright;
+        public string JitPadWebSiteUrl => _appCore.JitPadWebSiteUrl;
         
         public ReactiveCommand<OpenSourceMetadata> OpenJitPadWebSiteCommand { get; }
         public ReactiveCommand<OpenSourceMetadata> OpenOpenSourceCommand { get; }
+        
+        private readonly AppCore _appCore;
 
         public AboutDialogViewModel(AppCore appCore)
         {
-            OpenSources = appCore.OpenSources;
-            Version = appCore.Version;
+            _appCore = appCore;
             
             OpenJitPadWebSiteCommand = new ReactiveCommand<OpenSourceMetadata>().AddTo(Trashes);
             OpenJitPadWebSiteCommand.Subscribe(_ => appCore.OpenJitPadWebSite())

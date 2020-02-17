@@ -14,16 +14,17 @@ namespace JitPad.Core
     {
         public BuildingUnit BuildingUnit { get; }
 
-        private readonly Config _config;
-        private readonly CompositeDisposable _Trashes = new CompositeDisposable();
-
         public OpenSourceMetadata[] OpenSources => OpenSource.OpenSources;
-
         public string Version => Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? throw new NullReferenceException();
+        public string Copyright => "Copyright © 2020 Yoshihiro Ito. All rights reserved.";
+        public string JitPadWebSiteUrl => "https://github.com/YoshihiroIto/JitPad";
 
         public readonly ICompiler Compiler;
         public readonly IDisassembler Disassembler;
-        
+
+        private readonly Config _config;
+        private readonly CompositeDisposable _Trashes = new CompositeDisposable();
+
         public AppCore(Config config)
         {
             _config = config;
@@ -43,7 +44,7 @@ namespace JitPad.Core
 
             Compiler = new Compiler();
             Disassembler = new JitDisassembler("JitDasm/JitDasm.exe");
-            
+
             BuildingUnit = new BuildingUnit(_config, Compiler, Disassembler) {SourceCode = initialSourceCode}
                 .AddTo(_Trashes);
 
@@ -65,21 +66,19 @@ namespace JitPad.Core
             var dir = Path.GetDirectoryName(_config.FilePath);
 
             using var proc = Process.Start("explorer", $"\"{dir}\"");
-            
+
             proc?.WaitForExit();
         }
 
         public void OpenJitPadWebSite()
         {
-            const string url = "https://github.com/YoshihiroIto/JitPad";
-            
-            OpenWeb(url);
+            OpenWeb(JitPadWebSiteUrl);
         }
-        
+
         public void OpenWeb(string url)
         {
             using var proc = Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") {CreateNoWindow = true});
-            
+
             proc?.WaitForExit();
         }
 

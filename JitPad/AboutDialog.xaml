@@ -66,11 +66,11 @@
 
         <controls:BiaTextBlock Margin="0,2,0,0"
                                DockPanel.Dock="Top"
-                               Text="Copyright © 2020 Yoshihiro Ito. All rights reserved." />
+                               Text="{Binding Copyright, Mode=OneTime}" />
 
         <Button Margin="0,2,0,0"
                 Command="{Binding OpenJitPadWebSiteCommand, Mode=OneTime}"
-                Content="https://github.com/YoshihiroIto/JitPad"
+                Content="{Binding JitPadWebSiteUrl, Mode=OneTime}"
                 DockPanel.Dock="Top">
             <Button.Style>
                 <Style BasedOn="{StaticResource LinkButtonStyle}" TargetType="Button">
