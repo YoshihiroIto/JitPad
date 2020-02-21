@@ -1,9 +1,17 @@
 # JitPad
-[![Releases](https://img.shields.io/github/release/YoshihiroIto/JitPad.svg)](https://github.com/YoshihiroIto/JitPad/releases/latest) [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
+[![Releases](https://img.shields.io/github/release/YoshihiroIto/JitPad)](https://github.com/YoshihiroIto/JitPad/releases/latest) 
+[![Chocolatey](https://img.shields.io//chocolatey/dt/jitpad)](https://chocolatey.org/packages/jitpad/) 
+[![MIT License](http://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 On the fly disassemble C# code based on JitDasm
 
 ![JitPad](JitPad.gif)
+
+## Install (for end user)
+
+- Download from [release page](https://github.com/YoshihiroIto/JitPad/releases/latest)
+- Install from [Chocolatey](https://chocolatey.org/)
+    - ```> choco install jitpad```
 
 ## Build and Run
 ```
@@ -11,11 +19,9 @@ On the fly disassemble C# code based on JitDasm
 > cd JitPad
 > dotnet build
 > JitPad\bin\Debug\netcoreapp3.1\JitPad.exe
-
-or
-
-Open JitPad.sln
 ```
+
+or Open JitPad.sln
 
 ## Credits
 - Disassembler
