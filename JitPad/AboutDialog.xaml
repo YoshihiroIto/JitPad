@@ -58,14 +58,17 @@
             <TextBlock FontSize="18" Text="JitPad" />
             <controls:BiaTextBlock Margin="8,0,0,2"
                                    VerticalAlignment="Bottom"
+                                   Foreground="{StaticResource SemiActiveForegroundBrushKey}"
                                    Text="Version: " />
             <controls:BiaTextBlock Margin="0,0,0,2"
                                    VerticalAlignment="Bottom"
+                                   Foreground="{StaticResource SemiActiveForegroundBrushKey}"
                                    Text="{Binding Version, Mode=OneTime}" />
         </StackPanel>
 
         <controls:BiaTextBlock Margin="0,2,0,0"
                                DockPanel.Dock="Top"
+                               Foreground="{StaticResource SemiActiveForegroundBrushKey}"
                                Text="{Binding Copyright, Mode=OneTime}" />
 
         <Button Margin="0,2,0,0"
@@ -91,8 +94,8 @@
 
         <!--  ReSharper disable once Xaml.StaticResourceNotResolved  -->
         <ScrollViewer Margin="0,0,-8,0"
-                      PanningMode="VerticalOnly"
                       Focusable="False"
+                      PanningMode="VerticalOnly"
                       Style="{StaticResource BasicScrollViewerStyle}"
                       VerticalScrollBarVisibility="Visible">
             <ItemsControl Focusable="False"
@@ -123,24 +126,21 @@
                             <Button.ToolTip>
                                 <ToolTip>
                                     <StackPanel MaxWidth="600">
-                                        <StackPanel.Resources>
-                                            <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="TextBlock">
-                                                <Setter Property="TextWrapping" Value="Wrap" />
-                                            </Style>
-                                        </StackPanel.Resources>
-
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock FontSize="18" Text="{Binding Name, Mode=OneTime}" />
-                                            <TextBlock Margin="8,0,0,1"
-                                                       VerticalAlignment="Bottom"
-                                                       Text="by " />
-                                            <TextBlock Margin="0,0,0,1"
-                                                       VerticalAlignment="Bottom"
-                                                       Text="{Binding Author, Mode=OneTime}" />
+                                            <controls:BiaTextBlock Margin="12,0,0,1"
+                                                                   VerticalAlignment="Bottom"
+                                                                   Foreground="{StaticResource SemiActiveForegroundBrushKey}"
+                                                                   Text="by " />
+                                            <controls:BiaTextBlock Margin="0,0,0,1"
+                                                                   VerticalAlignment="Bottom"
+                                                                   Foreground="{StaticResource SemiActiveForegroundBrushKey}"
+                                                                   Text="{Binding Author, Mode=OneTime}" />
                                         </StackPanel>
 
                                         <TextBlock Margin="0,8,0,0"
-                                                   Foreground="#A0A0A0"
+                                                   TextWrapping="Wrap"
+                                                   Foreground="{StaticResource SemiActiveForegroundBrushKey}"
                                                    Text="{Binding Summary, Mode=OneTime}" />
                                     </StackPanel>
                                 </ToolTip>
