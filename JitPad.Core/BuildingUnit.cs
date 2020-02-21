@@ -143,7 +143,7 @@ namespace JitPad.Core
         }
 
         private readonly LruCache<BuildContext, BuildResultData> _buildCaches
-            = new LruCache<BuildContext, BuildResultData>(16, true);
+            = new LruCache<BuildContext, BuildResultData>(16);
 
         private readonly CompositeDisposable _Trashes = new CompositeDisposable();
 

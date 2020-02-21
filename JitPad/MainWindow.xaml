@@ -53,21 +53,12 @@
         </Style>
     </controls:BiaWindow.Style>
 
-    <controls:BiaWindow.Resources>
-        <Style x:Key="MenuStyle"
-               BasedOn="{StaticResource {x:Type Menu}}"
-               TargetType="Menu">
-            <Setter Property="Foreground" Value="{StaticResource AccentForegroundBrushKey}" />
-
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{StaticResource ActiveBackgroundBrushKey}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ActiveBorderBrushKey}" />
-                    <Setter Property="Foreground" Value="{StaticResource AccentBrushKey}" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </controls:BiaWindow.Resources>
+    <controls:BiaWindow.HamburgerMenu>
+        <controls:BiaHamburgerMenu>
+            <MenuItem Command="{Binding OpenConfigFolderCommand, Mode=OneTime}" Header="Open Config Folder..." />
+            <MenuItem Command="{Binding OpenAboutDialogCommand, Mode=OneTime}" Header="About JitPad..." />
+        </controls:BiaHamburgerMenu>
+    </controls:BiaWindow.HamburgerMenu>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -159,34 +150,6 @@
                                               ToolTip="Quick JIT for loops" />
                 </controls:BiaUniformGrid>
             </controls:BiaClippingBorder>
-
-            <Menu Width="32"
-                  Height="32"
-                  Margin="0,-12,84,0"
-                  Padding="0"
-                  HorizontalAlignment="Right"
-                  VerticalAlignment="Top"
-                  Style="{StaticResource MenuStyle}">
-                <MenuItem>
-                    <MenuItem.Header>
-                        <Canvas Width="32"
-                                Height="32"
-                                Margin="-4,0,0,0">
-                            <!--  Hack: Margin="-4,0,0,0"  -->
-                            <Viewbox Width="16"
-                                     Height="16"
-                                     Margin="4">
-                                <Canvas Width="24" Height="24">
-                                    <Path Data="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z" Fill="{Binding RelativeSource={RelativeSource AncestorType=Menu}, Mode=OneWay, Path=Foreground}" />
-                                </Canvas>
-                            </Viewbox>
-                        </Canvas>
-                    </MenuItem.Header>
-
-                    <MenuItem Command="{Binding OpenConfigFolderCommand, Mode=OneTime}" Header="Open Config Folder..." />
-                    <MenuItem Command="{Binding OpenAboutDialogCommand, Mode=OneTime}" Header="About JitPad..." />
-                </MenuItem>
-            </Menu>
         </DockPanel>
 
         <Rectangle Grid.Row="0"
