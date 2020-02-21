@@ -92,6 +92,7 @@
         <!--  ReSharper disable once Xaml.StaticResourceNotResolved  -->
         <ScrollViewer Margin="0,0,-8,0"
                       PanningMode="VerticalOnly"
+                      Focusable="False"
                       Style="{StaticResource BasicScrollViewerStyle}"
                       VerticalScrollBarVisibility="Visible">
             <ItemsControl Focusable="False"
