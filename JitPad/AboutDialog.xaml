@@ -20,24 +20,6 @@
         <Style BasedOn="{StaticResource {x:Type ToolTip}}" TargetType="ToolTip">
             <Setter Property="Placement" Value="Right" />
         </Style>
-
-        <Style x:Key="LinkButtonStyle" TargetType="Button">
-            <Setter Property="HorizontalAlignment" Value="Left" />
-            <Setter Property="Focusable" Value="False" />
-            <Setter Property="Cursor" Value="Hand" />
-        </Style>
-
-        <Style x:Key="LinkTextBlockStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource AccentBrushKey}" />
-            <Setter Property="HorizontalAlignment" Value="Left" />
-            <Setter Property="TextDecorations" Value="Underline" />
-
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" Value="{StaticResource AccentBrushKey.IsMouseOver}" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
     </controls:BiaWindow.Resources>
 
     <controls:BiaWindow.Style>
@@ -71,22 +53,10 @@
                                Foreground="{StaticResource SemiActiveForegroundBrushKey}"
                                Text="{Binding Copyright, Mode=OneTime}" />
 
-        <Button Margin="0,2,0,0"
-                Command="{Binding OpenJitPadWebSiteCommand, Mode=OneTime}"
-                Content="{Binding JitPadWebSiteUrl, Mode=OneTime}"
-                DockPanel.Dock="Top">
-            <Button.Style>
-                <Style BasedOn="{StaticResource LinkButtonStyle}" TargetType="Button">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <TextBlock Style="{StaticResource LinkTextBlockStyle}" Text="{TemplateBinding Content}" />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
-        </Button>
+        <controls:BiaHyperlinkButton Margin="0,2,0,0"
+                                     Command="{Binding OpenJitPadWebSiteCommand, Mode=OneTime}"
+                                     Content="{Binding JitPadWebSiteUrl, Mode=OneTime}"
+                                     DockPanel.Dock="Top" />
 
         <controls:BiaTextBlock Margin="0,32,0,4"
                                DockPanel.Dock="Top"
@@ -102,28 +72,15 @@
                           ItemsSource="{Binding OpenSources, Mode=OneTime}"
                           VirtualizingPanel.IsVirtualizing="True"
                           VirtualizingPanel.VirtualizationMode="Recycling">
-                <ItemsControl.Resources>
-                    <Style BasedOn="{StaticResource LinkButtonStyle}" TargetType="Button">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="Button">
-                                    <TextBlock d:DataContext="{d:DesignInstance core:OpenSourceMetadata}"
-                                               Style="{StaticResource LinkTextBlockStyle}"
-                                               Text="{Binding Name, Mode=OneTime}" />
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ItemsControl.Resources>
-
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <!--  ReSharper disable once Xaml.BindingWithContextNotResolved  -->
-                        <Button Margin="0,0,0,4"
-                                d:DataContext="{d:DesignInstance core:OpenSourceMetadata}"
-                                Command="{Binding DataContext.OpenOpenSourceCommand, Mode=OneWay, RelativeSource={RelativeSource AncestorType=dialog:AboutDialog}}"
-                                CommandParameter="{Binding Mode=OneWay}">
-                            <Button.ToolTip>
+                        <controls:BiaHyperlinkButton Margin="0,0,0,4"
+                                                     d:DataContext="{d:DesignInstance core:OpenSourceMetadata}"
+                                                     Command="{Binding DataContext.OpenOpenSourceCommand, Mode=OneTime, RelativeSource={RelativeSource AncestorType=dialog:AboutDialog}}"
+                                                     CommandParameter="{Binding Mode=OneTime}"
+                                                     Content="{Binding Name, Mode=OneTime}">
+                            <controls:BiaHyperlinkButton.ToolTip>
                                 <ToolTip>
                                     <StackPanel MaxWidth="600">
                                         <StackPanel Orientation="Horizontal">
@@ -139,13 +96,13 @@
                                         </StackPanel>
 
                                         <TextBlock Margin="0,8,0,0"
-                                                   TextWrapping="Wrap"
                                                    Foreground="{StaticResource SemiActiveForegroundBrushKey}"
-                                                   Text="{Binding Summary, Mode=OneTime}" />
+                                                   Text="{Binding Summary, Mode=OneTime}"
+                                                   TextWrapping="Wrap" />
                                     </StackPanel>
                                 </ToolTip>
-                            </Button.ToolTip>
-                        </Button>
+                            </controls:BiaHyperlinkButton.ToolTip>
+                        </controls:BiaHyperlinkButton>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
