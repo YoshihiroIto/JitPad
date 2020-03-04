@@ -12,7 +12,7 @@
 
     <ItemGroup>
       <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.4.0" />
-      <PackageReference Include="Jewelry" Version="2.0.4" />
+      <PackageReference Include="Jewelry" Version="2.0.6" />
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="3.4.0" />
       <PackageReference Include="ReactiveProperty" Version="6.2.0" />
       <PackageReference Include="System.Interactive" Version="4.0.0" />
