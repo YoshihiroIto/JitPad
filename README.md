@@ -1,6 +1,6 @@
 # JitPad
 [![Releases](https://img.shields.io/github/release/YoshihiroIto/JitPad)](https://github.com/YoshihiroIto/JitPad/releases/latest) 
-[![Chocolatey](https://img.shields.io//chocolatey/dt/jitpad)](https://chocolatey.org/packages/jitpad/) 
+[![Chocolatey](https://img.shields.io/chocolatey/dt/jitpad)](https://chocolatey.org/packages/jitpad/) 
 [![MIT License](http://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 On the fly disassemble C# code based on JitDasm
@@ -10,7 +10,7 @@ On the fly disassemble C# code based on JitDasm
 ## Install (for end user)
 
 - Download from [release page](https://github.com/YoshihiroIto/JitPad/releases/latest)
-- Install from [Chocolatey](https://chocolatey.org/)
+- Install from [Chocolatey](https://chocolatey.org/packages/jitpad)
     - ```> choco install jitpad```
 
 ## Build and Run
