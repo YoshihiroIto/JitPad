@@ -7,7 +7,7 @@
         <Nullable>enable</Nullable>
         <ApplicationIcon>Resources/icon.ico</ApplicationIcon>
         <PackageVersion></PackageVersion>
-        <AssemblyVersion>1.0.9</AssemblyVersion>
+        <AssemblyVersion>1.0.10</AssemblyVersion>
         <FileVersion></FileVersion>
 
         <InternalsAssemblyNames>Biaui</InternalsAssemblyNames>
@@ -21,7 +21,7 @@
       <PackageReference Include="AvalonEdit" Version="6.0.1" />
       <PackageReference Include="Biaui" Version="1.0.18.1" />
       <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.4.0" />
-      <PackageReference Include="LivetCask.Messaging" Version="3.2.1" />
+      <PackageReference Include="LivetCask.Messaging" Version="3.2.2.2" />
       <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
       <PackageReference Include="ReactiveProperty" Version="6.2.0" />
       <PackageReference Include="System.Reactive" Version="4.3.2" />
