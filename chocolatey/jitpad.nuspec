@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>jitpad</id>
-    <version>1.0.9</version>
+    <version>1.0.10</version>
     <packageSourceUrl>https://github.com/YoshihiroIto/JitPad</packageSourceUrl>
     <owners>Yoshihiro Ito</owners>
     <title>JitPad (Install)</title>
@@ -14,6 +14,7 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <tags>jitpad jit c# dotnet</tags>
     <summary>On the fly disassemble C# code based on JitDasm</summary>
+    <releaseNotes>https://github.com/YoshihiroIto/JitPad/releases</releaseNotes>
     <description>
 ![JitPad](https://raw.githubusercontent.com/YoshihiroIto/JitPad/master/JitPad.gif)
 
